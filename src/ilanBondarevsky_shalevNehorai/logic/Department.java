@@ -2,6 +2,8 @@ package ilanBondarevsky_shalevNehorai.logic;
 
 import java.util.ArrayList;
 
+import javax.management.InstanceNotFoundException;
+
 public class Department implements CalculateAddedValueable, WorkChangeable, WorkingSync {
 	
 	private String name;
@@ -35,48 +37,51 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		return null;
 	}
 	
-	public void addRole(String roleName, boolean isRoleChangeable)  throws IllegalArgumentException {
-		addRole(roleName, isRoleChangeable, null, "", 0, false, 0, false, 0, 0, 0);
+	public int addRole(String roleName, boolean isRoleChangeable)  throws IllegalArgumentException {
+		return addRole(roleName, isRoleChangeable, null, "", 0, false, 0, false, 0, 0, 0);
 	}
 	
-	public void addRole(String roleName, boolean isRoleChangeable, EmployeeType type, String employeeName, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double monthlyPercentage, int monthlySales) throws IllegalArgumentException {
+	public int addRole(String roleName, boolean isRoleChangeable, EmployeeType type, String employeeName, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double monthlyPercentage, int monthlySales) throws IllegalArgumentException {
 		if(!isChangeable)
 			isRoleChangeable = false;
 		
 		roles.add(new Role(roleName, isSync, isRoleChangeable, type, employeeName, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, monthlyPercentage, monthlySales));
-		//TODO fire add role
+		return roles.get(roles.size() - 1).getId();
 	}
 	
-	public void setRoleEmployee(int roleId, EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException {
+	public void setRoleEmployee(int roleId, EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException {
 		Role role = getRoleById(roleId);
 		
 		if(role != null) {
 			role.setEmployee(type, name, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
-			//TODO fire add employee
 		}
 		else{
-			//TODO fire role not found
+			throw new InstanceNotFoundException("Role not found");
 		}
 	}
 	
 	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) {
+	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
 		if(isChangeable){
 			for (Role role : roles) {
 				role.changeWorkingHours(startTime, homeWork);
 			}
+		} else{
+			throw new IllegalArgumentException("Can't change the department's roles hours");
 		}
 	}
 	
-	public void changeWorkingHoursForRole(int roleId, int startTime, boolean homeWork) {
+	public void changeWorkingHoursForRole(int roleId, int startTime, boolean homeWork) throws IllegalArgumentException, InstanceNotFoundException{
 		if(isSync) {
 			System.out.println("cant change hours for this role " + roleId + " seperately");
-			return;
+			throw new IllegalArgumentException("Can't change the role's hours");
 		}
 		
 		Role role = getRoleById(roleId);
 		if(role != null) {
 			role.changeWorkingHours(startTime, homeWork);
+		} else{
+			throw new InstanceNotFoundException("Role does not exist");
 		}
 	}
 	
@@ -91,10 +96,10 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	}
 
 	@Override
-	public double addedMoney() {
+	public double profit() {
 		double addedMoney = 0;
 		for (Role role : roles) {
-			addedMoney += role.addedMoney();
+			addedMoney += role.profit();
 		}
 		return addedMoney;
 	}
@@ -113,5 +118,94 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		
 		
 		return output.toString();
+	}
+	
+	public ArrayList<Integer> getRolesIDList(){
+		ArrayList<Integer> rolesID = new ArrayList<Integer>();
+		for (Role role : roles) {
+			rolesID.add(role.getId());
+		}
+		return rolesID;
+	}
+	
+	public boolean isRoleSync(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.isWorkingSync();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public boolean isRoleChangeable(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.isWorkChangeable();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public double getRoleProfit(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.profit();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public String getRoleName(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.getName();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public String getRoleData(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.toString();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public String getEmployeeNameInRole(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.getEmployeeName();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public EmployeeType getEmployeeType(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.getEmployeeType();
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public void changeEmployeeSalesPercentage(int roleId, double percentage) throws InstanceNotFoundException, IllegalArgumentException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			role.changeEmployeeSalesPercentage(percentage);
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+	}
+	
+	public void changeEmployeeMonthlySales(int sales, int roleId) throws InstanceNotFoundException, IllegalArgumentException {
+		Role role = getRoleById(roleId);
+		if(role != null){
+			role.changeEmployeeMonthlySales(sales);
+		} else{
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
 	}
 }

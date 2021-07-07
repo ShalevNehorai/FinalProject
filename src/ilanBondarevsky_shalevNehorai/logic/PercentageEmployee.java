@@ -39,4 +39,9 @@ public class PercentageEmployee extends BaseEmployee {
 		output.append(" The salary is: ").append(this.getSalary()).append("\u20AA with ").append(monthlyPercentage).append(" percentage from sales.");
 		return output.toString();
 	}
+	
+	@Override
+	public EmployeeType getType() {
+		return EmployeeType.PERCENTAGE_EMPLOYEE;
+	}
 }

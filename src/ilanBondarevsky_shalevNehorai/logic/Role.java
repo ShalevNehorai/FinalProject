@@ -1,5 +1,7 @@
 package ilanBondarevsky_shalevNehorai.logic;
 
+import javax.management.InstanceNotFoundException;
+
 public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSync {
 	
 	private static int globalId = 0;
@@ -53,7 +55,7 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		case HOUR_EMPLOYEE:
 			employee = new HourEmployee(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary);
 			break;
-		case PARSENTAGE_EMPLOYEE:
+		case PERCENTAGE_EMPLOYEE:
 			employee = new PercentageEmployee(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary, mothlyPercentage, monthlySales);
 			break;
 		
@@ -73,24 +75,23 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	}
 
 	@Override
-	public double addedMoney() {
+	public double profit() {
 		if(employee != null) {
-			return employee.addedMoney();
+			return employee.profit();
 		}
 		
 		return 0;
 	}
 	
 	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) {
+	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
 		if(isWorkChangeable) {
 			if(employee != null) {
 				employee.changeWorkingHours(startTime, homeWork);
 			}
 		}
 		else{
-			//TODO fire not Changeable
-			System.out.println("Cant change work hours for role " + this.id + " " + this.name);
+			throw new IllegalArgumentException("Hours can not be changed!");
 		}
 	}
 	
@@ -106,5 +107,46 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		output.append(" - isChangeable?:").append(isWorkChangeable).append("- isSync?:").append(isWorkingSync);
 		return output.toString();
 	}
-
+	
+	public String getEmployeeName() throws InstanceNotFoundException{
+		if(employee != null){
+			return employee.getName();
+		} else{
+			throw new InstanceNotFoundException("The role is vacant");
+		}
+	}
+	
+	public EmployeeType getEmployeeType() throws InstanceNotFoundException{
+		if(employee != null){
+			return employee.getType();
+		} else{
+			throw new InstanceNotFoundException("The role is vacant");
+		}
+	}
+	
+	public void changeEmployeeSalesPercentage(double percentage) throws InstanceNotFoundException, IllegalArgumentException{
+		if(employee != null){
+			if(employee.getType() == EmployeeType.PERCENTAGE_EMPLOYEE){
+				PercentageEmployee emp = (PercentageEmployee)employee;
+				emp.setMonthlyPercentage(percentage);
+			} else{
+				throw new IllegalArgumentException("only employee with bonuses get percentage of sales");
+			}
+		}else{
+			throw new InstanceNotFoundException("The role is vacant");
+		}
+	}
+	
+	public void changeEmployeeMonthlySales(int sales) throws InstanceNotFoundException, IllegalArgumentException{
+		if(employee != null){
+			if(employee.getType() == EmployeeType.PERCENTAGE_EMPLOYEE){
+				PercentageEmployee emp = (PercentageEmployee)employee;
+				emp.setMonthlySales(sales);
+			} else{
+				throw new IllegalArgumentException("only employee with bonuses get percentage of sales");
+			}
+		}else{
+			throw new InstanceNotFoundException("The role is vacant");
+		}
+	}
 }

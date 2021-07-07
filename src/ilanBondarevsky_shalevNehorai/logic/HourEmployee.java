@@ -25,5 +25,10 @@ public class HourEmployee extends Employee {
 		output.append(" The salary is: ").append(moneyForHour).append("\u20AA for Hour.");
 		return output.toString();
 	}
+	
+	@Override
+	public EmployeeType getType() {
+		return EmployeeType.HOUR_EMPLOYEE;
+	}
 
 }

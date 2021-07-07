@@ -30,7 +30,8 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	}
 	
 	public abstract double salaryForHour();
-
+	public abstract EmployeeType getType();
+	
 	@Override
 	public boolean isWorkingSync() {
 		return isWorkingSync;
@@ -42,7 +43,7 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	}
 
 	@Override
-	public double addedMoney() {
+	public double profit() {
 		return addedHours() * salaryForHour();
 	}
 	
@@ -71,6 +72,10 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 		
 		output.append(" He/She prefer working: ").append(preference.toString());
 		return output.toString();
+	}
+	
+	public String getName(){
+		return name;
 	}
 
 }

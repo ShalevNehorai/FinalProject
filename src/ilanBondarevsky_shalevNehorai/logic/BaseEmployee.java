@@ -30,4 +30,9 @@ public class BaseEmployee extends Employee {
 		output.append(" The salary is: ").append(salary).append("\u20AA for month.");
 		return output.toString();
 	}
+	
+	@Override
+	public EmployeeType getType() {
+		return EmployeeType.BASE_EMPLOYEE;
+	}
 }
