@@ -1,5 +1,6 @@
 package ilanBondarevsky_shalevNehorai.application;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -9,7 +10,7 @@ import javafx.scene.text.Text;
 public class RoleViewCell extends ListCell<RoleView> {
 	private MainWindow mainWindow;
 	
-	private Text roleText;
+	private Label roleText;
 	private BorderPane root;
 
 	public RoleViewCell(MainWindow mainWindow) {
@@ -17,7 +18,7 @@ public class RoleViewCell extends ListCell<RoleView> {
 		
 		this.mainWindow = mainWindow;
 		
-		roleText = new Text();
+		roleText = new Label();
 		root = new BorderPane();
 		
 		root.setTop(roleText);

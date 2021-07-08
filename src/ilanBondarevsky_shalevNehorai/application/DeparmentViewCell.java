@@ -62,17 +62,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 		BorderPane.setMargin(top, new Insets(5));
 			//END @TOP
 		
-//		roleList = FXCollections.observableArrayList();
-//		roleListView = new ListView<RoleView>(roleList);
-		/*roleListView.setCellFactory(new Callback<ListView<RoleView>, ListCell<RoleView>>() {
-			@Override
-			public ListCell<RoleView> call(ListView<RoleView> listView) {
-				return new RoleViewCell(mainWindow);
-			}
-		});*/
-		
-		root.setCenter(roleListView);
-		
 		
 			//@BUTTOM
 		addRoleButton = new DefaultButton("Add Role");
@@ -92,16 +81,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 	private void addRole(String deptName, String roleName, boolean isRoleChangeable) {
 		mainWindow.addRole(deptName, roleName, isRoleChangeable);
 	}
-	
-	/*private void updateRoleList(String name) {
-		ArrayList<Integer> list = mainWindow.askRolesInDeparment(name);
-		
-		if(list != null) {
-			for (Integer integer : list) {
-				roleList.add(new RoleView(integer));
-			}
-		}
-	}*/
 	
 	@Override
 	protected void updateItem(DeparmentView item, boolean empty) {
@@ -126,6 +105,8 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 					return new RoleViewCell(mainWindow);
 				}
 			});
+			root.setCenter(roleListView);
+			roleListView.setPrefSize(50, 200);
 			
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
