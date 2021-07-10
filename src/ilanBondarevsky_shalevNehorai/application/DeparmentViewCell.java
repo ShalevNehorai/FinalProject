@@ -34,7 +34,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 	private Button changeHoursBtn;
 	private Button addRoleButton;
 	
-//	private ObservableList<RoleView> roleList;
 	private ListView<RoleView> roleListView;
 	
 	public DeparmentViewCell(MainWindow mainWindow) {
@@ -74,8 +73,7 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 	}
 	
 	private void setChagngBtnState(String name) {
-		boolean isVisiable = mainWindow.isDepatmentChangeable(name);
-		changeHoursBtn.setVisible(isVisiable);
+		changeHoursBtn.setVisible(mainWindow.isDepatmentChangeable(name));
 	}
 	
 	private void addRole(String deptName, String roleName, boolean isRoleChangeable) {
@@ -97,8 +95,9 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			else {
 				profitText.setTextFill(Color.GREEN);
 			}
-			
+						
 			roleListView = new ListView<RoleView>(item.getRoleList());
+			roleListView.setSelectionModel(new NoSelectionModel<RoleView>());
 			roleListView.setCellFactory(new Callback<ListView<RoleView>, ListCell<RoleView>>() {
 				@Override
 				public ListCell<RoleView> call(ListView<RoleView> listView) {
@@ -107,6 +106,10 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			});
 			root.setCenter(roleListView);
 			roleListView.setPrefSize(50, 200);
+			
+			if(!mainWindow.isDepatmentChangeable(item.getName())) {
+				changeHoursBtn.setVisible(false);
+			}
 			
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override

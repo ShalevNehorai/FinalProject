@@ -178,4 +178,9 @@ public class Controller implements CompanyListenable, ViewListenable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
+		return theModel.getEmployeeType(deparmentName, roleId);
+	}
 }

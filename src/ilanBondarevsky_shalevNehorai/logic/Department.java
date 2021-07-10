@@ -12,6 +12,9 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	private boolean isSync;
 	private boolean isChangeable;
 	
+	private int syncStartTime = Company.DEFAULT_START_WORK_DAY;
+	private boolean syncWorkFromHome = false;
+	
 	public Department(String name, boolean isSync, boolean isChangable) throws IllegalArgumentException{
 		if(name.isBlank()) {
 			throw new IllegalArgumentException("Department name cant be blank");
@@ -42,8 +45,12 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	}
 	
 	public int addRole(String roleName, boolean isRoleChangeable, EmployeeType type, String employeeName, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double monthlyPercentage, int monthlySales) throws IllegalArgumentException {
-		if(!isChangeable)
+		if(isSync){
+			isRoleChangeable = true;
+		}
+		else if(!isChangeable) {
 			isRoleChangeable = false;
+		}
 		
 		roles.add(new Role(roleName, isSync, isRoleChangeable, type, employeeName, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, monthlyPercentage, monthlySales));
 		return roles.get(roles.size() - 1).getId();
@@ -65,6 +72,8 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		if(isChangeable){
 			for (Role role : roles) {
 				role.changeWorkingHours(startTime, homeWork);
+				syncStartTime = startTime;
+				syncWorkFromHome = homeWork;
 			}
 		} else{
 			throw new IllegalArgumentException("Can't change the department's roles hours");
@@ -173,12 +182,13 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		}
 	}
 	
-	public String getEmployeeNameInRole(int roleId) throws InstanceNotFoundException{
+	public String getEmployeeNameInRole(int roleId) throws InstanceNotFoundException {
 		Role role = getRoleById(roleId);
 		if(role != null){
 			return role.getEmployeeName();
-		} else{
-			throw new InstanceNotFoundException("Role doesn't exist");
+		}
+		else {
+			throw new InstanceNotFoundException("Role not found under deparment " + name);
 		}
 	}
 	
@@ -207,5 +217,13 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		} else{
 			throw new InstanceNotFoundException("Role doesn't exist");
 		}
+	}
+	
+	public int getSyncedStartHour(){
+		return syncStartTime;
+	}
+	
+	public boolean getSyncWorkFromHome(){
+		return syncWorkFromHome;
 	}
 }

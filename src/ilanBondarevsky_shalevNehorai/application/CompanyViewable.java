@@ -23,12 +23,13 @@ public interface CompanyViewable {
 	boolean isRoleSync(String deparmentName, int roleId);
 	boolean isRoleChangeable(String departmentName, int roleId);
 	String askRoleData(String deparmentName, int roleId);
+	EmployeeType askEmployeeType(String deparmentName, int roleId);
 	
 	void addDepartment(String name, boolean isSync, boolean isChangeable);
 	void addRole(String deparmentName, String roleName, boolean isRoleChangeable);
-	void addEpmloyee(String deparmentName, int roleId, String employeeName, EmployeeType type, int preferWorkingRime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales);
+	void addEmployee(String deparmentName, int roleId, String employeeName, EmployeeType type, int preferWorkingRime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales);
 	
-	void changeEmployeePersentage(String deparmentName, int roleId, String employeeName, double percentage, double monthlySales);
+	void changeEmployeePercentage(String deparmentName, int roleId, String employeeName, double percentage, double monthlySales);
 	
 	void addedDeparment(String deparmentName);
 	void addedRoleToDeparment(String deparmentName, int roleId);

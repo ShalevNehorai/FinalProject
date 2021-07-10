@@ -44,7 +44,7 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 
 	@Override
 	public double profit() {
-		return addedHours() * salaryForHour();
+		return Math.round(addedHours() * salaryForHour() * 100) / 100.0;
 	}
 	
 	@Override
@@ -68,9 +68,9 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 		if(isHomeWorking)
 			output.append(" works from home.");
 		else
-			output.append(" works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY + 1) % 24).append(".");
+			output.append(" works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY + 1) % 24).append(".\n");
 		
-		output.append(" He/She prefer working: ").append(preference.toString());
+		output.append("He/She prefer working: ").append(preference.toString());
 		return output.toString();
 	}
 	

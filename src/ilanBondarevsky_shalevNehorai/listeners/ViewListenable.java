@@ -20,6 +20,7 @@ public interface ViewListenable {
 	boolean isRoleSync(String deparmentName, int roleId);
 	boolean isRoleChangeable(String departmentName, int roleId);
 	String askRoleData(String deparmentName, int roleId);
+	EmployeeType askEmployeeType(String deparmentName, int roleId);
 	
 	void addDepartment(String name, boolean isSync, boolean isChangeable);
 	void addRole(String deparmentName, String roleName, boolean isRoleChangeable);

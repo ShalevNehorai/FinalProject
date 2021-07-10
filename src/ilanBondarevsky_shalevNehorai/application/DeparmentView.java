@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
 
 public class DeparmentView {
 	private String deprmentName;
@@ -14,6 +15,7 @@ public class DeparmentView {
 		this.deprmentName = name;
 		
 		roleList = FXCollections.observableArrayList();
+		
 	}
 	
 	public String getName() {
@@ -21,7 +23,7 @@ public class DeparmentView {
 	}
 	
 	public void addRoleId(int id) {
-		roleList.add(new RoleView(id));
+		roleList.add(new RoleView(id, deprmentName));
 	}
 	
 	public ObservableList<RoleView> getRoleList() {

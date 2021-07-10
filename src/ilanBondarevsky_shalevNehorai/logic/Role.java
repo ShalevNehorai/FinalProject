@@ -100,20 +100,19 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		StringBuffer output = new StringBuffer();
 		output.append(name).append(" Role: ");
 		if(employee != null)
-			output.append(employee.toString());
+			output.append(employee.toString() + "\n");
 		else
-			output.append(" There is no employee working for this role.");
+			output.append(" There is no employee working for this role.\n");
 			
-		output.append(" - isChangeable?:").append(isWorkChangeable).append("- isSync?:").append(isWorkingSync);
+		output.append("isChangeable? ").append(isWorkChangeable).append("\nisSync? ").append(isWorkingSync);
 		return output.toString();
 	}
 	
-	public String getEmployeeName() throws InstanceNotFoundException{
+	public String getEmployeeName() {
 		if(employee != null){
 			return employee.getName();
-		} else{
-			throw new InstanceNotFoundException("The role is vacant");
-		}
+		} 
+		return null;
 	}
 	
 	public EmployeeType getEmployeeType() throws InstanceNotFoundException{

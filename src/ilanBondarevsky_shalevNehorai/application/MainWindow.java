@@ -67,12 +67,14 @@ public class MainWindow implements CompanyViewable {
 			//@CENTER
 		deptList = FXCollections.observableArrayList();
 		depListView = new ListView<DeparmentView>(deptList);
-		depListView.setCellFactory(new Callback<ListView<DeparmentView>, ListCell<DeparmentView>>() {
+		depListView.setSelectionModel(new NoSelectionModel<DeparmentView>());
+		/*depListView.setCellFactory(new Callback<ListView<DeparmentView>, ListCell<DeparmentView>>() {
 			@Override
 			public ListCell<DeparmentView> call(ListView<DeparmentView> listView) {
 				return new DeparmentViewCell(mainWindow);
 			}
-		});
+		});*/
+		updateDepmtList();
 		
 		root.setCenter(depListView);
 		BorderPane.setMargin(depListView, new Insets(10));
@@ -88,7 +90,9 @@ public class MainWindow implements CompanyViewable {
 				
 				Random rnd = new Random();
 				String[] names = {"Cormac Millington", "Kean Guevara", "Giacomo Mcdaniel", "Pearce Terry", "Dorian Timms"};
-				addDepartment(names[rnd.nextInt(names.length)] + rnd.nextInt(), rnd.nextBoolean(), rnd.nextBoolean());				
+				addDepartment(names[rnd.nextInt(names.length)] + rnd.nextInt(), rnd.nextBoolean(), rnd.nextBoolean());	
+				
+//				AddDepartment addDept = new AddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
 			}
 		});
 		
@@ -109,7 +113,16 @@ public class MainWindow implements CompanyViewable {
 		askCompanyName();
 		askCompanyProfit();
 		
-		askDeparmnetNames();
+//		askDeparmnetNames();
+	}
+	
+	public void updateDepmtList() {
+		depListView.setCellFactory(new Callback<ListView<DeparmentView>, ListCell<DeparmentView>>() {
+			@Override
+			public ListCell<DeparmentView> call(ListView<DeparmentView> listView) {
+				return new DeparmentViewCell(mainWindow);
+			}
+		});
 	}
 	
 	@Override
@@ -179,44 +192,37 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public ArrayList<Integer> askRolesInDeparment(String deparmentName) {
-		// TODO Auto-generated method stub
-		return null;
+		return allListeners.get(0).askRoleIdInDepartment(deparmentName);
 	}
 
 	@Override
 	public String askRoleName(String departmentName, int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return allListeners.get(0).askRoleName(departmentName, id);
 	}
 
 	@Override
 	public String askRoleEmployeeName(String deparmentName, int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return allListeners.get(0).askRoleEmployeeName(deparmentName, id);
 	}
 
 	@Override
 	public double askEmployeeProfit(String deparmentName, int roleId) {
-		// TODO Auto-generated method stub
-		return 0;
+		return allListeners.get(0).askEmployeeProfit(deparmentName, roleId);
 	}
 
 	@Override
 	public boolean isRoleSync(String deparmentName, int roleId) {
-		// TODO Auto-generated method stub
-		return false;
+		return allListeners.get(0).isRoleSync(deparmentName, roleId);
 	}
 
 	@Override
 	public boolean isRoleChangeable(String departmentName, int roleId) {
-		// TODO Auto-generated method stub
-		return false;
+		return allListeners.get(0).isRoleChangeable(departmentName, roleId);
 	}
 
 	@Override
 	public String askRoleData(String deparmentName, int roleId) {
-		// TODO Auto-generated method stub
-		return null;
+		return allListeners.get(0).askRoleData(deparmentName, roleId);
 	}
 
 	@Override
@@ -235,14 +241,15 @@ public class MainWindow implements CompanyViewable {
 	}
 
 	@Override
-	public void addEpmloyee(String deparmentName, int roleId, String employeeName, EmployeeType type,
-			int preferWorkingRime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales) {
-		// TODO Auto-generated method stub
-
+	public void addEmployee(String deparmentName, int roleId, String employeeName, EmployeeType type,
+			int preferWorkingTime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales) {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.addEpmloyee(deparmentName, roleId, employeeName, type, preferWorkingTime, prefWorkingHome, salary, monthlyPersentage, monthlySales);
+		}
 	}
 
 	@Override
-	public void changeEmployeePersentage(String deparmentName, int roleId, String employeeName, double percentage,
+	public void changeEmployeePercentage(String deparmentName, int roleId, String employeeName, double percentage,
 			double monthlySales) {
 		// TODO Auto-generated method stub
 
@@ -250,6 +257,7 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void addedDeparment(String deparmentName) {
+		askCompanyProfit();
 		if(deparmentName != null && !deparmentName.isBlank()) {
 			deptList.add(new DeparmentView(deparmentName));
 		}
@@ -263,12 +271,23 @@ public class MainWindow implements CompanyViewable {
 				deparmentView.addRoleId(roleId);
 			}
 		}
+//		updateDepmtList();
 	}
 
 	@Override
 	public void addedEmployee(String deparmentName, int roleId) {
 		// TODO Auto-generated method stub
-		
+		/*for (DeparmentView deparmentView : depListView.getItems()) {
+			if(deparmentView.getName().equals(deparmentName)) {
+				for (RoleView roleView : deparmentView.getRoleList()) {
+					if(roleView.getRoleId() == roleId) {
+						roleView.setEmployeeName(askRoleEmployeeName(deparmentName, roleId));
+					}
+				}
+			}
+		}*/
+		askCompanyProfit();
+		updateDepmtList();
 	}
 
 	@Override
@@ -279,6 +298,11 @@ public class MainWindow implements CompanyViewable {
 	@Override
 	public void showError(String errorMsg) {
 		JOptionPane.showMessageDialog(null, errorMsg, "Failure", JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
+		return allListeners.get(0).askEmployeeType(deparmentName, roleId);
 	}
 
 }

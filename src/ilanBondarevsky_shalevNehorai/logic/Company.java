@@ -12,6 +12,8 @@ public class Company {
 	public static final int WORK_HOURS_IN_DAY = 8;
 	public static final int DEFAULT_START_WORK_DAY = 8;
 	
+	private final String dataAddress = "";
+	
 	private String name;
 	
 	private ArrayList<Department> departments;
@@ -89,6 +91,7 @@ public class Company {
 			try{
 				department.setRoleEmployee(roleID, emplyeeType, employeeName, DEFAULT_START_WORK_DAY, false, preferWorkingTime, preferWoringFromHome, salary, monthlyPercentage, monthlySales);			
 				fireAddedEmployee(departmentName, roleID);
+				System.out.println("added employee " + emplyeeType + " " + employeeName);
 			}
 			catch(IllegalArgumentException e){
 				fireExcpetion(e);
