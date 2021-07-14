@@ -28,7 +28,7 @@ public class AddDepartment {
 	private Label isChangeableLbl;
 	private CheckBox changeableCkb;
 	private Label isSyncableLbl;
-	private CheckBox syncableLbl;
+	private CheckBox syncableCkb;
 	private Button addDataBtn;
 	
 	public AddDepartment(MainWindow view, String companyName, Stage stage){
@@ -68,11 +68,11 @@ public class AddDepartment {
 		isSyncableLbl.setFont(font);
 		grid.add(isSyncableLbl, 0, 2);
 		
-		syncableLbl = new CheckBox();
-		syncableLbl.setOnAction(new EventHandler<ActionEvent>() {
+		syncableCkb = new CheckBox();
+		syncableCkb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 				public void handle(ActionEvent arg0) {
-					if(syncableLbl.isSelected()){
+					if(syncableCkb.isSelected()){
 						changeableCkb.setSelected(true);
 						changeableCkb.setVisible(false);
 						isChangeableLbl.setVisible(false);
@@ -85,7 +85,7 @@ public class AddDepartment {
 				
 				}
 		});
-		grid.add(syncableLbl, 1, 2);
+		grid.add(syncableCkb, 1, 2);
 		
 		addDataBtn = new DefaultButton("Add Department");
 		addDataBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -93,7 +93,7 @@ public class AddDepartment {
 			@Override
 			public void handle(ActionEvent arg0) {
 				System.out.print(changeableCkb.isSelected());
-				view.addDepartment(depNameInput.getText(), syncableLbl.isSelected(), changeableCkb.isSelected());	
+				view.addDepartment(depNameInput.getText(), syncableCkb.isSelected(), changeableCkb.isSelected());	
 				stage.close();
 			}
 		});

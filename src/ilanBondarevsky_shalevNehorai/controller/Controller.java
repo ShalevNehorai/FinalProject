@@ -104,15 +104,8 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 
 	@Override
-	public void changeEmployeePersentage(String deparmentName, int roleId, String employeeName, double percentage) {
-		theModel.changeEmployeePercentage(deparmentName, roleId, percentage);
-
-	}
-	
-	@Override
-	public void changeMonthlySales(int monthlySales) {
-		// TODO Auto-generated method stub
-		
+	public void changeEmployeePersentageData(String deparmentName, int roleId, String employeeName, double percentage, int sales) {
+		theModel.changePercentageEmployeeData(employeeName, roleId, percentage, sales);
 	}
 
 	@Override
@@ -155,13 +148,6 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public void updateChangeMonthlySales(int sales, int roleId, String departmentName) {
-		updateRoleProfit(departmentName, roleId);
-		updateDepartmentProfit(departmentName);
-		updateCompanyProfit();
-	}
-	
-	@Override
 	public void updateCompanyProfit() {
 		// TODO Auto-generated method stub
 		
@@ -183,4 +169,68 @@ public class Controller implements CompanyListenable, ViewListenable {
 	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
 		return theModel.getEmployeeType(deparmentName, roleId);
 	}
+	@Override
+	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
+		theModel.changeDepartmentWorkHours(depName, startHour, workHome);
+	}
+	@Override
+	public void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
+		theModel.changeRoleWorkHours(depName, roleId, startHour, workFromHome);
+		
+	}
+	
+	@Override
+	public int askEmployeeMonthlySales(String depName, int roleId) {
+		int sales = theModel.getEmployeeMonthlySales(depName, roleId);
+		if(sales != -1){
+			return sales;
+		}
+		return 0;
+	}
+	
+	@Override
+	public double askEmployeePercentage(String depName, int roleId) {
+		double percentage = theModel.getEmployeePercentage(depName, roleId);
+		if(percentage != -1){
+			return percentage;
+		}
+		return 0;
+	}
+	
+	@Override
+	public void addedDepartment(String depName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void addedRole(String depName, int roleId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void addedEmployee(String depName, int roleId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void changedDepartmentHour(String depName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void changedRoleHour(String depName, int roleId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void changedPercentageEmployeeData(String depName, int roleId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

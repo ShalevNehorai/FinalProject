@@ -7,14 +7,20 @@ import javax.swing.JOptionPane;
 import ilanBondarevsky_shalevNehorai.logic.EmployeeType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class RoleViewCell extends ListCell<RoleView> {
 	private MainWindow mainWindow;
@@ -28,6 +34,8 @@ public class RoleViewCell extends ListCell<RoleView> {
 	private Button showBtn;
 	private Button changeHoursBtn;
 	private Button editEmployeeBtn;
+	
+	private ImageView showImg;
 
 	public RoleViewCell(MainWindow mainWindow) {
 		super();
@@ -36,13 +44,15 @@ public class RoleViewCell extends ListCell<RoleView> {
 		
 		hbox = new HBox();
 		hbox.setSpacing(20);
+		hbox.setAlignment(Pos.CENTER_LEFT);
 		
 		roleNameLbl = new Label();
 		employeeNameLbl = new Label();
 		profitLbl = new Label();
 		
 		addEmployeeBtn = new Button("Add Employee");
-		showBtn = new Button("show");
+		showBtn = new Button();
+		showImg = new ImageView(new Image("ilanBondarevsky_shalevNehorai/Images/icons8-info-48.png"));		
 		changeHoursBtn = new EditButton("change hours");
 		editEmployeeBtn = new Button("Edit");
 		
@@ -69,11 +79,11 @@ public class RoleViewCell extends ListCell<RoleView> {
 				public void handle(ActionEvent arg0) {
 					// TODO open the add employee window
 					
-					Random rnd = new Random();
+					/*Random rnd = new Random();
 					String[] names = {"Cormac Millington", "Kean Guevara", "Giacomo Mcdaniel", "Pearce Terry", "Dorian Timms"};					
 					addEmployeeToRole(item.getDeparmentName(), item.getRoleId(), names[rnd.nextInt(names.length)], EmployeeType.values()[rnd.nextInt(EmployeeType.values().length)],
-							rnd.nextInt(24), rnd.nextBoolean(), rnd.nextInt(12000), rnd.nextDouble(), rnd.nextInt(500));
-					
+							rnd.nextInt(24), rnd.nextBoolean(), rnd.nextInt(12000), rnd.nextDouble(), rnd.nextInt(500));*/
+					AddEmployee addEmployee = new AddEmployee(mainWindow, item.getDeparmentName(), item.getRoleId(), new Stage());					
 				}
 			});
 			
@@ -81,17 +91,19 @@ public class RoleViewCell extends ListCell<RoleView> {
 			if(employeeName != null) {
 				addEmployeeBtn.setManaged(false);
 				employeeNameLbl.setText(employeeName);
-				employeeNameLbl.setVisible(true);
-				profitLbl.setVisible(true);
-				showBtn.setVisible(true);
+				employeeNameLbl.setManaged(true);
+				profitLbl.setManaged(true);
+				showBtn.setManaged(true);
 				
-				changeHoursBtn.setVisible(true);
+				showBtn.setGraphic(showImg);
+				
+				changeHoursBtn.setManaged(true);
 				
 				if(mainWindow.isRoleSync(item.getDeparmentName(), item.getRoleId()) || !mainWindow.isRoleChangeable(item.getDeparmentName(), item.getRoleId())) {
-					changeHoursBtn.setVisible(false);
+					changeHoursBtn.setManaged(false);
 				}
 				
-				editEmployeeBtn.setVisible(mainWindow.askEmployeeType(item.getDeparmentName(), item.getRoleId()) == EmployeeType.PERCENTAGE_EMPLOYEE);
+				editEmployeeBtn.setManaged(mainWindow.askEmployeeType(item.getDeparmentName(), item.getRoleId()) == EmployeeType.PERCENTAGE_EMPLOYEE);
 				
 				double profit = mainWindow.askEmployeeProfit(item.getDeparmentName(), item.getRoleId());
 				
@@ -105,17 +117,16 @@ public class RoleViewCell extends ListCell<RoleView> {
 			}
 			else {
 				addEmployeeBtn.setManaged(true);
-				employeeNameLbl.setVisible(false);
-				profitLbl.setVisible(false);
-				showBtn.setVisible(false);
-				changeHoursBtn.setVisible(false);
-				editEmployeeBtn.setVisible(false);
+				employeeNameLbl.setManaged(false);
+				profitLbl.setManaged(false);
+				showBtn.setManaged(false);
+				changeHoursBtn.setManaged(false);
+				editEmployeeBtn.setManaged(false);
 			}
 			
 			showBtn.setOnAction(new EventHandler<ActionEvent>() {	
 				@Override
 				public void handle(ActionEvent arg0) {
-					// TODO Auto-generated method stub
 					JOptionPane.showMessageDialog(null, mainWindow.askRoleData(item.getDeparmentName(), item.getRoleId()));
 				}
 			});

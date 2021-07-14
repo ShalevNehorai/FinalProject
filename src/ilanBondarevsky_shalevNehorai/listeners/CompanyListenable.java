@@ -11,7 +11,16 @@ public interface CompanyListenable {
 	
 	void updateChangeDepartmentHour(String departmentName);
 	void updateChangeRoleHour(int roleId, String departmentName);
-	void updateChangeMonthlySales(int sales, int roleId, String departmentName);
+	
+	/**********************************************/
+	void addedDepartment(String depName);
+	void addedRole(String depName, int roleId);
+	void addedEmployee(String depName, int roleId);
+	
+	void changedDepartmentHour(String depName);
+	void changedRoleHour(String depName, int roleId);
+	void changedPercentageEmployeeData(String depName, int roleId);
+	/**********************************************/
 	
 	void modelExecpetion(String excpetionMsg);
 	void modelMsg(String msg);

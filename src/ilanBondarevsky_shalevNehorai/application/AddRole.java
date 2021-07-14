@@ -22,9 +22,9 @@ public class AddRole {
 	private Button addData;
 	
 	private final int H_GAP = 20;
-	private final int V_GAP = 30;
+	private final int V_GAP = 10;
 	private final int SCENE_WIDTH = 400;
-	private final int SCENE_HEIGHT = 200;
+	private final int SCENE_HEIGHT = 175;
 	private final int PADDING_INSETS = 20;
 	
 	public AddRole(MainWindow view, String depName, Stage stage){
@@ -52,18 +52,18 @@ public class AddRole {
 		
 		if(view.isDeparmentSync(depName)){
 			changeable.setSelected(true);
-		}else{
+		}else if(view.isDepatmentChangeable(depName)){
 			grid.add(isChangeable, 0, 2);
 			grid.add(changeable, 1, 2);
 		}
 		
 		
-		addData = new Button("Add Role");
+		addData = new DefaultButton("Add Role");
 		addData.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				view.addRole(depName, role.getText(), changeable.isSelected());
-				
+				stage.close();
 			}
 		});
 		

@@ -90,9 +90,9 @@ public class MainWindow implements CompanyViewable {
 				
 				Random rnd = new Random();
 				String[] names = {"Cormac Millington", "Kean Guevara", "Giacomo Mcdaniel", "Pearce Terry", "Dorian Timms"};
-				addDepartment(names[rnd.nextInt(names.length)] + rnd.nextInt(), rnd.nextBoolean(), rnd.nextBoolean());	
+//				addDepartment(names[rnd.nextInt(names.length)] + rnd.nextInt(), rnd.nextBoolean(), rnd.nextBoolean());	
 				
-//				AddDepartment addDept = new AddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
+				AddDepartment addDept = new AddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
 			}
 		});
 		
@@ -109,11 +109,10 @@ public class MainWindow implements CompanyViewable {
 		
 	}
 	
+	@Override
 	public void updateData() {
 		askCompanyName();
 		askCompanyProfit();
-		
-//		askDeparmnetNames();
 	}
 	
 	public void updateDepmtList() {
@@ -249,10 +248,10 @@ public class MainWindow implements CompanyViewable {
 	}
 
 	@Override
-	public void changeEmployeePercentage(String deparmentName, int roleId, String employeeName, double percentage,
-			double monthlySales) {
-		// TODO Auto-generated method stub
-
+	public void changeEmployeePercentageData(String deparmentName, int roleId, String employeeName, double percentage, int monthlySales) {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.changeEmployeePersentageData(deparmentName, roleId, employeeName, percentage, monthlySales);
+		}
 	}
 
 	@Override
@@ -261,17 +260,16 @@ public class MainWindow implements CompanyViewable {
 		if(deparmentName != null && !deparmentName.isBlank()) {
 			deptList.add(new DeparmentView(deparmentName));
 		}
+//		updateData();
 	}
 
 	@Override
 	public void addedRoleToDeparment(String deparmentName, int roleId) {
-		// TODO Auto-generated method stub
 		for (DeparmentView deparmentView : depListView.getItems()) {
 			if(deparmentView.getName().equals(deparmentName)) {
 				deparmentView.addRoleId(roleId);
 			}
 		}
-//		updateDepmtList();
 	}
 
 	@Override
@@ -304,5 +302,29 @@ public class MainWindow implements CompanyViewable {
 	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
 		return allListeners.get(0).askEmployeeType(deparmentName, roleId);
 	}
-
+	
+	@Override
+	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.changeDepartmentHours(depName, workHome, startHour);
+		}
+	}
+	@Override
+	public void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.changeRoleHour(depName, roleId, workFromHome, startHour);
+		}
+	}
+	
+	@Override
+	public int askEmployeeMonthlySales(String depName, int roleId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public double askEmployeePercentage(String depName, int roleId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

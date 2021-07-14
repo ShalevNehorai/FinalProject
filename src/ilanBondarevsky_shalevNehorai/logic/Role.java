@@ -123,7 +123,35 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		}
 	}
 	
-	public void changeEmployeeSalesPercentage(double percentage) throws InstanceNotFoundException, IllegalArgumentException{
+	public double getEmployeePercentage() throws InstanceNotFoundException, IllegalArgumentException {
+		if(employee.getType() != EmployeeType.PERCENTAGE_EMPLOYEE){
+			throw new IllegalArgumentException("Not a Bonus Sales Percentage Employee");
+		}
+		PercentageEmployee tempEmployee = (PercentageEmployee)(employee);
+		return tempEmployee.getPercentage();
+	}
+	
+	public int getEmployeeMonthlySales() throws IllegalArgumentException, InstanceNotFoundException{
+		if(employee.getType() != EmployeeType.PERCENTAGE_EMPLOYEE){
+			throw new IllegalArgumentException("Not a Bonus Sales Percentage Employee");
+		}
+		PercentageEmployee tempEmployee = (PercentageEmployee)(employee);
+		return tempEmployee.getMonthlySales();
+	}
+	
+	public void changePercentageEmployeeData(double percentage, int sales) throws InstanceNotFoundException, IllegalArgumentException {
+		if(employee != null){
+			if(employee.getType() != EmployeeType.PERCENTAGE_EMPLOYEE){
+				throw new IllegalArgumentException("Not a Bonus Sales Percentage Employee");
+			}
+			PercentageEmployee tempEmployee = (PercentageEmployee)employee;
+			tempEmployee.setMonthlyPercentage(percentage);
+			tempEmployee.setMonthlySales(sales);
+		}
+		throw new InstanceNotFoundException("The role is vacant");
+	}
+	
+	/*public void changeEmployeeSalesPercentage(double percentage) throws InstanceNotFoundException, IllegalArgumentException{
 		if(employee != null){
 			if(employee.getType() == EmployeeType.PERCENTAGE_EMPLOYEE){
 				PercentageEmployee emp = (PercentageEmployee)employee;
@@ -147,5 +175,5 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		}else{
 			throw new InstanceNotFoundException("The role is vacant");
 		}
-	}
+	}*/
 }

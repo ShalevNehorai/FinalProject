@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class DeparmentViewCell extends ListCell<DeparmentView> {
@@ -114,7 +115,7 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					
+					ChangeHours change = new ChangeHours(mainWindow, new Stage(), item.getName());
 				}
 			});
 			
@@ -123,9 +124,11 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 				public void handle(ActionEvent arg0) {
 					//TODO open add department window and from there adding role
 					
-					Random rnd = new Random();
+					/*Random rnd = new Random();
 					String[] names = {"Stockbroker", "Computer analyst", "Paramedic", "Editor", "Probation officer", "Psychologist", "Lighthouse keeper"};
-					addRole(item.getName(), names[rnd.nextInt(names.length)], rnd.nextBoolean());				
+					addRole(item.getName(), names[rnd.nextInt(names.length)], rnd.nextBoolean());*/
+					
+					AddRole addRole = new AddRole(mainWindow, item.getName(), new Stage());
 				}
 			});
 			

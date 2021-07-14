@@ -133,7 +133,7 @@ public class Company {
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
 			}	
-		}	else{
+		} else{
 			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
 		}
 	}
@@ -312,12 +312,72 @@ public class Company {
 		}
 	}
 	
-	public void changeEmployeePercentage(String departmentName, int roleId, double percentage){
+	public double getEmployeePercentage(String depName, int roleId){
+		if(getEmployeeType(depName, roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
+			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			return -1;
+		}
+		
+		Department dep = getDepartmentByName(depName);
+		try{
+			return dep.getEmployeePercentage(roleId);
+		}
+		catch(InstanceNotFoundException e){
+			fireExcpetion(e);
+			return -1;
+		}
+		catch(IllegalArgumentException e){
+			fireExcpetion(e);
+			return -1;
+		}	
+	}
+	
+	public int getEmployeeMonthlySales(String depName, int roleId){
+		if(getEmployeeType(depName, roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
+			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			return -1;
+		}
+		
+		Department dep = getDepartmentByName(depName);
+		try{
+			return dep.getEmployeeMonthlySales(roleId);
+		}
+		catch(InstanceNotFoundException e){
+			fireExcpetion(e);
+			return -1;
+		}
+		catch(IllegalArgumentException e){
+			fireExcpetion(e);
+			return -1;
+		}
+	}
+	
+	public void changePercentageEmployeeData(String depName, int roleId, double percentage, int monthlySales){
+		if(getEmployeeType(depName, roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
+			fireExcpetion(new IllegalArgumentException("Not a Bonus Sales Percentage Employee"));
+		}
+		
+		Department dep = getDepartmentByName(depName);
+		try{
+			dep.changePercentageEmployeeData(roleId, percentage, monthlySales);
+			fireChangeBonusPercentEmployee(roleId, depName);
+		}
+		catch(InstanceNotFoundException e){
+			fireExcpetion(e);
+		}
+		catch(IllegalArgumentException e){
+			fireExcpetion(e);
+		}
+		
+	}
+	
+	/*public void changeEmployeePercentage(String departmentName, int roleId, double percentage){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null){
 			try{
 				if(dep.getEmployeeType(roleId) == EmployeeType.PERCENTAGE_EMPLOYEE){
 					dep.changeEmployeeSalesPercentage(roleId, percentage);
+					//TODO fire changePercentage
 				} else{
 					fireExcpetion(new IllegalArgumentException("only employee with bonuses get percentage of sales"));
 				}
@@ -333,11 +393,15 @@ public class Company {
 		}
 	}
 	
-	public void changeMonthlySales(int sales, int roleId){
-		Department dep = getDepartmentByName(searchRoleInAllDepartments(roleId));
+	public void changeEmployeeMonthlySales(String depName, int roleId, int sales){
+		Department dep = getDepartmentByName(depName);
 		if(dep != null){
 			try{
-				dep.changeEmployeeMonthlySales(sales, roleId);
+				if(dep.getEmployeeType(roleId) == EmployeeType.PERCENTAGE_EMPLOYEE){
+					dep.changeEmployeeMonthlySales(sales, roleId);
+				} else{
+					fireExcpetion(new IllegalArgumentException("only employee with bonuses get percentage of sales"));
+				}
 				fireChangedMonthlySales(sales, roleId, dep.getName());
 			}
 			catch(InstanceNotFoundException e){
@@ -366,7 +430,7 @@ public class Company {
 			}
 		}
 		return null;
-	}
+	}*/
 	
 	public void fireExcpetion(Exception e){
 		for (CompanyListenable listener : allListeners) {
@@ -410,9 +474,9 @@ public class Company {
 		}
 	}
 	
-	public void fireChangedMonthlySales(int sales, int roleId, String departmentName){
+	public void fireChangeBonusPercentEmployee(int roleId, String departmentName){
 		for (CompanyListenable listener : allListeners) {
-			listener.updateChangeMonthlySales(sales, roleId, departmentName);
+			listener.updateEmployee(departmentName, roleId);
 		}
 	}
 	

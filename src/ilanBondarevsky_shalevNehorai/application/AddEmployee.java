@@ -13,7 +13,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
-
+import ilanBondarevsky_shalevNehorai.logic.Company;
 import ilanBondarevsky_shalevNehorai.logic.EmployeeType;
 
 public class AddEmployee {
@@ -32,12 +32,14 @@ public class AddEmployee {
 	private TextField salaryInput;
 	private Label salesPercentage;
 	private TextField salesPercentageInput;
+	private Label salesMonthlyLbl;
+	private TextField salesMonthlyInput;
 	private Button addData;
 	
 	private final int H_GAP = 20;
-	private final int V_GAP = 30;
-	private final int SCENE_WIDTH = 400;
-	private final int SCENE_HEIGHT = 200;
+	private final int V_GAP = 10;
+	private final int SCENE_WIDTH = 500;
+	private final int SCENE_HEIGHT = 400;
 	private final int PADDING_INSETS = 20;
 	
 	public AddEmployee(MainWindow view, String depName ,int roleId, Stage stage){
@@ -46,8 +48,7 @@ public class AddEmployee {
 		grid.setHgap(H_GAP);
 		grid.setVgap(V_GAP);
 		
-		roleName = new Label();
-		roleName.setText("Set employee in role " + view.askRoleName(depName, roleId) + " in " + depName);
+		roleName = new Label("Set employee in role " + view.askRoleName(depName, roleId) + " in deparment " + depName);
 		grid.add(roleName, 0, 0);
 		
 		name = new Label();
@@ -56,29 +57,40 @@ public class AddEmployee {
 		
 		nameInput = new TextField();
 		grid.add(nameInput, 1, 1);
-		
-		preferStartHour = new Label();
-		preferStartHour.setText("Prefer Start Work Hour: ");
-		grid.add(preferStartHour, 0, 2);
-		
-		preferHourInput = new TextField();
-		setTextFieldNumbersOnly(preferHourInput);
-		grid.add(preferHourInput, 1, 2);
-		
-		workFromHome = new Label();
-		workFromHome.setText("Prefer Working From Home? ");
-		grid.add(workFromHome, 0, 3);
+				
+		workFromHome = new Label("Prefer Working From Home? ");
+		grid.add(workFromHome, 0, 2);
 		
 		workFromHomeInput = new CheckBox();
-		grid.add(workFromHomeInput, 1, 3);
+		grid.add(workFromHomeInput, 1, 2);
 		
-		type = new Label();
-		type.setText("Employee Type: ");
+		workFromHomeInput.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+				preferStartHour.setVisible(!newVal);
+				preferHourInput.setVisible(!newVal);
+				
+				if(newVal) {
+					if(preferHourInput.getText().isBlank()) {
+						preferHourInput.setText("8");
+					}
+				}
+			}
+		});
+		
+		preferStartHour = new Label("Prefer Start Work Hour:\n(number between 0 to 23)");
+		grid.add(preferStartHour, 0, 3);
+		
+		preferHourInput = new TextField();
+		setTextFieldNumbersOnly(preferHourInput, 8);
+		grid.add(preferHourInput, 1, 3);
+		
+		type = new Label("Employee Type: ");
 		grid.add(type, 0, 4);
 		
 		typeInput = new ComboBox<EmployeeType>();
 		typeInput.getItems().addAll(EmployeeType.values());
-		typeInput.setValue(EmployeeType.BASE_EMPLOYEE);
+		typeInput.getSelectionModel().selectFirst();
 		typeInput.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -87,19 +99,22 @@ public class AddEmployee {
 						salary.setText("Salary (Monthly): ");
 						salesPercentage.setVisible(false);
 						salesPercentageInput.setVisible(false);
-						salesPercentageInput.setText("0");
+						salesMonthlyLbl.setVisible(false);
+						salesMonthlyInput.setVisible(false);
 						break;
 					case HOUR_EMPLOYEE:
 						salary.setText("Salary (Per Hour): ");
 						salesPercentage.setVisible(false);
 						salesPercentageInput.setVisible(false);
-						salesPercentageInput.setText("0");
+						salesMonthlyLbl.setVisible(false);
+						salesMonthlyInput.setVisible(false);
 						break;
 					case PERCENTAGE_EMPLOYEE:
 						salary.setText("Salary (Monthly): ");
 						salesPercentage.setVisible(true);
 						salesPercentageInput.setVisible(true);
-						salesPercentageInput.setText("");
+						salesMonthlyLbl.setVisible(true);
+						salesMonthlyInput.setVisible(true);
 						break;
 					
 					default:
@@ -110,32 +125,64 @@ public class AddEmployee {
 		});
 		grid.add(typeInput, 1, 4);
 		
-		salary = new Label();
-		salary.setText("Salary (Monthly): ");
+		salary = new Label("Salary (Monthly): ");
 		grid.add(salary, 0, 5);
 		
 		salaryInput = new TextField();
-		setTextFieldNumbersOnly(salaryInput);
+		setTextFieldNumbersOnly(salaryInput, 0);
 		grid.add(salaryInput, 1, 5);
 		
-		salesPercentage = new Label();
-		salesPercentage.setText("Your sales Percentage: (A number between 0 to 100)");
+		salesPercentage = new Label("Your sales Percentage:\n(A number between 0 to 100)");
 		grid.add(salesPercentage, 0, 6);
+		salesPercentage.setVisible(false);
 		
 		salesPercentageInput = new TextField();
-		setTextFieldNumbersOnly(salesPercentageInput);
+		setTextFieldNumbersOnly(salesPercentageInput, 0);
 		grid.add(salesPercentageInput, 1, 6);
+		salesPercentageInput.setVisible(false);
 		
-		addData = new Button("Add Employee");
+		salesMonthlyLbl = new Label("Your monthly sales: ");
+		grid.add(salesMonthlyLbl, 0, 7);
+		salesMonthlyLbl.setVisible(false);
+		
+		salesMonthlyInput = new TextField();
+		setTextFieldNumbersOnly(salesMonthlyInput, 0);
+		grid.add(salesMonthlyInput, 1, 7);
+		salesMonthlyInput.setVisible(false);
+		
+		addData = new DefaultButton("Add Employee");
 		addData.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				String prefWorkHoursStr = preferHourInput.getText();
+				if(prefWorkHoursStr.isBlank()) {
+					prefWorkHoursStr = String.valueOf(Company.DEFAULT_START_WORK_DAY);
+				}
+				
+				String salaryStr = salaryInput.getText();
+				if(salaryStr.isBlank()) {
+					salaryStr = "0";
+				}
+				
+				String salePerStr = salesPercentageInput.getText();
+				if(salePerStr.isBlank()) {
+					salePerStr = "0";
+				}
+				
+				String saleMonStr = salesMonthlyInput.getText();
+				if(saleMonStr.isBlank()) {
+					saleMonStr = "0";
+				}
+				
 				view.addEmployee(depName, roleId, nameInput.getText(), typeInput.getValue(), 
-								Integer.parseInt(preferHourInput.getText()), workFromHomeInput.isSelected(), 
-								Integer.parseInt(salaryInput.getText()), Integer.parseInt(salesPercentage.getText()) / 100,
-								0);
+								Integer.parseInt(prefWorkHoursStr), workFromHomeInput.isSelected(), 
+								Integer.parseInt(salaryStr), Double.parseDouble(salePerStr) / 100.0,
+								Integer.parseInt(saleMonStr));
+				
+				stage.close();
 			}
 		});
+		grid.add(addData, 0, 8);
 			
 			
 		Scene scene = new Scene(grid, SCENE_WIDTH, SCENE_HEIGHT);
@@ -143,7 +190,7 @@ public class AddEmployee {
 		stage.show();	
 	}
 	
-	private void setTextFieldNumbersOnly(TextField tf) {
+	private void setTextFieldNumbersOnly(TextField tf, int startingText) {
 		tf.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -153,5 +200,6 @@ public class AddEmployee {
 		        }
 		    }
 		});
+		tf.setText(String.valueOf(startingText));
 	}
 }
