@@ -31,7 +31,7 @@ public interface CompanyViewable {
 	void addRole(String deparmentName, String roleName, boolean isRoleChangeable);
 	void addEmployee(String deparmentName, int roleId, String employeeName, EmployeeType type, int preferWorkingRime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales);
 	
-	void changeEmployeePercentageData(String deparmentName, int roleId, String employeeName, double percentage, int monthlySales);
+	void changeEmployeePercentageData(String deparmentName, int roleId, double percentage, int monthlySales);
 	void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour);
 	void changeDepartmentHours(String depName, boolean workHome, int startHour);
 	
@@ -43,4 +43,5 @@ public interface CompanyViewable {
 	void showError(String errorMsg);
 	
 	void updateData();
+	void updateProfit();
 }

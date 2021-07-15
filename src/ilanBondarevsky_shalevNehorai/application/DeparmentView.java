@@ -15,7 +15,6 @@ public class DeparmentView {
 		this.deprmentName = name;
 		
 		roleList = FXCollections.observableArrayList();
-		
 	}
 	
 	public String getName() {

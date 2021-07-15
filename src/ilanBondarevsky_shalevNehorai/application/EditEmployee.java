@@ -31,7 +31,7 @@ public class EditEmployee {
 	private final int H_GAP = 20;
 	private final int V_GAP = 10;
 	private final int SCENE_WIDTH = 400;
-	private final int SCENE_HEIGHT = 175;
+	private final int SCENE_HEIGHT = 200;
 	private final int PADDING_INSETS = 20;
 	
 	public  EditEmployee(MainWindow view, Stage stage, String depName, int roleId){
@@ -40,24 +40,22 @@ public class EditEmployee {
 		grid.setHgap(H_GAP);
 		grid.setVgap(V_GAP);
 		
-		double currentPercentage = view.askEmployeePercentage(depName, roleId);
+		int currentPercentage = (int)(view.askEmployeePercentage(depName, roleId) * 100);
+		int currentMonthlySales = view.askEmployeeMonthlySales(depName, roleId);
 		String employeeName = view.askRoleEmployeeName(depName, roleId);
 		
-		employee = new Label();
-		employee.setText("Employee " + employeeName);
+		employee = new Label("Employee " + employeeName);
 		grid.add(employee, 0, 0);
 		
-		monthlySales = new Label();
-		monthlySales.setText("Monthly sales: ");
+		monthlySales = new Label("Monthly sales: ");
 		grid.add(monthlySales, 0, 1);
 		
-		salesInput = new TextField();
+		salesInput = new TextField("" + currentMonthlySales);
 		setTextFieldNumbersOnly(salesInput);
-		salesInput.setText("" + view.askEmployeeMonthlySales(depName, roleId));
 		grid.add(salesInput, 1, 1);
 		
-		changePercentage = new Label();
-		changePercentage.setText("Change sales percentage? Current at "+ (currentPercentage * 100) + "%");
+		/*changePercentage = new Label();
+		changePercentage.setText("Change sales percentage? \nCurrent at "+ (currentPercentage * 100) + "%");
 		grid.add(changePercentage, 0, 2);
 		
 		change = new CheckBox();
@@ -75,26 +73,31 @@ public class EditEmployee {
 				}
 			}
 		});
-		grid.add(change, 1, 2);
+		grid.add(change, 1, 2);*/
 		
-		percentage = new Label();
-		percentage.setText("New percentage: Can be 0 - 100");
-		grid.add(percentage, 0, 3);
+		percentage = new Label("Percentage (Can be 0 - 100)");
+		grid.add(percentage, 0, 2);
 		
-		percentageInput = new TextField();
+		percentageInput = new TextField("" + (int)(currentPercentage));
 		setTextFieldNumbersOnly(percentageInput);
+		grid.add(percentageInput, 1, 2);
 		
-		editButton = new Button();
+		editButton = new DefaultButton("Submit");
 		editButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				view.changeEmployeePercentageData(depName, roleId, employeeName, 
-												Integer.parseInt(percentageInput.getText()) / 100,
-												Integer.parseInt(salesInput.getText()));
+				String percentStr = percentageInput.getText();
+				
+				String saleStr = salesInput.getText();
+				
+				view.changeEmployeePercentageData(depName, roleId, 
+												percentStr.isBlank()? (currentPercentage / 100.0) : (Double.parseDouble(percentStr) / 100.0),
+												saleStr.isBlank()? (currentMonthlySales) : (Integer.parseInt(saleStr)));
 												
 				stage.close();
 			}
 		});
+		grid.add(editButton, 0, 3);
 		
 		Scene scene = new Scene(grid, SCENE_WIDTH, SCENE_HEIGHT);
 		stage.setScene(scene);

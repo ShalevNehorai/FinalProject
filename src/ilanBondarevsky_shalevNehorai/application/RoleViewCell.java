@@ -79,31 +79,31 @@ public class RoleViewCell extends ListCell<RoleView> {
 				public void handle(ActionEvent arg0) {
 					// TODO open the add employee window
 					
-					/*Random rnd = new Random();
+					Random rnd = new Random();
 					String[] names = {"Cormac Millington", "Kean Guevara", "Giacomo Mcdaniel", "Pearce Terry", "Dorian Timms"};					
-					addEmployeeToRole(item.getDeparmentName(), item.getRoleId(), names[rnd.nextInt(names.length)], EmployeeType.values()[rnd.nextInt(EmployeeType.values().length)],
-							rnd.nextInt(24), rnd.nextBoolean(), rnd.nextInt(12000), rnd.nextDouble(), rnd.nextInt(500));*/
+//					addEmployeeToRole(item.getDeparmentName(), item.getRoleId(), names[rnd.nextInt(names.length)], EmployeeType.values()[rnd.nextInt(EmployeeType.values().length)],
+//							rnd.nextInt(24), rnd.nextBoolean(), rnd.nextInt(12000), rnd.nextDouble(), rnd.nextInt(500));
 					AddEmployee addEmployee = new AddEmployee(mainWindow, item.getDeparmentName(), item.getRoleId(), new Stage());					
 				}
 			});
 			
 //			System.out.println(employeeName + " in cell " + item.getRoleId());
 			if(employeeName != null) {
-				addEmployeeBtn.setManaged(false);
+				addEmployeeBtn.setVisible(false);
 				employeeNameLbl.setText(employeeName);
-				employeeNameLbl.setManaged(true);
-				profitLbl.setManaged(true);
-				showBtn.setManaged(true);
+				employeeNameLbl.setVisible(true);
+				profitLbl.setVisible(true);
+				showBtn.setVisible(true);
 				
 				showBtn.setGraphic(showImg);
 				
-				changeHoursBtn.setManaged(true);
+				changeHoursBtn.setVisible(true);
 				
 				if(mainWindow.isRoleSync(item.getDeparmentName(), item.getRoleId()) || !mainWindow.isRoleChangeable(item.getDeparmentName(), item.getRoleId())) {
-					changeHoursBtn.setManaged(false);
+					changeHoursBtn.setVisible(false);
 				}
 				
-				editEmployeeBtn.setManaged(mainWindow.askEmployeeType(item.getDeparmentName(), item.getRoleId()) == EmployeeType.PERCENTAGE_EMPLOYEE);
+				editEmployeeBtn.setVisible(mainWindow.askEmployeeType(item.getDeparmentName(), item.getRoleId()) == EmployeeType.PERCENTAGE_EMPLOYEE);
 				
 				double profit = mainWindow.askEmployeeProfit(item.getDeparmentName(), item.getRoleId());
 				
@@ -116,12 +116,12 @@ public class RoleViewCell extends ListCell<RoleView> {
 				}
 			}
 			else {
-				addEmployeeBtn.setManaged(true);
-				employeeNameLbl.setManaged(false);
-				profitLbl.setManaged(false);
-				showBtn.setManaged(false);
-				changeHoursBtn.setManaged(false);
-				editEmployeeBtn.setManaged(false);
+				addEmployeeBtn.setVisible(true);
+				employeeNameLbl.setVisible(false);
+				profitLbl.setVisible(false);
+				showBtn.setVisible(false);
+				changeHoursBtn.setVisible(false);
+				editEmployeeBtn.setVisible(false);
 			}
 			
 			showBtn.setOnAction(new EventHandler<ActionEvent>() {	
@@ -131,11 +131,23 @@ public class RoleViewCell extends ListCell<RoleView> {
 				}
 			});
 			
+			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					ChangeHours change = new ChangeHours(mainWindow, new Stage(), item.getDeparmentName(), item.getRoleId());
+					
+				}
+			});
+			
+			editEmployeeBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent arg0) {
+					EditEmployee edit = new EditEmployee(mainWindow, new Stage(), item.getDeparmentName(), item.getRoleId());
+				}
+			});
+			
 			setGraphic(hbox);
 		}
-	}
-	
-	private void addEmployeeToRole(String deparmentName, int roleId, String emoloyeeName, EmployeeType type, int prefWorkingTime, boolean prefWorkingHome, int salary, double montlyPersantage, int monthlySales) {
-		mainWindow.addEmployee(deparmentName, roleId, emoloyeeName, type, prefWorkingTime, prefWorkingHome, salary, montlyPersantage, monthlySales);
 	}
 }

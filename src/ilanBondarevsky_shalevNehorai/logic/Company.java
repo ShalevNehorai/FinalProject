@@ -109,10 +109,12 @@ public class Company {
 		if(department != null){
 			try{
 				department.changeWorkingHours(startTime, workingFromHome);
-				fireChangedDepartmentHour(departmentName);
 			}
 			catch(IllegalArgumentException e){
 				fireExcpetion(e);
+			}
+			finally {
+				fireUpdateProfit();
 			}
 		}
 		else{
@@ -125,7 +127,7 @@ public class Company {
 		if(department != null){
 			try{
 				department.changeWorkingHoursForRole(roleId, startTime, workingFromHome);
-				fireChangedRoleHour(roleId, department.getName());
+				fireUpdateProfit();
 			}
 			catch(IllegalArgumentException e){
 				fireExcpetion(e);
@@ -313,109 +315,50 @@ public class Company {
 	}
 	
 	public double getEmployeePercentage(String depName, int roleId){
-		if(getEmployeeType(depName, roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
-			return -1;
-		}
-		
 		Department dep = getDepartmentByName(depName);
 		try{
 			return dep.getEmployeePercentage(roleId);
 		}
-		catch(InstanceNotFoundException e){
+		catch(IllegalArgumentException | InstanceNotFoundException e){
 			fireExcpetion(e);
-			return -1;
 		}
-		catch(IllegalArgumentException e){
-			fireExcpetion(e);
-			return -1;
-		}	
+		catch(NullPointerException e) {
+			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
+		}
+		
+		return -1;
 	}
 	
 	public int getEmployeeMonthlySales(String depName, int roleId){
-		if(getEmployeeType(depName, roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
-			return -1;
-		}
-		
 		Department dep = getDepartmentByName(depName);
 		try{
 			return dep.getEmployeeMonthlySales(roleId);
 		}
-		catch(InstanceNotFoundException e){
-			fireExcpetion(e);
-			return -1;
-		}
 		catch(IllegalArgumentException e){
 			fireExcpetion(e);
-			return -1;
 		}
+		catch(NullPointerException | InstanceNotFoundException e) {
+			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
+		}
+		
+		return -1;
 	}
 	
 	public void changePercentageEmployeeData(String depName, int roleId, double percentage, int monthlySales){
-		if(getEmployeeType(depName, roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
-			fireExcpetion(new IllegalArgumentException("Not a Bonus Sales Percentage Employee"));
-		}
-		
 		Department dep = getDepartmentByName(depName);
 		try{
 			dep.changePercentageEmployeeData(roleId, percentage, monthlySales);
-			fireChangeBonusPercentEmployee(roleId, depName);
+			fireUpdateProfit();
 		}
-		catch(InstanceNotFoundException e){
+		catch(IllegalArgumentException | InstanceNotFoundException e){
 			fireExcpetion(e);
 		}
-		catch(IllegalArgumentException e){
-			fireExcpetion(e);
+		catch(NullPointerException e) {
+			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
 		}
 		
 	}
-	
-	/*public void changeEmployeePercentage(String departmentName, int roleId, double percentage){
-		Department dep = getDepartmentByName(departmentName);
-		if(dep != null){
-			try{
-				if(dep.getEmployeeType(roleId) == EmployeeType.PERCENTAGE_EMPLOYEE){
-					dep.changeEmployeeSalesPercentage(roleId, percentage);
-					//TODO fire changePercentage
-				} else{
-					fireExcpetion(new IllegalArgumentException("only employee with bonuses get percentage of sales"));
-				}
-			}
-			catch(InstanceNotFoundException e){
-				fireExcpetion(e);
-			}
-			catch(IllegalArgumentException e){
-				fireExcpetion(e);
-			}
-		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
-		}
-	}
-	
-	public void changeEmployeeMonthlySales(String depName, int roleId, int sales){
-		Department dep = getDepartmentByName(depName);
-		if(dep != null){
-			try{
-				if(dep.getEmployeeType(roleId) == EmployeeType.PERCENTAGE_EMPLOYEE){
-					dep.changeEmployeeMonthlySales(sales, roleId);
-				} else{
-					fireExcpetion(new IllegalArgumentException("only employee with bonuses get percentage of sales"));
-				}
-				fireChangedMonthlySales(sales, roleId, dep.getName());
-			}
-			catch(InstanceNotFoundException e){
-				fireExcpetion(e);
-			}
-			catch(IllegalArgumentException e){
-				fireExcpetion(e);
-			}
-		} else{
-			fireExcpetion(new InstanceNotFoundException("The role doesn't exist in the company"));
-		}
-		
-	}
-	
+
 	private String searchRoleInAllDepartments(int roleId){
 		for (Department department : departments) {
 			try{
@@ -430,7 +373,7 @@ public class Company {
 			}
 		}
 		return null;
-	}*/
+	}
 	
 	public void fireExcpetion(Exception e){
 		for (CompanyListenable listener : allListeners) {
@@ -446,37 +389,25 @@ public class Company {
 	
 	public void fireAddedDepartment(String name){
 		for (CompanyListenable listener : allListeners) {
-			listener.updateDepartment(name);
+			listener.modelAddedDepartment(name);;
 		}
 	}
 	
 	public void fireAddedRole(String departmentName, int roleId){
 		for (CompanyListenable listener : allListeners) {
-			listener.updateRole(departmentName, roleId);
+			listener.modelAddedRole(departmentName, roleId);;
 		}
 	}
 	
 	public void fireAddedEmployee(String departmentName, int roleId){
 		for (CompanyListenable listener : allListeners) {
-			listener.updateEmployee(departmentName, roleId);
+			listener.modelAddedEmployee(departmentName, roleId);;
 		}
 	}
 	
-	public void fireChangedDepartmentHour(String departmentName){
-		for (CompanyListenable listener : allListeners) {
-			listener.updateChangeDepartmentHour(departmentName);
-		}
-	}
-	
-	public void fireChangedRoleHour(int roleId, String departmentName){
-		for (CompanyListenable listener : allListeners) {
-			listener.updateChangeRoleHour(roleId, departmentName);
-		}
-	}
-	
-	public void fireChangeBonusPercentEmployee(int roleId, String departmentName){
-		for (CompanyListenable listener : allListeners) {
-			listener.updateEmployee(departmentName, roleId);
+	public void fireUpdateProfit() { // send command to update the profit in the company and all the departments and employees
+		for (CompanyListenable companyListenable : allListeners) {
+			companyListenable.modelUpdateProfit();
 		}
 	}
 	

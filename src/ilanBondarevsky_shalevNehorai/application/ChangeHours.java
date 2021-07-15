@@ -40,11 +40,8 @@ public class ChangeHours {
 			@Override
 			public void handle(ActionEvent arg0) {
 				String startStr = whenStartInput.getText();
-				if(startStr.isBlank()) {
-					startStr = String.valueOf(Company.DEFAULT_START_WORK_DAY);
-				}
 				
-				view.changeDepartmentHours(depName, homeInput.isSelected(), Integer.parseInt(startStr));
+				view.changeDepartmentHours(depName, homeInput.isSelected(), startStr.isBlank()? Company.DEFAULT_START_WORK_DAY : Integer.parseInt(startStr));
 				stage.close();
 			}
 		});
@@ -57,11 +54,13 @@ public class ChangeHours {
 		whoToChange = new Label();
 		whoToChange.setText("Change " + view.askRoleEmployeeName(depName, roleId) + " hours:");
 		
-		changeButton = new Button();
+		changeButton = new DefaultButton("Submit");
 		changeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				view.changeRoleHour(depName, roleId, homeInput.isSelected(), Integer.parseInt(whenStartInput.getText()));
+				String startStr = whenStartInput.getText();
+				
+				view.changeRoleHour(depName, roleId, homeInput.isSelected(), startStr.isBlank()? Company.DEFAULT_START_WORK_DAY : Integer.parseInt(startStr));
 				stage.close();
 			}
 		});

@@ -82,7 +82,7 @@ public class MainWindow implements CompanyViewable {
 			//END @CENTER
 		
 			//@BUTTOM
-		Button addDeptButton = new DefaultButton("Add Deparmetn");
+		Button addDeptButton = new DefaultButton("Add Deparment");
 		addDeptButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -113,6 +113,13 @@ public class MainWindow implements CompanyViewable {
 	public void updateData() {
 		askCompanyName();
 		askCompanyProfit();
+		askDeparmnetNames();
+	}
+	
+	@Override
+	public void updateProfit() {
+		askCompanyProfit();
+		updateDepmtList();
 	}
 	
 	public void updateDepmtList() {
@@ -131,13 +138,13 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void askCompanyName() {
-		String name = allListeners.get(0).askCompanyName();
+		String name = allListeners.get(0).viewAskCompanyName();
 		companyNameLbl.setText(name);
 	}
 
 	@Override
 	public void askCompanyProfit() {
-		double profit = allListeners.get(0).askCompanyProfit();
+		double profit = allListeners.get(0).viewAskCompanyProfit();
 		
 		companyProfitLbl.setText("profit: " + String.valueOf(profit));
 		
@@ -154,7 +161,7 @@ public class MainWindow implements CompanyViewable {
 //		deptList.clear();
 //		depListView.getItems().clear();
 		
-		ArrayList<String> list = allListeners.get(0).askDeparmentsNames();
+		ArrayList<String> list = allListeners.get(0).viewAskDeparmentsNames();
 		
 		if(list != null) {		
 			for (String string : list) {
@@ -176,65 +183,65 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public boolean isDeparmentSync(String departmentName) {
-		return allListeners.get(0).isDepartmentSync(departmentName);
+		return allListeners.get(0).viewAskIsDepartmentSync(departmentName);
 	}
 
 	@Override
 	public boolean isDepatmentChangeable(String departmentName) {
-		return allListeners.get(0).isDepartmentChangeable(departmentName);
+		return allListeners.get(0).viewAskIsDepartmentChangeable(departmentName);
 	}
 
 	@Override
 	public double askDeparmentProfit(String deparmentName) {
-		return allListeners.get(0).askDepartmentProfit(deparmentName);
+		return allListeners.get(0).viewAskDepartmentProfit(deparmentName);
 	}
 
 	@Override
 	public ArrayList<Integer> askRolesInDeparment(String deparmentName) {
-		return allListeners.get(0).askRoleIdInDepartment(deparmentName);
+		return allListeners.get(0).viewAskRoleIdInDepartment(deparmentName);
 	}
 
 	@Override
 	public String askRoleName(String departmentName, int id) {
-		return allListeners.get(0).askRoleName(departmentName, id);
+		return allListeners.get(0).viewAskRoleName(departmentName, id);
 	}
 
 	@Override
 	public String askRoleEmployeeName(String deparmentName, int id) {
-		return allListeners.get(0).askRoleEmployeeName(deparmentName, id);
+		return allListeners.get(0).viewAskRoleEmployeeName(deparmentName, id);
 	}
 
 	@Override
 	public double askEmployeeProfit(String deparmentName, int roleId) {
-		return allListeners.get(0).askEmployeeProfit(deparmentName, roleId);
+		return allListeners.get(0).viewAskEmployeeProfit(deparmentName, roleId);
 	}
 
 	@Override
 	public boolean isRoleSync(String deparmentName, int roleId) {
-		return allListeners.get(0).isRoleSync(deparmentName, roleId);
+		return allListeners.get(0).viewAskIsRoleSync(deparmentName, roleId);
 	}
 
 	@Override
 	public boolean isRoleChangeable(String departmentName, int roleId) {
-		return allListeners.get(0).isRoleChangeable(departmentName, roleId);
+		return allListeners.get(0).viewAskIsRoleChangeable(departmentName, roleId);
 	}
 
 	@Override
 	public String askRoleData(String deparmentName, int roleId) {
-		return allListeners.get(0).askRoleData(deparmentName, roleId);
+		return allListeners.get(0).viewAskRoleData(deparmentName, roleId);
 	}
 
 	@Override
 	public void addDepartment(String name, boolean isSync, boolean isChangeable) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.addDepartment(name, isSync, isChangeable);
+			viewListenable.viewAddDepartment(name, isSync, isChangeable);
 		}
 	}
 
 	@Override
 	public void addRole(String deparmentName, String roleName, boolean isRoleChangeable) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.addRole(deparmentName, roleName, isRoleChangeable);
+			viewListenable.viewAddRole(deparmentName, roleName, isRoleChangeable);
 		}
 
 	}
@@ -243,49 +250,36 @@ public class MainWindow implements CompanyViewable {
 	public void addEmployee(String deparmentName, int roleId, String employeeName, EmployeeType type,
 			int preferWorkingTime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.addEpmloyee(deparmentName, roleId, employeeName, type, preferWorkingTime, prefWorkingHome, salary, monthlyPersentage, monthlySales);
+			viewListenable.viewAddEpmloyee(deparmentName, roleId, employeeName, type, preferWorkingTime, prefWorkingHome, salary, monthlyPersentage, monthlySales);
 		}
 	}
 
 	@Override
-	public void changeEmployeePercentageData(String deparmentName, int roleId, String employeeName, double percentage, int monthlySales) {
+	public void changeEmployeePercentageData(String deparmentName, int roleId, double percentage, int monthlySales) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.changeEmployeePersentageData(deparmentName, roleId, employeeName, percentage, monthlySales);
+			viewListenable.viewChangeEmployeePersentageData(deparmentName, roleId, percentage, monthlySales);
 		}
 	}
 
 	@Override
 	public void addedDeparment(String deparmentName) {
+		deptList.add(new DeparmentView(deparmentName));
 		askCompanyProfit();
-		if(deparmentName != null && !deparmentName.isBlank()) {
-			deptList.add(new DeparmentView(deparmentName));
-		}
-//		updateData();
 	}
 
 	@Override
 	public void addedRoleToDeparment(String deparmentName, int roleId) {
-		for (DeparmentView deparmentView : depListView.getItems()) {
-			if(deparmentView.getName().equals(deparmentName)) {
-				deparmentView.addRoleId(roleId);
-			}
-		}
+       /* for (DeparmentView deparmentView : depListView.getItems()) {
+            if(deparmentView.getName().equals(deparmentName)) {
+                deparmentView.addRoleId(roleId);
+            }
+        }*/
+		updateDepmtList();
 	}
 
 	@Override
 	public void addedEmployee(String deparmentName, int roleId) {
-		// TODO Auto-generated method stub
-		/*for (DeparmentView deparmentView : depListView.getItems()) {
-			if(deparmentView.getName().equals(deparmentName)) {
-				for (RoleView roleView : deparmentView.getRoleList()) {
-					if(roleView.getRoleId() == roleId) {
-						roleView.setEmployeeName(askRoleEmployeeName(deparmentName, roleId));
-					}
-				}
-			}
-		}*/
-		askCompanyProfit();
-		updateDepmtList();
+		updateProfit();
 	}
 
 	@Override
@@ -300,31 +294,35 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
-		return allListeners.get(0).askEmployeeType(deparmentName, roleId);
+		return allListeners.get(0).viewAskEmployeeType(deparmentName, roleId);
 	}
 	
 	@Override
 	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.changeDepartmentHours(depName, workHome, startHour);
+			viewListenable.viewChangeDepartmentHours(depName, workHome, startHour);
 		}
 	}
 	@Override
 	public void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.changeRoleHour(depName, roleId, workFromHome, startHour);
+			viewListenable.viewChangeRoleHour(depName, roleId, workFromHome, startHour);
 		}
 	}
 	
 	@Override
 	public int askEmployeeMonthlySales(String depName, int roleId) {
-		// TODO Auto-generated method stub
+		int temp = allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId);
+		if (temp != -1)// TODO not necessary, we can just return 0 in the model
+			return temp;
 		return 0;
 	}
 	
 	@Override
 	public double askEmployeePercentage(String depName, int roleId) {
-		// TODO Auto-generated method stub
+		double temp = allListeners.get(0).viewAskEmployeePercentage(depName, roleId);
+		if (temp != -1)// TODO not necessary, we can just return 0 in the model
+			return temp;
 		return 0;
 	}
 }

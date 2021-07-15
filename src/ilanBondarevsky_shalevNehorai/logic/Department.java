@@ -73,11 +73,22 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	
 	@Override
 	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
+		StringBuffer errorMsg = new StringBuffer();
+		
 		if(isChangeable){
 			syncStartTime = startTime;
 			syncWorkFromHome = homeWork;
 			for (Role role : roles) {
-				role.changeWorkingHours(startTime, homeWork);
+				try{
+					role.changeWorkingHours(startTime, homeWork);
+				}
+				catch(IllegalArgumentException e){
+					errorMsg.append(e.getMessage() + "\n");
+				}
+			}
+			
+			if(!errorMsg.isEmpty()){
+				throw new IllegalArgumentException(errorMsg.toString());
 			}
 		} else {
 			throw new IllegalArgumentException("Can't change the department's roles hours");
@@ -205,48 +216,17 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		}
 	}
 	
-	public double getEmployeePercentage(int roleId) throws InstanceNotFoundException, IllegalArgumentException{
-		if(getEmployeeType(roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
-			throw new IllegalArgumentException("Not a Bonus Sales Percentage Employee");
-		} else{
-			Role role = getRoleById(roleId);
-			return role.getEmployeePercentage();
-		}
-	}
-	
-	public int getEmployeeMonthlySales(int roleId) throws InstanceNotFoundException, IllegalArgumentException{
-		if(getEmployeeType(roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
-			throw new IllegalArgumentException("Not a Bonus Sales Percentage Employee");
-		} else{
-			Role role = getRoleById(roleId);
-			return role.getEmployeeMonthlySales();
-		}
-	}
-	
-	/*public void changeEmployeeSalesPercentage(int roleId, double percentage) throws InstanceNotFoundException, IllegalArgumentException{
+	public double getEmployeePercentage(int roleId) throws IllegalArgumentException, InstanceNotFoundException{
 		Role role = getRoleById(roleId);
-		if(role != null){
-			role.changeEmployeeSalesPercentage(percentage);
-		} else{
-			throw new InstanceNotFoundException("Role doesn't exist");
-		}
+		return role.getEmployeePercentage();
 	}
 	
-	public void changeEmployeeMonthlySales(int sales, int roleId) throws InstanceNotFoundException, IllegalArgumentException {
+	public int getEmployeeMonthlySales(int roleId) throws IllegalArgumentException, InstanceNotFoundException {
 		Role role = getRoleById(roleId);
-		if(role != null){
-			role.changeEmployeeMonthlySales(sales);
-		} else{
-			throw new InstanceNotFoundException("Role doesn't exist");
-		}
-	}*/
+		return role.getEmployeeMonthlySales();
+	}	
 	
-	
-	public void changePercentageEmployeeData(int roleId, double percentage, int monthlySales) throws InstanceNotFoundException, IllegalArgumentException {
-		if(getEmployeeType(roleId) != EmployeeType.PERCENTAGE_EMPLOYEE){
-			throw new IllegalArgumentException("Not a Bonus Sales Percentage Employee");
-		}
-		
+	public void changePercentageEmployeeData(int roleId, double percentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException {
 		Role role = getRoleById(roleId);
 		role.changePercentageEmployeeData(percentage, monthlySales);
 	}

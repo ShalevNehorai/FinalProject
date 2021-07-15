@@ -7,35 +7,37 @@ public class Preference {
 	private final int DEFUALT_TIME = Company.DEFAULT_START_WORK_DAY;
 	private final int WORK_HOURS = Company.WORK_HOURS_IN_DAY;
 	
-	private int startTime;
-	private boolean workFromHome;
+	private int prefStartTime;
+	private boolean prefWorkFromHome;
 	
 	public Preference(boolean workFromHome, int startWorkHour) throws IllegalArgumentException{
 		if(startWorkHour < 0 || startWorkHour >= 24) {
 			throw new IllegalArgumentException("start working hour must be in range 0 - 23");
 		}
 		
-		this.startTime = startWorkHour;
-		this.workFromHome = workFromHome;
+		this.prefStartTime = startWorkHour;
+		this.prefWorkFromHome = workFromHome;
 	}
 	
 	public double efficiencyValue(){
-		if(workFromHome)
+		if(prefWorkFromHome)
 			return HOME_EFFECTIVE_VALUE;
 		return OFFICE_EFFECTIVE_VALUE;
 	}
 	
 	public int effectiveHours(int currentStartTime, boolean isHomeWorker) {
-		if(isHomeWorker && this.workFromHome)
+		if(isHomeWorker && this.prefWorkFromHome)
 			return WORK_HOURS;
-		if(isHomeWorker != this.workFromHome)
+		if(isHomeWorker != this.prefWorkFromHome)
 			return 0;	
-		
-		if(currentStartTime == DEFUALT_TIME || startTime == DEFUALT_TIME)
+
+		if(currentStartTime == DEFUALT_TIME) {
 			return 0;
-		if(startTime == currentStartTime)
-			return Math.abs(DEFUALT_TIME - startTime);
-		else if(startTime > currentStartTime) {
+		}
+		
+		if(prefStartTime == currentStartTime)
+			return Math.abs(DEFUALT_TIME - prefStartTime);
+		else if(prefStartTime > currentStartTime) {
 			return earlierThanPreferedEffectiveWorkHours(currentStartTime);
 		}
 		else {
@@ -44,23 +46,23 @@ public class Preference {
 	}
 	
 	private int laterThanPreferedEffectiveWorkHours(int currentStartTime) {
-		if(startTime < DEFUALT_TIME)
-			return DEFUALT_TIME - startTime;
-		if(startTime > DEFUALT_TIME) {
-			if(startTime > DEFUALT_TIME)
-				return startTime - DEFUALT_TIME;
-			if(startTime < DEFUALT_TIME)
+		if(prefStartTime < DEFUALT_TIME)
+			return DEFUALT_TIME - prefStartTime;
+		if(prefStartTime > DEFUALT_TIME) {
+			if(prefStartTime > DEFUALT_TIME)
+				return prefStartTime - DEFUALT_TIME;
+			if(prefStartTime < DEFUALT_TIME)
 				return 0;
 		}
 		return 0;
 	}
 	private int earlierThanPreferedEffectiveWorkHours(int currentStartTime) {
 		if(currentStartTime < DEFUALT_TIME) {
-			if(startTime > DEFUALT_TIME) {
+			if(prefStartTime > DEFUALT_TIME) {
 				return 0;
 			}
-			if(startTime < DEFUALT_TIME) 
-				return DEFUALT_TIME - startTime;
+			if(prefStartTime < DEFUALT_TIME) 
+				return DEFUALT_TIME - prefStartTime;
 		}
 		if(currentStartTime > DEFUALT_TIME) {
 			return currentStartTime - DEFUALT_TIME;
@@ -70,19 +72,20 @@ public class Preference {
 	}
 	
 	public int unEffectiveHours(int currentStartTime, boolean isHomeWorker) {	
-		if(isHomeWorker && this.workFromHome)
+		if(isHomeWorker && this.prefWorkFromHome)
 			return 0;
-		if(isHomeWorker != this.workFromHome)
+		if(isHomeWorker != this.prefWorkFromHome)
 			return WORK_HOURS;
 		
 		if(currentStartTime == DEFUALT_TIME)
 			return 0;
-		if(startTime == DEFUALT_TIME)
+			
+		if(prefStartTime == DEFUALT_TIME)
 			return Math.abs(DEFUALT_TIME - currentStartTime);
 		
-		if(startTime == currentStartTime)
+		if(prefStartTime == currentStartTime)
 			return 0;
-		else if(startTime > currentStartTime) {
+		else if(prefStartTime > currentStartTime) {
 			return earlierThanPreferedUneffectiveWorkHours(currentStartTime);
 		}
 		
@@ -93,10 +96,10 @@ public class Preference {
 	
 	private int earlierThanPreferedUneffectiveWorkHours(int currentStartTime) {
 		if(currentStartTime < DEFUALT_TIME) {
-			if(startTime < DEFUALT_TIME) {
-				return startTime - currentStartTime;
+			if(prefStartTime < DEFUALT_TIME) {
+				return prefStartTime - currentStartTime;
 			}
-			if(startTime > DEFUALT_TIME) 
+			if(prefStartTime > DEFUALT_TIME) 
 				return DEFUALT_TIME - currentStartTime;
 		}
 		if(currentStartTime > DEFUALT_TIME) {
@@ -108,9 +111,9 @@ public class Preference {
 		if(currentStartTime < DEFUALT_TIME)
 			return 0;
 		if(currentStartTime > DEFUALT_TIME) {
-			if(startTime > DEFUALT_TIME)
-				return currentStartTime - startTime;
-			if(startTime < DEFUALT_TIME)
+			if(prefStartTime > DEFUALT_TIME)
+				return currentStartTime - prefStartTime;
+			if(prefStartTime < DEFUALT_TIME)
 				return currentStartTime - DEFUALT_TIME;
 		}
 		return 0;
@@ -120,10 +123,10 @@ public class Preference {
 	public String toString() {
 		StringBuffer output = new StringBuffer();
 		output.append("Preffer Working ");
-		if(workFromHome)
+		if(prefWorkFromHome)
 			output.append("from home.");
 		else
-			output.append("from ").append(startTime).append(" to ").append((startTime + WORK_HOURS + 1) % 24).append(".");
+			output.append("from ").append(prefStartTime).append(" to ").append((prefStartTime + WORK_HOURS + 1) % 24).append(".");
 		return output.toString();
 	}
 }

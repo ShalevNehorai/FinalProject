@@ -96,8 +96,13 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			else {
 				profitText.setTextFill(Color.GREEN);
 			}
+			
+			ObservableList<RoleView> roleList = FXCollections.observableArrayList();
+			for(int num : mainWindow.askRolesInDeparment(item.getName())) {
+				roleList.add(new RoleView(num, item.getName()));
+			}
 						
-			roleListView = new ListView<RoleView>(item.getRoleList());
+			roleListView = new ListView<RoleView>(roleList);
 			roleListView.setSelectionModel(new NoSelectionModel<RoleView>());
 			roleListView.setCellFactory(new Callback<ListView<RoleView>, ListCell<RoleView>>() {
 				@Override
@@ -124,9 +129,9 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 				public void handle(ActionEvent arg0) {
 					//TODO open add department window and from there adding role
 					
-					/*Random rnd = new Random();
+					Random rnd = new Random();
 					String[] names = {"Stockbroker", "Computer analyst", "Paramedic", "Editor", "Probation officer", "Psychologist", "Lighthouse keeper"};
-					addRole(item.getName(), names[rnd.nextInt(names.length)], rnd.nextBoolean());*/
+//					addRole(item.getName(), names[rnd.nextInt(names.length)], rnd.nextBoolean());
 					
 					AddRole addRole = new AddRole(mainWindow, item.getName(), new Stage());
 				}

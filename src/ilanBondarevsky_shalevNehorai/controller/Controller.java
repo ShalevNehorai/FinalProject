@@ -22,107 +22,90 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public String askCompanyName() {
+	public String viewAskCompanyName() {
 		return theModel.getName();
 	}
 
 	@Override
-	public double askCompanyProfit() {
+	public double viewAskCompanyProfit() {
 		return theModel.getCompanyProfit();
 	}
 
 	@Override
-	public ArrayList<String> askDeparmentsNames() {
+	public ArrayList<String> viewAskDeparmentsNames() {
 		return theModel.getDepartmentsNames();
 	}
 
 	@Override
-	public double askDepartmentProfit(String deparmentName) {
+	public double viewAskDepartmentProfit(String deparmentName) {
 		return theModel.getDepartmentProfit(deparmentName);
 	}
 
 	@Override
-	public boolean isDepartmentSync(String deparmentName) {
+	public boolean viewAskIsDepartmentSync(String deparmentName) {
 		return theModel.isDepartmentSync(deparmentName);
 	}
 
 	@Override
-	public boolean isDepartmentChangeable(String departmentName) {
+	public boolean viewAskIsDepartmentChangeable(String departmentName) {
 		return theModel.isDepartmentChangeable(departmentName);
 	}
 
 	@Override
-	public ArrayList<Integer> askRoleIdInDepartment(String deparmentName) {
+	public ArrayList<Integer> viewAskRoleIdInDepartment(String deparmentName) {
 		return theModel.getRolesInDepartment(deparmentName);
 	}
 
 	@Override
-	public String askRoleName(String deparmentName, int roleId) {
+	public String viewAskRoleName(String deparmentName, int roleId) {
 		return theModel.getRoleName(deparmentName, roleId);
 	}
 
 	@Override
-	public String askRoleEmployeeName(String deparmentName, int roleId) {
+	public String viewAskRoleEmployeeName(String deparmentName, int roleId) {
 		return theModel.getEmployeeNameInRole(deparmentName, roleId);
 	}
 
 	@Override
-	public double askEmployeeProfit(String deparmentName, int roleId) {
+	public double viewAskEmployeeProfit(String deparmentName, int roleId) {
 		return theModel.getEmployeeProfit(deparmentName, roleId);
 	}
 
 	@Override
-	public boolean isRoleSync(String deparmentName, int roleId) {
+	public boolean viewAskIsRoleSync(String deparmentName, int roleId) {
 		return theModel.isRoleSync(deparmentName, roleId);
 	}
 
 	@Override
-	public boolean isRoleChangeable(String departmentName, int roleId) {
+	public boolean viewAskIsRoleChangeable(String departmentName, int roleId) {
 		return theModel.isRoleChangeable(departmentName, roleId);
 	}
 
 	@Override
-	public String askRoleData(String deparmentName, int roleId) {
+	public String viewAskRoleData(String deparmentName, int roleId) {
 		return theModel.getRoleData(deparmentName, roleId);
 	}
 
 	@Override
-	public void addDepartment(String name, boolean isSync, boolean isChangeable) {
+	public void viewAddDepartment(String name, boolean isSync, boolean isChangeable) {
 		theModel.addDepartment(name, isSync, isChangeable);
 	}
 
 	@Override
-	public void addRole(String deparmentName, String roleName, boolean isRoleChangeable) {
+	public void viewAddRole(String deparmentName, String roleName, boolean isRoleChangeable) {
 		theModel.addRoleToDepartment(deparmentName, roleName, isRoleChangeable);
 	}
 
 	@Override
-	public void addEpmloyee(String deparmentName, int roleId, String employeeName, EmployeeType type,
+	public void viewAddEpmloyee(String deparmentName, int roleId, String employeeName, EmployeeType type,
 			int preferWorkingTime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales) {
 		theModel.addEmployeeToRole(deparmentName, roleId, employeeName, type, preferWorkingTime, prefWorkingHome, salary, monthlyPersentage, monthlySales);
 
 	}
 
 	@Override
-	public void changeEmployeePersentageData(String deparmentName, int roleId, String employeeName, double percentage, int sales) {
-		theModel.changePercentageEmployeeData(employeeName, roleId, percentage, sales);
-	}
-
-	@Override
-	public void updateDepartment(String name) {
-		theView.addedDeparment(name);
-	}
-
-	@Override
-	public void updateRole(String departmentName, int roleId) {
-		theView.addedRoleToDeparment(departmentName, roleId);
-		
-	}
-
-	@Override
-	public void updateEmployee(String departmentName, int roleId) {
-		theView.addedEmployee(departmentName, roleId);
-		
+	public void viewChangeEmployeePersentageData(String deparmentName, int roleId, double percentage, int sales) {
+		theModel.changePercentageEmployeeData(deparmentName, roleId, percentage, sales);
 	}
 
 	@Override
@@ -134,53 +117,23 @@ public class Controller implements CompanyListenable, ViewListenable {
 	public void modelMsg(String msg) {
 		theView.showMsg(msg);
 	}
-	@Override
-	public void updateChangeDepartmentHour(String departmentName) {
-		updateDepartmentProfit(departmentName);
-		updateCompanyProfit();
-	}
-	
-	@Override
-	public void updateChangeRoleHour(int roleId, String departmentName) {
-		updateRoleProfit(departmentName, roleId);
-		updateDepartmentProfit(departmentName);
-		updateCompanyProfit();
-	}
-	
-	@Override
-	public void updateCompanyProfit() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void updateDepartmentProfit(String departmentName) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void updateRoleProfit(String departmentName, int roleId) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
-	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
+	public EmployeeType viewAskEmployeeType(String deparmentName, int roleId) {
 		return theModel.getEmployeeType(deparmentName, roleId);
 	}
 	@Override
-	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
+	public void viewChangeDepartmentHours(String depName, boolean workHome, int startHour) {
 		theModel.changeDepartmentWorkHours(depName, startHour, workHome);
 	}
 	@Override
-	public void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
+	public void viewChangeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
 		theModel.changeRoleWorkHours(depName, roleId, startHour, workFromHome);
 		
 	}
 	
 	@Override
-	public int askEmployeeMonthlySales(String depName, int roleId) {
+	public int viewAskEmployeeMonthlySales(String depName, int roleId) {
 		int sales = theModel.getEmployeeMonthlySales(depName, roleId);
 		if(sales != -1){
 			return sales;
@@ -189,7 +142,7 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public double askEmployeePercentage(String depName, int roleId) {
+	public double viewAskEmployeePercentage(String depName, int roleId) {
 		double percentage = theModel.getEmployeePercentage(depName, roleId);
 		if(percentage != -1){
 			return percentage;
@@ -198,39 +151,23 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public void addedDepartment(String depName) {
-		// TODO Auto-generated method stub
-		
+	public void modelAddedDepartment(String depName) {
+		theView.addedDeparment(depName);
 	}
 	
 	@Override
-	public void addedRole(String depName, int roleId) {
-		// TODO Auto-generated method stub
-		
+	public void modelAddedRole(String depName, int roleId) {
+		theView.addedRoleToDeparment(depName, roleId);
 	}
 	
 	@Override
-	public void addedEmployee(String depName, int roleId) {
-		// TODO Auto-generated method stub
-		
+	public void modelAddedEmployee(String depName, int roleId) {
+		theView.addedEmployee(depName, roleId);
 	}
 	
 	@Override
-	public void changedDepartmentHour(String depName) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void changedRoleHour(String depName, int roleId) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void changedPercentageEmployeeData(String depName, int roleId) {
-		// TODO Auto-generated method stub
-		
+	public void modelUpdateProfit() {
+		theView.updateProfit();
 	}
 	
 }

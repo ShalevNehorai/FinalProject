@@ -43,8 +43,13 @@ public class PercentageEmployee extends BaseEmployee {
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer(super.toString());
-		output.append(" The salary is: ").append(this.getSalary()).append("\u20AA with ").append(monthlyPercentage).append(" percentage from sales.");
+		output.append("\nWith ").append(monthlyPercentage).append(" percentage from sales.");
 		return output.toString();
+	}
+	
+	@Override
+	public double profit() {
+		return super.profit() + monthlySales * (1 - monthlyPercentage);
 	}
 	
 	@Override
