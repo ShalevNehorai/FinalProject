@@ -15,7 +15,7 @@ import javafx.geometry.Insets;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ChangeHours {
+public class ViewChangeHours {
 	private GridPane grid;
 	
 	private Label whoToChange;
@@ -31,7 +31,7 @@ public class ChangeHours {
 	private final int SCENE_HEIGHT = 200;
 	private final int PADDING_INSETS = 20;
 	
-	public ChangeHours(MainWindow view, Stage stage, String depName){
+	public ViewChangeHours(MainWindow view, Stage stage, String depName){
 		grid = new GridPane();
 		whoToChange = new Label("Change department " + depName + " hours:");
 		
@@ -49,7 +49,7 @@ public class ChangeHours {
 		addObjectsToGrid(stage);
 	}
 	
-	public ChangeHours(MainWindow view, Stage stage, String depName, int roleId){
+	public ViewChangeHours(MainWindow view, Stage stage, String depName, int roleId){
 		grid = new GridPane();
 		whoToChange = new Label();
 		whoToChange.setText("Change " + view.askRoleEmployeeName(depName, roleId) + " hours:");

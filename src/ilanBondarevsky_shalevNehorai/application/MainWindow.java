@@ -1,8 +1,6 @@
 package ilanBondarevsky_shalevNehorai.application;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -20,14 +18,16 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 public class MainWindow implements CompanyViewable {
+	private final int WIN_WIDTH = 1280;
+	private final int WIN_HEIGHT = 720;
+	
 	private MainWindow mainWindow;
 	
 	private ArrayList<ViewListenable> allListeners;
@@ -68,45 +68,49 @@ public class MainWindow implements CompanyViewable {
 		deptList = FXCollections.observableArrayList();
 		depListView = new ListView<DeparmentView>(deptList);
 		depListView.setSelectionModel(new NoSelectionModel<DeparmentView>());
-		/*depListView.setCellFactory(new Callback<ListView<DeparmentView>, ListCell<DeparmentView>>() {
-			@Override
-			public ListCell<DeparmentView> call(ListView<DeparmentView> listView) {
-				return new DeparmentViewCell(mainWindow);
-			}
-		});*/
 		updateDepmtList();
 		
 		root.setCenter(depListView);
 		BorderPane.setMargin(depListView, new Insets(10));
-
 			//END @CENTER
 		
 			//@BUTTOM
 		Button addDeptButton = new DefaultButton("Add Deparment");
 		addDeptButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) {
-				//TODO open add department window and from there adding deparment
-				
-				Random rnd = new Random();
-				String[] names = {"Cormac Millington", "Kean Guevara", "Giacomo Mcdaniel", "Pearce Terry", "Dorian Timms"};
-//				addDepartment(names[rnd.nextInt(names.length)] + rnd.nextInt(), rnd.nextBoolean(), rnd.nextBoolean());	
-				
-				AddDepartment addDept = new AddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
+			public void handle(ActionEvent arg0) {				
+				ViewAddDepartment addDept = new ViewAddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
 			}
 		});
 		
-		root.setBottom(addDeptButton);
+		Button exitBtn = new Button("save & quit");
+		exitBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				saveCompanyData();
+				primaryStage.close();
+			}
+		});
+		
+		HBox bottomBox = new HBox(addDeptButton, exitBtn);
+		bottomBox.setSpacing(900);
+		
+		root.setBottom(bottomBox);
 		BorderPane.setMargin(addDeptButton, new Insets(10));
-
 			//END @BUTTOM
 		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent arg0) {
+				saveCompanyData();
+				primaryStage.close();
+			}
+		});
 		
-		Scene scene = new Scene(root, 1280, 720);
-//		scene.getStylesheets().add("D:\\Shalev\\OneDrive - Afeka College Of Engineering\\codeProjects\\OOPLessones\\FinalProject\\src\\ilanBondarevsky_shalevNehorai\\application.css");
+		Scene scene = new Scene(root, WIN_WIDTH, WIN_HEIGHT);
+		scene.getStylesheets().add("/ilanBondarevsky_shalevNehorai/application.css");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
 	}
 	
 	@Override
@@ -146,7 +150,7 @@ public class MainWindow implements CompanyViewable {
 	public void askCompanyProfit() {
 		double profit = allListeners.get(0).viewAskCompanyProfit();
 		
-		companyProfitLbl.setText("profit: " + String.valueOf(profit));
+		companyProfitLbl.setText("profit: " + String.valueOf(profit) + "\u20AA");
 		
 		if(profit < 0) {
 			companyProfitLbl.setTextFill(Color.RED);
@@ -158,9 +162,6 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void askDeparmnetNames() {
-//		deptList.clear();
-//		depListView.getItems().clear();
-		
 		ArrayList<String> list = allListeners.get(0).viewAskDeparmentsNames();
 		
 		if(list != null) {		
@@ -269,11 +270,6 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void addedRoleToDeparment(String deparmentName, int roleId) {
-       /* for (DeparmentView deparmentView : depListView.getItems()) {
-            if(deparmentView.getName().equals(deparmentName)) {
-                deparmentView.addRoleId(roleId);
-            }
-        }*/
 		updateDepmtList();
 	}
 
@@ -312,17 +308,18 @@ public class MainWindow implements CompanyViewable {
 	
 	@Override
 	public int askEmployeeMonthlySales(String depName, int roleId) {
-		int temp = allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId);
-		if (temp != -1)// TODO not necessary, we can just return 0 in the model
-			return temp;
-		return 0;
+		return allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId);
 	}
 	
 	@Override
 	public double askEmployeePercentage(String depName, int roleId) {
-		double temp = allListeners.get(0).viewAskEmployeePercentage(depName, roleId);
-		if (temp != -1)// TODO not necessary, we can just return 0 in the model
-			return temp;
-		return 0;
+		return allListeners.get(0).viewAskEmployeePercentage(depName, roleId);
+	}
+
+	@Override
+	public void saveCompanyData() {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.viewAskSave();
+		}
 	}
 }

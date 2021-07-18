@@ -134,20 +134,12 @@ public class Controller implements CompanyListenable, ViewListenable {
 	
 	@Override
 	public int viewAskEmployeeMonthlySales(String depName, int roleId) {
-		int sales = theModel.getEmployeeMonthlySales(depName, roleId);
-		if(sales != -1){
-			return sales;
-		}
-		return 0;
+		return theModel.getEmployeeMonthlySales(depName, roleId);
 	}
 	
 	@Override
 	public double viewAskEmployeePercentage(String depName, int roleId) {
-		double percentage = theModel.getEmployeePercentage(depName, roleId);
-		if(percentage != -1){
-			return percentage;
-		}
-		return 0;
+		return theModel.getEmployeePercentage(depName, roleId);
 	}
 	
 	@Override
@@ -170,4 +162,9 @@ public class Controller implements CompanyListenable, ViewListenable {
 		theView.updateProfit();
 	}
 	
+	
+	@Override
+	public void viewAskSave() {
+		theModel.saveAsBinaryFile();
+	}
 }

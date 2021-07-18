@@ -1,13 +1,7 @@
 package ilanBondarevsky_shalevNehorai.application;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.management.relation.RoleList;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,7 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -48,7 +41,7 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 
 			//@TOP
 		name = new Label();
-		name.setFont(topfont);
+		name.getStyleClass().add("default-label");
 		profitText = new Label();
 		profitText.setFont(topfont);
 		
@@ -66,7 +59,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			//@BUTTOM
 		addRoleButton = new DefaultButton("Add Role");
 		
-		
 		root.setBottom(addRoleButton);
 		BorderPane.setMargin(addRoleButton, new Insets(5));
 			//END @BUTTOM
@@ -77,10 +69,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 		changeHoursBtn.setVisible(mainWindow.isDepatmentChangeable(name));
 	}
 	
-	private void addRole(String deptName, String roleName, boolean isRoleChangeable) {
-		mainWindow.addRole(deptName, roleName, isRoleChangeable);
-	}
-	
 	@Override
 	protected void updateItem(DeparmentView item, boolean empty) {
 		super.updateItem(item, empty);
@@ -89,7 +77,7 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			name.setText(item.getName());
 			
 			double profit = mainWindow.askDeparmentProfit(item.getName());
-			profitText.setText(String.valueOf(profit));
+			profitText.setText(String.valueOf(profit) + "\u20AA");
 			if(profit < 0) {
 				profitText.setTextFill(Color.RED);
 			}
@@ -120,20 +108,14 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					ChangeHours change = new ChangeHours(mainWindow, new Stage(), item.getName());
+					ViewChangeHours change = new ViewChangeHours(mainWindow, new Stage(), item.getName());
 				}
 			});
 			
 			addRoleButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					//TODO open add department window and from there adding role
-					
-					Random rnd = new Random();
-					String[] names = {"Stockbroker", "Computer analyst", "Paramedic", "Editor", "Probation officer", "Psychologist", "Lighthouse keeper"};
-//					addRole(item.getName(), names[rnd.nextInt(names.length)], rnd.nextBoolean());
-					
-					AddRole addRole = new AddRole(mainWindow, item.getName(), new Stage());
+					ViewAddRole addRole = new ViewAddRole(mainWindow, item.getName(), new Stage());
 				}
 			});
 			

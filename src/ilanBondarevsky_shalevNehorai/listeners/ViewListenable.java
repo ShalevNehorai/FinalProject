@@ -32,5 +32,7 @@ public interface ViewListenable {
 	void viewChangeDepartmentHours(String depName, boolean workHome, int startHour);
 	void viewChangeRoleHour(String depName, int roleId, boolean workFromHome, int startHour);
 	
+	void viewAskSave();
+	
 	
 }

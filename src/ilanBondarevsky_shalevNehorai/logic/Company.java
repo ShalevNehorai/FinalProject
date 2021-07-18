@@ -1,5 +1,11 @@
 package ilanBondarevsky_shalevNehorai.logic;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -12,7 +18,7 @@ public class Company {
 	public static final int WORK_HOURS_IN_DAY = 8;
 	public static final int DEFAULT_START_WORK_DAY = 8;
 	
-	private final String dataAddress = "";
+	private final String FILE_PATH = "data.dat";
 	
 	private String name;
 	
@@ -326,7 +332,7 @@ public class Company {
 			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
 		}
 		
-		return -1;
+		return 0;
 	}
 	
 	public int getEmployeeMonthlySales(String depName, int roleId){
@@ -341,7 +347,7 @@ public class Company {
 			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
 		}
 		
-		return -1;
+		return 0;
 	}
 	
 	public void changePercentageEmployeeData(String depName, int roleId, double percentage, int monthlySales){
@@ -357,22 +363,6 @@ public class Company {
 			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
 		}
 		
-	}
-
-	private String searchRoleInAllDepartments(int roleId){
-		for (Department department : departments) {
-			try{
-				department.getRoleName(roleId);
-				return department.getName();
-			}
-			catch(InstanceNotFoundException e){
-				
-			}
-			catch(IllegalArgumentException e){
-				
-			}
-		}
-		return null;
 	}
 	
 	public void fireExcpetion(Exception e){
@@ -405,10 +395,40 @@ public class Company {
 		}
 	}
 	
-	public void fireUpdateProfit() { // send command to update the profit in the company and all the departments and employees
+	// send command to update the profit in the company and all the departments and employees
+	public void fireUpdateProfit() { 
 		for (CompanyListenable companyListenable : allListeners) {
 			companyListenable.modelUpdateProfit();
 		}
 	}
 	
+	public void saveAsBinaryFile() {
+		try {
+			ObjectOutputStream outFile = new ObjectOutputStream(new FileOutputStream(FILE_PATH));
+			outFile.writeObject(name);
+			outFile.writeObject(departments);
+			outFile.writeInt(Role.getGlobalId());
+			outFile.close();
+		}
+		catch(FileNotFoundException e) {
+			System.out.println("File not found");
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readBinaryFile() {
+		ObjectInputStream inputFile;
+		try {
+			inputFile = new ObjectInputStream(new FileInputStream(FILE_PATH));
+			name = (String)inputFile.readObject();
+			departments = (ArrayList<Department>)inputFile.readObject();
+			Role.setGlobalId(inputFile.readInt());
+			inputFile.close();
+		} 
+		catch (IOException | ClassNotFoundException e) {
+			System.out.println("data file not found. fail loading data");
+		}	
+	}
 }

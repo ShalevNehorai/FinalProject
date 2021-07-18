@@ -30,5 +30,4 @@ public class HourEmployee extends Employee {
 	public EmployeeType getType() {
 		return EmployeeType.HOUR_EMPLOYEE;
 	}
-
 }

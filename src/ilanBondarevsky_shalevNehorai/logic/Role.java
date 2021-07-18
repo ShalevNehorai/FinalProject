@@ -1,8 +1,10 @@
 package ilanBondarevsky_shalevNehorai.logic;
 
+import java.io.Serializable;
+
 import javax.management.InstanceNotFoundException;
 
-public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSync {
+public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSync, Serializable {
 	
 	private static int globalId = 0;
 	
@@ -13,8 +15,6 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	
 	private boolean isWorkingSync;
 	private boolean isWorkChangeable;
-	
-	
 	
 	public Role(String name, boolean isWorkingSync, boolean isWorkChangeable, 
 			EmployeeType type, String empployeeName, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException {
@@ -163,5 +163,13 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		else {
 			throw new InstanceNotFoundException("role " + id + " doesnt have employee");
 		}
+	}
+	
+	public static int getGlobalId() {
+		return globalId;
+	}
+	
+	public static void setGlobalId(int globalId) {
+		Role.globalId = globalId;
 	}
 }

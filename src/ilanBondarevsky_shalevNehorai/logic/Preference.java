@@ -1,6 +1,8 @@
 package ilanBondarevsky_shalevNehorai.logic;
 
-public class Preference {
+import java.io.Serializable;
+
+public class Preference implements Serializable {
 	
 	private final double HOME_EFFECTIVE_VALUE = 0.1;
 	private final double OFFICE_EFFECTIVE_VALUE = 0.2;

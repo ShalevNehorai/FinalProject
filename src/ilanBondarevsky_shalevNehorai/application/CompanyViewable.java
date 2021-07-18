@@ -44,4 +44,6 @@ public interface CompanyViewable {
 	
 	void updateData();
 	void updateProfit();
+	
+	void saveCompanyData();
 }

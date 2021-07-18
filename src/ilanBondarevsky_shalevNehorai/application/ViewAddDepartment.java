@@ -13,7 +13,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
-public class AddDepartment {
+public class ViewAddDepartment {
 	private final int H_GAP = 10;
 	private final int V_GAP = 10;
 	private final int SCENE_WIDTH = 500;
@@ -31,12 +31,11 @@ public class AddDepartment {
 	private CheckBox syncableCkb;
 	private Button addDataBtn;
 	
-	public AddDepartment(MainWindow view, String companyName, Stage stage){
+	public ViewAddDepartment(MainWindow view, String companyName, Stage stage){
 		
 	 	Insets insets = new Insets(PADDING_INSETS, 0, 0, PADDING_INSETS);
 		
 		grid = new GridPane();
-//		grid.setPadding(insets);
 		grid.setHgap(H_GAP);
 		grid.setVgap(V_GAP);
 		

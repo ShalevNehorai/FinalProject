@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-public class AddRole {
+public class ViewAddRole {
 	private GridPane grid;
 	
 	private Label depName;
@@ -27,7 +27,7 @@ public class AddRole {
 	private final int SCENE_HEIGHT = 175;
 	private final int PADDING_INSETS = 20;
 	
-	public AddRole(MainWindow view, String depName, Stage stage){
+	public ViewAddRole(MainWindow view, String depName, Stage stage){
 		grid = new GridPane();
 		grid.setPadding(new Insets(PADDING_INSETS));
 		grid.setHgap(H_GAP);

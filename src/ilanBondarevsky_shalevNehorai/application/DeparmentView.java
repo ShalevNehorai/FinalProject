@@ -1,10 +1,7 @@
 package ilanBondarevsky_shalevNehorai.application;
 
-import java.util.ArrayList;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
 
 public class DeparmentView {
 	private String deprmentName;
@@ -28,5 +25,4 @@ public class DeparmentView {
 	public ObservableList<RoleView> getRoleList() {
 		return roleList;
 	}
-	
 }

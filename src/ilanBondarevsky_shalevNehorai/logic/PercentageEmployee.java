@@ -27,11 +27,6 @@ public class PercentageEmployee extends BaseEmployee {
 		return monthlySales;
 	}
 	
-	@Override
-	public double salaryForHour() {
-		return super.salaryForHour()  + monthlySales * monthlyPercentage / Company.WORK_HOURS_IN_MONTH;
-	}
-	
 	public void setMonthlySales(int monthlySales) {
 		this.monthlySales = monthlySales;
 	}

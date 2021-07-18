@@ -1,12 +1,9 @@
 package ilanBondarevsky_shalevNehorai.application;
 
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import ilanBondarevsky_shalevNehorai.logic.Company;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.Scene;
@@ -16,14 +13,12 @@ import javafx.geometry.Insets;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class EditEmployee {
+public class ViewEditEmployee {
 	private GridPane grid;
 	
 	private Label employee;
 	private Label monthlySales;
 	private TextField salesInput;
-	private Label changePercentage;
-	private CheckBox change;
 	private Label percentage;
 	private TextField percentageInput;
 	private Button editButton;
@@ -34,7 +29,7 @@ public class EditEmployee {
 	private final int SCENE_HEIGHT = 200;
 	private final int PADDING_INSETS = 20;
 	
-	public  EditEmployee(MainWindow view, Stage stage, String depName, int roleId){
+	public  ViewEditEmployee(MainWindow view, Stage stage, String depName, int roleId){
 		grid = new GridPane();
 		grid.setPadding(new Insets(PADDING_INSETS));
 		grid.setHgap(H_GAP);
@@ -53,27 +48,6 @@ public class EditEmployee {
 		salesInput = new TextField("" + currentMonthlySales);
 		setTextFieldNumbersOnly(salesInput);
 		grid.add(salesInput, 1, 1);
-		
-		/*changePercentage = new Label();
-		changePercentage.setText("Change sales percentage? \nCurrent at "+ (currentPercentage * 100) + "%");
-		grid.add(changePercentage, 0, 2);
-		
-		change = new CheckBox();
-		change.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if(change.isSelected()){
-					percentage.setVisible(true);
-					percentageInput.setVisible(true);
-					percentageInput.setText("");
-				} else{
-					percentage.setVisible(false);
-					percentageInput.setVisible(false);
-					percentageInput.setText("" + currentPercentage);
-				}
-			}
-		});
-		grid.add(change, 1, 2);*/
 		
 		percentage = new Label("Percentage (Can be 0 - 100)");
 		grid.add(percentage, 0, 2);

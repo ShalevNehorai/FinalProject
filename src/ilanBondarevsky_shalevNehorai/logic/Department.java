@@ -1,10 +1,11 @@
 package ilanBondarevsky_shalevNehorai.logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.management.InstanceNotFoundException;
 
-public class Department implements CalculateAddedValueable, WorkChangeable, WorkingSync {
+public class Department implements CalculateAddedValueable, WorkChangeable, WorkingSync, Serializable {
 	
 	private String name;
 	private ArrayList<Role> roles;

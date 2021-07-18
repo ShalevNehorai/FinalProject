@@ -1,6 +1,8 @@
 package ilanBondarevsky_shalevNehorai.logic;
 
-public abstract class Employee implements CalculateAddedValueable, WorkChangeable, WorkingSync {
+import java.io.Serializable;
+
+public abstract class Employee implements CalculateAddedValueable, WorkChangeable, WorkingSync, Serializable {
 	
 	private String name;
 	private int startTime;
@@ -44,7 +46,12 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 
 	@Override
 	public double profit() {
-		return Math.round(addedHours() * salaryForHour() * 100) / 100.0;
+		double profitNotRounded = addedHours() * salaryForHour();
+		return roundToTwoDigit(profitNotRounded);
+	}
+	
+	private double roundToTwoDigit(double num){
+		return Math.round(num * 100) / 100.0;
 	}
 	
 	@Override
@@ -77,5 +84,4 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	public String getName(){
 		return name;
 	}
-
 }

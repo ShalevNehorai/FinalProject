@@ -16,7 +16,7 @@ import javafx.geometry.Insets;
 import ilanBondarevsky_shalevNehorai.logic.Company;
 import ilanBondarevsky_shalevNehorai.logic.EmployeeType;
 
-public class AddEmployee {
+public class ViewAddEmployee {
 	private GridPane grid;
 	
 	private Label roleName;
@@ -42,7 +42,7 @@ public class AddEmployee {
 	private final int SCENE_HEIGHT = 400;
 	private final int PADDING_INSETS = 20;
 	
-	public AddEmployee(MainWindow view, String depName ,int roleId, Stage stage){
+	public ViewAddEmployee(MainWindow view, String depName ,int roleId, Stage stage){
 		grid = new GridPane();
 		grid.setPadding(new Insets(PADDING_INSETS));
 		grid.setHgap(H_GAP);
