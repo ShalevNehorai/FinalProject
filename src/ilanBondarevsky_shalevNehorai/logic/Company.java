@@ -36,6 +36,18 @@ public class Company {
 		allListeners = new ArrayList<CompanyListenable>();
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
+	public double getCompanyProfit(){
+		double profit = 0;
+		for (Department department : departments) {
+			profit += department.profit();	
+		}
+		return profit;
+	}
+	
 	private Department getDepartmentByName(String departmentName) {
 		if(departmentName != null){
 			for (Department department : departments) {
@@ -45,6 +57,10 @@ public class Company {
 			}
 		}
 		return null;
+	}
+	
+	public void registerListener(CompanyListenable l) {
+		allListeners.add(l);
 	}
 	
 	public void addDepartment(String name, boolean isSync, boolean isChangeable){
@@ -60,18 +76,6 @@ public class Company {
 			fireExcpetion(new InstanceAlreadyExistsException("Department already exist"));
 		}
 	}
-		
-	public String getName(){
-		return name;
-	}
-	
-	public double getCompanyProfit(){
-		double profit = 0;
-		for (Department department : departments) {
-			profit += department.profit();	
-		}
-		return profit;
-	}
 	
 	public void addRoleToDepartment(String departmentName, String roleName, boolean isRoleChangeable){
 		Department department = getDepartmentByName(departmentName);
@@ -79,7 +83,7 @@ public class Company {
 			try{
 				int roleId = department.addRole(roleName, isRoleChangeable);
 				fireAddedRole(departmentName, roleId);
-				System.out.println("added role" + roleId + " " + getRoleName(departmentName, roleId) + " under " + departmentName);
+				System.out.println("added role" + roleId + " " + getRoleName(departmentName, roleId) + " under " + departmentName);//TODO delete
 			}
 			catch(IllegalArgumentException e){
 				fireExcpetion(e);
@@ -97,12 +101,9 @@ public class Company {
 			try{
 				department.setRoleEmployee(roleID, emplyeeType, employeeName, DEFAULT_START_WORK_DAY, false, preferWorkingTime, preferWoringFromHome, salary, monthlyPercentage, monthlySales);			
 				fireAddedEmployee(departmentName, roleID);
-				System.out.println("added employee " + emplyeeType + " " + employeeName);
+				System.out.println("added employee " + emplyeeType + " " + employeeName);//TODO delete
 			}
-			catch(IllegalArgumentException e){
-				fireExcpetion(e);
-			}
-			catch(InstanceNotFoundException e){
+			catch(IllegalArgumentException | InstanceNotFoundException e){
 				fireExcpetion(e);
 			}
 		} else{
@@ -133,14 +134,13 @@ public class Company {
 		if(department != null){
 			try{
 				department.changeWorkingHoursForRole(roleId, startTime, workingFromHome);
+			}
+			catch(IllegalArgumentException | InstanceNotFoundException e){
+				fireExcpetion(e);
+			}
+			finally {
 				fireUpdateProfit();
 			}
-			catch(IllegalArgumentException e){
-				fireExcpetion(e);
-			}
-			catch(InstanceNotFoundException e){
-				fireExcpetion(e);
-			}	
 		} else{
 			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
 		}
@@ -156,10 +156,6 @@ public class Company {
 		return output.toString();
 	}
 	
-	public void registerListener(CompanyListenable l) {
-		allListeners.add(l);
-	}
-	
 	public ArrayList<String> getDepartmentsNames(){
 		ArrayList<String> output = new ArrayList<String>();
 		for (Department dep : departments) {
@@ -171,9 +167,9 @@ public class Company {
 	public ArrayList<Integer> getRolesInDepartment(String departmentName){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null){
-			return dep.getRolesIDList();
+			return dep.getRolesIdList();
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return null;
 		}	
 	}
@@ -183,7 +179,7 @@ public class Company {
 		if(dep != null){
 			return dep.isWorkingSync();		
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return false;
 		}
 	}
@@ -193,7 +189,7 @@ public class Company {
 		if(dep != null){
 			return dep.isWorkChangeable();		
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return false;
 		}
 	}
@@ -209,7 +205,7 @@ public class Company {
 				return false;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return false;
 		}
 	}
@@ -225,7 +221,7 @@ public class Company {
 				return false;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return false;
 		}
 	}
@@ -235,7 +231,7 @@ public class Company {
 		if(dep != null){
 			return dep.profit();	
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return 0;
 		}
 	}
@@ -251,7 +247,7 @@ public class Company {
 				return 0;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return 0;
 		}
 	}
@@ -267,7 +263,7 @@ public class Company {
 				return null;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return null;
 		}
 	}
@@ -283,7 +279,7 @@ public class Company {
 				return null;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return null;
 		}
 	}
@@ -299,7 +295,7 @@ public class Company {
 				return null;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return null;
 		}
 	}
@@ -315,54 +311,60 @@ public class Company {
 				return null;
 			}
 		} else{
-			fireExcpetion(new InstanceNotFoundException("Department doesnt exist"));
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return null;
 		}
 	}
 	
-	public double getEmployeePercentage(String depName, int roleId){
-		Department dep = getDepartmentByName(depName);
-		try{
-			return dep.getEmployeePercentage(roleId);
-		}
-		catch(IllegalArgumentException | InstanceNotFoundException e){
-			fireExcpetion(e);
-		}
-		catch(NullPointerException e) {
-			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
-		}
-		
-		return 0;
-	}
-	
-	public int getEmployeeMonthlySales(String depName, int roleId){
-		Department dep = getDepartmentByName(depName);
-		try{
-			return dep.getEmployeeMonthlySales(roleId);
-		}
-		catch(IllegalArgumentException e){
-			fireExcpetion(e);
-		}
-		catch(NullPointerException | InstanceNotFoundException e) {
-			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
+	public double getEmployeePercentage(String departmentName, int roleId){
+		Department dep = getDepartmentByName(departmentName);
+		if(dep != null) {
+			try{
+				return dep.getEmployeePercentage(roleId);
+			}
+			catch(IllegalArgumentException | InstanceNotFoundException e){
+				fireExcpetion(e);
+			}
+		} else {
+			fireExcpetion(new IllegalArgumentException("Deparment " + departmentName + " doesnt exists"));
 		}
 		
 		return 0;
 	}
 	
-	public void changePercentageEmployeeData(String depName, int roleId, double percentage, int monthlySales){
-		Department dep = getDepartmentByName(depName);
-		try{
-			dep.changePercentageEmployeeData(roleId, percentage, monthlySales);
-			fireUpdateProfit();
+	public int getEmployeeMonthlySales(String departmentName, int roleId){
+		Department dep = getDepartmentByName(departmentName);
+		if(dep != null) {
+			try{
+				return dep.getEmployeeMonthlySales(roleId);
+			}
+			catch(IllegalArgumentException | InstanceNotFoundException e){
+				fireExcpetion(e);
+			}
 		}
-		catch(IllegalArgumentException | InstanceNotFoundException e){
-			fireExcpetion(e);
-		}
-		catch(NullPointerException e) {
-			fireExcpetion(new IllegalArgumentException("deparment " + depName + " doesnt exists"));
+		else {
+			fireExcpetion(new IllegalArgumentException("Deparment " + departmentName + " doesnt exists"));
 		}
 		
+		return 0;
+	}
+	
+	public void changePercentageEmployeeData(String departmentName, int roleId, double percentage, int monthlySales){
+		Department dep = getDepartmentByName(departmentName);
+		if(dep != null) {
+			try{
+				dep.changePercentageEmployeeData(roleId, percentage, monthlySales);
+			}
+			catch(IllegalArgumentException | InstanceNotFoundException e){
+				fireExcpetion(e);
+			}
+			finally {
+				fireUpdateProfit();
+			}
+		} 
+		else {
+			fireExcpetion(new IllegalArgumentException("deparment " + departmentName + " doesnt exists"));
+		}
 	}
 	
 	public void fireExcpetion(Exception e){
@@ -379,19 +381,19 @@ public class Company {
 	
 	public void fireAddedDepartment(String name){
 		for (CompanyListenable listener : allListeners) {
-			listener.modelAddedDepartment(name);;
+			listener.modelAddedDepartment(name);
 		}
 	}
 	
-	public void fireAddedRole(String departmentName, int roleId){
+	public void fireAddedRole(String departmentName, int roleId){//TODO needed to send the role id ?
 		for (CompanyListenable listener : allListeners) {
-			listener.modelAddedRole(departmentName, roleId);;
+			listener.modelAddedRole(departmentName, roleId);
 		}
 	}
 	
 	public void fireAddedEmployee(String departmentName, int roleId){
 		for (CompanyListenable listener : allListeners) {
-			listener.modelAddedEmployee(departmentName, roleId);;
+			listener.modelAddedEmployee(departmentName, roleId);
 		}
 	}
 	

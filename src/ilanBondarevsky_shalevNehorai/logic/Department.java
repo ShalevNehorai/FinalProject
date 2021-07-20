@@ -13,7 +13,7 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	private boolean isSync;
 	private boolean isChangeable;
 	
-	private int syncStartTime = Company.DEFAULT_START_WORK_DAY;
+	private int syncStartTime;
 	private boolean syncWorkFromHome = false;
 	
 	public Department(String name, boolean isSync, boolean isChangable) throws IllegalArgumentException{
@@ -25,11 +25,21 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		this.isSync = isSync;
 		this.isChangeable = isChangable;
 		
+		syncStartTime = Company.DEFAULT_START_WORK_DAY;
+		
 		roles = new ArrayList<Role>();
 	}
 	
 	public String getName(){
 		return name;
+	}
+	
+	public int getSyncedStartHour(){
+		return syncStartTime;
+	}
+	
+	public boolean getSyncWorkFromHome(){
+		return syncWorkFromHome;
 	}
 	
 	private Role getRoleById(int roleId) {
@@ -41,11 +51,11 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		return null;
 	}
 	
-	public int addRole(String roleName, boolean isRoleChangeable)  throws IllegalArgumentException {
+	/*public int addRole(String roleName, boolean isRoleChangeable)  throws IllegalArgumentException {
 		return addRole(roleName, isRoleChangeable, null, "", 0, false, 0, false, 0, 0, 0);
-	}
+	}*/
 	
-	public int addRole(String roleName, boolean isRoleChangeable, EmployeeType type, String employeeName, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double monthlyPercentage, int monthlySales) throws IllegalArgumentException {
+	public int addRole(String roleName, boolean isRoleChangeable) throws IllegalArgumentException {
 		if(isSync){
 			isRoleChangeable = true;
 		}
@@ -53,7 +63,8 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 			isRoleChangeable = false;
 		}
 		
-		roles.add(new Role(roleName, isSync, isRoleChangeable, type, employeeName, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, monthlyPercentage, monthlySales));
+		roles.add(new Role(roleName, isSync, isRoleChangeable));
+		
 		return roles.get(roles.size() - 1).getId();
 	}
 	
@@ -128,29 +139,13 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		}
 		return addedMoney;
 	}
-	@Override
-	public String toString() {
-		StringBuffer output = new StringBuffer();
-		output.append("Department ").append(name).append("\n");
-		if(roles.isEmpty()){
-			output.append("\t").append("There are no roles in this department.");
-		}
-		else{
-			for (Role role : roles) {
-				output.append("\t").append(role.toString()).append("\n");
-			}
-		}
 		
-		
-		return output.toString();
-	}
-	
-	public ArrayList<Integer> getRolesIDList(){
-		ArrayList<Integer> rolesID = new ArrayList<Integer>();
+	public ArrayList<Integer> getRolesIdList(){
+		ArrayList<Integer> rolesId = new ArrayList<Integer>();
 		for (Role role : roles) {
-			rolesID.add(role.getId());
+			rolesId.add(role.getId());
 		}
-		return rolesID;
+		return rolesId;
 	}
 	
 	public boolean isRoleSync(int roleId) throws InstanceNotFoundException{
@@ -232,11 +227,19 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		role.changePercentageEmployeeData(percentage, monthlySales);
 	}
 	
-	public int getSyncedStartHour(){
-		return syncStartTime;
-	}
-	
-	public boolean getSyncWorkFromHome(){
-		return syncWorkFromHome;
+	@Override
+	public String toString() {
+		StringBuffer output = new StringBuffer();
+		output.append("Department ").append(name).append("\n");
+		if(roles.isEmpty()){
+			output.append("\t").append("There are no roles in this department.");
+		}
+		else{
+			for (Role role : roles) {
+				output.append("\t").append(role.toString()).append("\n");
+			}
+		}
+		
+		return output.toString();
 	}
 }

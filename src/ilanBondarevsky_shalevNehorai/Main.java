@@ -13,7 +13,7 @@ public class Main extends Application {
 		MainWindow view = new MainWindow(primaryStage);
 		Controller controller = new Controller(com, view);
 		com.readBinaryFile();
-		view.updateData();
+		view.initViewData();
 	}
 	
 	public static void main(String[] args) {

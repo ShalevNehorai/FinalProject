@@ -14,6 +14,11 @@ public class BaseEmployee extends Employee {
 		
 		this.salary = salary;
 	}
+	
+	@Override
+	public EmployeeType getType() {
+		return EmployeeType.BASE_EMPLOYEE;
+	}
 
 	@Override
 	public double salaryForHour() {
@@ -29,10 +34,5 @@ public class BaseEmployee extends Employee {
 		StringBuffer output = new StringBuffer(super.toString());
 		output.append(" The salary is: ").append(salary).append("\u20AA for month.");
 		return output.toString();
-	}
-	
-	@Override
-	public EmployeeType getType() {
-		return EmployeeType.BASE_EMPLOYEE;
 	}
 }

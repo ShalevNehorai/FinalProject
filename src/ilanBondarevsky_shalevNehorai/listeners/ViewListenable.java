@@ -13,7 +13,7 @@ public interface ViewListenable {
 	boolean viewAskIsDepartmentSync(String deparmentName);
 	boolean viewAskIsDepartmentChangeable(String departmentName);
 	
-	ArrayList<Integer> viewAskRoleIdInDepartment(String deparmentName);
+	ArrayList<Integer> viewAskRolesIdInDepartment(String deparmentName);
 	String viewAskRoleName(String deparmentName, int roleId);
 	String viewAskRoleEmployeeName(String deparmentName, int roleId);
 	double viewAskEmployeeProfit(String deparmentName, int roleId);
@@ -28,11 +28,9 @@ public interface ViewListenable {
 	void viewAddRole(String deparmentName, String roleName, boolean isRoleChangeable);
 	void viewAddEpmloyee(String deparmentName, int roleId, String employeeName, EmployeeType type, int preferWorkingRime, boolean prefWorkingHome, int salary, double monthlyPersentage, int monthlySales);
 	
-	void viewChangeEmployeePersentageData(String deparmentName, int roleId, double percentage, int sales);
 	void viewChangeDepartmentHours(String depName, boolean workHome, int startHour);
 	void viewChangeRoleHour(String depName, int roleId, boolean workFromHome, int startHour);
+	void viewChangeEmployeePersentageData(String deparmentName, int roleId, double percentage, int sales);
 	
 	void viewAskSave();
-	
-	
 }

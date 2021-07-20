@@ -68,7 +68,7 @@ public class MainWindow implements CompanyViewable {
 		deptList = FXCollections.observableArrayList();
 		depListView = new ListView<DeparmentView>(deptList);
 		depListView.setSelectionModel(new NoSelectionModel<DeparmentView>());
-		updateDepmtList();
+		updateDepartmentListView();
 		
 		root.setCenter(depListView);
 		BorderPane.setMargin(depListView, new Insets(10));
@@ -114,7 +114,12 @@ public class MainWindow implements CompanyViewable {
 	}
 	
 	@Override
-	public void updateData() {
+	public void registerListener(ViewListenable l) {
+		allListeners.add(l);
+	}
+	
+	@Override
+	public void initViewData() {
 		askCompanyName();
 		askCompanyProfit();
 		askDeparmnetNames();
@@ -123,21 +128,16 @@ public class MainWindow implements CompanyViewable {
 	@Override
 	public void updateProfit() {
 		askCompanyProfit();
-		updateDepmtList();
+		updateDepartmentListView();
 	}
 	
-	public void updateDepmtList() {
+	private void updateDepartmentListView() {
 		depListView.setCellFactory(new Callback<ListView<DeparmentView>, ListCell<DeparmentView>>() {
 			@Override
 			public ListCell<DeparmentView> call(ListView<DeparmentView> listView) {
 				return new DeparmentViewCell(mainWindow);
 			}
 		});
-	}
-	
-	@Override
-	public void registerListener(ViewListenable l) {
-		allListeners.add(l);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public ArrayList<Integer> askRolesInDeparment(String deparmentName) {
-		return allListeners.get(0).viewAskRoleIdInDepartment(deparmentName);
+		return allListeners.get(0).viewAskRolesIdInDepartment(deparmentName);
 	}
 
 	@Override
@@ -215,6 +215,21 @@ public class MainWindow implements CompanyViewable {
 	@Override
 	public double askEmployeeProfit(String deparmentName, int roleId) {
 		return allListeners.get(0).viewAskEmployeeProfit(deparmentName, roleId);
+	}
+	
+	@Override
+	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
+		return allListeners.get(0).viewAskEmployeeType(deparmentName, roleId);
+	}
+	
+	@Override
+	public int askEmployeeMonthlySales(String depName, int roleId) {
+		return allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId);
+	}
+	
+	@Override
+	public double askEmployeePercentage(String depName, int roleId) {
+		return allListeners.get(0).viewAskEmployeePercentage(depName, roleId);
 	}
 
 	@Override
@@ -244,7 +259,6 @@ public class MainWindow implements CompanyViewable {
 		for (ViewListenable viewListenable : allListeners) {
 			viewListenable.viewAddRole(deparmentName, roleName, isRoleChangeable);
 		}
-
 	}
 
 	@Override
@@ -270,7 +284,7 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void addedRoleToDeparment(String deparmentName, int roleId) {
-		updateDepmtList();
+		updateDepartmentListView();
 	}
 
 	@Override
@@ -279,26 +293,12 @@ public class MainWindow implements CompanyViewable {
 	}
 
 	@Override
-	public void showMsg(String msg) {
-		JOptionPane.showMessageDialog(null, msg);
-	}
-
-	@Override
-	public void showError(String errorMsg) {
-		JOptionPane.showMessageDialog(null, errorMsg, "Failure", JOptionPane.ERROR_MESSAGE);
-	}
-
-	@Override
-	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
-		return allListeners.get(0).viewAskEmployeeType(deparmentName, roleId);
-	}
-	
-	@Override
 	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
 		for (ViewListenable viewListenable : allListeners) {
 			viewListenable.viewChangeDepartmentHours(depName, workHome, startHour);
 		}
 	}
+	
 	@Override
 	public void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
 		for (ViewListenable viewListenable : allListeners) {
@@ -307,13 +307,13 @@ public class MainWindow implements CompanyViewable {
 	}
 	
 	@Override
-	public int askEmployeeMonthlySales(String depName, int roleId) {
-		return allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId);
+	public void showMsg(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
 	}
-	
+
 	@Override
-	public double askEmployeePercentage(String depName, int roleId) {
-		return allListeners.get(0).viewAskEmployeePercentage(depName, roleId);
+	public void showError(String errorMsg) {
+		JOptionPane.showMessageDialog(null, errorMsg, "Failure", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override

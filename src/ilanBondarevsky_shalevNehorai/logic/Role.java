@@ -16,8 +16,7 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	private boolean isWorkingSync;
 	private boolean isWorkChangeable;
 	
-	public Role(String name, boolean isWorkingSync, boolean isWorkChangeable, 
-			EmployeeType type, String empployeeName, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException {
+	public Role(String name, boolean isWorkingSync, boolean isWorkChangeable) {
 		if(name.isBlank()) {
 			throw new IllegalArgumentException("Role name cant be blank");
 		}
@@ -27,15 +26,15 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		this.isWorkChangeable = isWorkChangeable;
 		this.isWorkingSync = isWorkingSync;
 		
-		if(type != null) {
-			setEmployee(type, empployeeName, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
-		}
-		
 		this.id = globalId++;
 	}
 	
-	public Role(String name, boolean isWorkingSync, boolean isWorkChangeable) throws IllegalArgumentException {
-		this(name, isWorkingSync, isWorkChangeable, null, "", 0, false, 0, false, 0, 0, 0);
+	public static int getGlobalId() {
+		return globalId;
+	}
+	
+	public static void setGlobalId(int globalId) {
+		Role.globalId = globalId;
 	}
 	
 	public String getName() {
@@ -44,6 +43,16 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	
 	public int getId() {
 		return id;
+	}
+	
+	@Override
+	public boolean isWorkingSync() {
+		return isWorkingSync;
+	}
+
+	@Override
+	public boolean isWorkChangeable() {
+		return isWorkChangeable;
 	}
 	
 	public void setEmployee(EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException {
@@ -63,52 +72,6 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 			throw new IllegalArgumentException("Unexpected value: " + type);
 		}
 	}
-
-	@Override
-	public boolean isWorkingSync() {
-		return isWorkingSync;
-	}
-
-	@Override
-	public boolean isWorkChangeable() {
-		return isWorkChangeable;
-	}
-
-	@Override
-	public double profit() {
-		if(employee != null) {
-			return employee.profit();
-		}
-		
-		return 0;
-	}
-	
-	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
-		if(employee != null){
-			if(isWorkChangeable){
-				employee.changeWorkingHours(startTime, homeWork);				
-			}
-			else {
-				throw new IllegalArgumentException("Employee " + getEmployeeName() + ", in role " + name + ", hours can't be changed!");				
-			}
-		} else {
-			throw new IllegalArgumentException("Role " + name + " is vacant.");			
-		}
-	}
-	
-	@Override
-	public String toString() {
-		StringBuffer output = new StringBuffer();
-		output.append(name).append(" Role: ");
-		if(employee != null)
-			output.append(employee.toString() + "\n");
-		else
-			output.append(" There is no employee working for this role.\n");
-			
-		output.append("isChangeable? ").append(isWorkChangeable).append("\nisSync? ").append(isWorkingSync);
-		return output.toString();
-	}
 	
 	public String getEmployeeName() {
 		if(employee != null){
@@ -120,7 +83,8 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	public EmployeeType getEmployeeType() throws InstanceNotFoundException{
 		if(employee != null){
 			return employee.getType();
-		} else{
+		}
+		else {
 			throw new InstanceNotFoundException("The role is vacant");
 		}
 	}
@@ -150,6 +114,29 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 			throw new InstanceNotFoundException("role " + id + " doesnt have employee");
 		}
 	}
+
+	@Override
+	public double profit() {
+		if(employee != null) {
+			return employee.profit();
+		}
+		
+		return 0;
+	}
+	
+	@Override
+	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
+		if(employee != null){
+			if(isWorkChangeable){
+				employee.changeWorkingHours(startTime, homeWork);				
+			}
+			else {
+				throw new IllegalArgumentException("Employee " + getEmployeeName() + ", in role " + name + ", hours can't be changed!");				
+			}
+		} else {
+			throw new IllegalArgumentException("Role " + name + " is vacant.");			
+		}
+	}
 	
 	public void changePercentageEmployeeData(double percentage, int sales) throws InstanceNotFoundException, IllegalArgumentException {
 		if(employee != null){
@@ -165,11 +152,16 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		}
 	}
 	
-	public static int getGlobalId() {
-		return globalId;
-	}
-	
-	public static void setGlobalId(int globalId) {
-		Role.globalId = globalId;
+	@Override
+	public String toString() {
+		StringBuffer output = new StringBuffer();
+		output.append(name).append(" Role: ");
+		if(employee != null)
+			output.append(employee.toString() + "\n");
+		else
+			output.append(" There is no employee working for this role.\n");
+			
+		output.append("isChangeable? ").append(isWorkChangeable).append("\nisSync? ").append(isWorkingSync);
+		return output.toString();
 	}
 }

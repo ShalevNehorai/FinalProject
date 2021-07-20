@@ -42,7 +42,7 @@ public interface CompanyViewable {
 	void showMsg(String msg);
 	void showError(String errorMsg);
 	
-	void updateData();
+	void initViewData();
 	void updateProfit();
 	
 	void saveCompanyData();
