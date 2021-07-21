@@ -15,8 +15,9 @@ import ilanBondarevsky_shalevNehorai.listeners.CompanyListenable;
 
 public class Company {
 	public static final int WORK_HOURS_IN_MONTH = 160;
-	public static final int WORK_HOURS_IN_DAY = 8;
+	public static final int WORK_HOURS_IN_DAY = 9;
 	public static final int DEFAULT_START_WORK_DAY = 8;
+	public static final int PROFIT_FOR_HOUR = 10;
 	
 	private final String FILE_PATH = "data.dat";
 	
@@ -410,6 +411,7 @@ public class Company {
 			outFile.writeObject(name);
 			outFile.writeObject(departments);
 			outFile.writeInt(Role.getGlobalId());
+			outFile.writeInt(Employee.getGlobalId());
 			outFile.close();
 		}
 		catch(FileNotFoundException e) {
@@ -427,10 +429,12 @@ public class Company {
 			name = (String)inputFile.readObject();
 			departments = (ArrayList<Department>)inputFile.readObject();
 			Role.setGlobalId(inputFile.readInt());
+			Employee.setGlobalId(inputFile.readInt());
 			inputFile.close();
-		} 
+		}
 		catch (IOException | ClassNotFoundException e) {
 			System.out.println("data file not found. fail loading data");
+			e.printStackTrace();
 		}	
 	}
 }

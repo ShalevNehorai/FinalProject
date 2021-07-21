@@ -40,6 +40,7 @@ public class RoleViewCell extends ListCell<RoleView> {
 		hbox.setAlignment(Pos.CENTER_LEFT);
 		
 		roleNameLbl = new Label();
+		roleNameLbl.getStyleClass().add("default-label");
 		employeeNameLbl = new Label();
 		profitLbl = new Label();
 		

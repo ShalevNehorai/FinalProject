@@ -3,7 +3,10 @@ package ilanBondarevsky_shalevNehorai.logic;
 import java.io.Serializable;
 
 public abstract class Employee implements CalculateAddedValueable, WorkChangeable, WorkingSync, Serializable {
+
+	private static int globalId = 0;
 	
+	private int id;
 	private String name;
 	private int startTime;
 	private boolean isHomeWorking;
@@ -11,6 +14,7 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	
 	private boolean isWorkingSync;
 	private boolean isWorkChangeable;
+	
 	
 	protected Employee(String name, int startTime, boolean isHomeWorking, int prefStartTime, 
 			boolean prefWorkHome, boolean isWorkingSync, boolean isWorkChangeable) throws IllegalArgumentException {
@@ -29,6 +33,20 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 		
 		this.isWorkingSync = isWorkingSync;
 		this.isWorkChangeable = isWorkChangeable;
+		
+		this.id = globalId++;
+	}
+	
+	public static int getGlobalId() {
+		return globalId;
+	}
+	
+	public static void setGlobalId(int globalId) {
+		Employee.globalId = globalId;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getName(){
@@ -50,7 +68,7 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 
 	@Override
 	public double profit() {
-		double profitNotRounded = addedHours() * salaryForHour();
+		double profitNotRounded = addedHours() * Company.PROFIT_FOR_HOUR;
 		return roundToTwoDigit(profitNotRounded);
 	}
 	
@@ -69,17 +87,17 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	private double addedHours(){
 		double effAddedHours = preference.effectiveHours(startTime, isHomeWorking);
 		double unEffAddedHours = preference.unEffectiveHours(startTime, isHomeWorking);
-		return effAddedHours * preference.efficiencyValue() - unEffAddedHours * preference.efficiencyValue();
+		return effAddedHours * preference.getEfficiencyValue() - unEffAddedHours * preference.getUnefficencyValue();
 	}
 	
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append("Employee ").append(name);
+		output.append("Employee ").append(name).append(" Id " + id);
 		if(isHomeWorking)
 			output.append(" works from home.");
 		else
-			output.append(" works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY + 1) % 24).append(".\n");
+			output.append(" works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY) % 24).append(".\n");
 		
 		output.append("He/She prefer working: ").append(preference.toString());
 		return output.toString();

@@ -6,6 +6,7 @@ public class Preference implements Serializable {
 	
 	private final double HOME_EFFECTIVE_VALUE = 0.1;
 	private final double OFFICE_EFFECTIVE_VALUE = 0.2;
+	private final double UNEFFECTIVE_VALUE = 0.2;
 	private final int DEFUALT_TIME = Company.DEFAULT_START_WORK_DAY;
 	private final int WORK_HOURS = Company.WORK_HOURS_IN_DAY;
 	
@@ -21,12 +22,15 @@ public class Preference implements Serializable {
 		this.prefWorkFromHome = workFromHome;
 	}
 	
-	public double efficiencyValue(){
+	public double getEfficiencyValue(){
 		if(prefWorkFromHome)
 			return HOME_EFFECTIVE_VALUE;
 		return OFFICE_EFFECTIVE_VALUE;
 	}
 	
+	public double getUnefficencyValue() {
+		return UNEFFECTIVE_VALUE; 	
+	}
 	public int effectiveHours(int currentStartTime, boolean isHomeWorker) {
 		if(isHomeWorker && this.prefWorkFromHome)
 			return WORK_HOURS;
@@ -128,7 +132,7 @@ public class Preference implements Serializable {
 		if(prefWorkFromHome)
 			output.append("from home.");
 		else
-			output.append("from ").append(prefStartTime).append(" to ").append((prefStartTime + WORK_HOURS + 1) % 24).append(".");
+			output.append("from ").append(prefStartTime).append(" to ").append((prefStartTime + WORK_HOURS) % 24).append(".");
 		return output.toString();
 	}
 }

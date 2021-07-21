@@ -155,7 +155,7 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append(name).append(" Role: ");
+		output.append(name).append(" Id " + id).append(" Role: ");
 		if(employee != null)
 			output.append(employee.toString() + "\n");
 		else

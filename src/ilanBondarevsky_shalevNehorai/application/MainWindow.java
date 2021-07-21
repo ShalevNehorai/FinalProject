@@ -84,6 +84,7 @@ public class MainWindow implements CompanyViewable {
 		});
 		
 		Button exitBtn = new Button("save & quit");
+		exitBtn.getStyleClass().add("exitBtn");
 		exitBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

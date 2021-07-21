@@ -54,37 +54,37 @@ public class ViewAddDepartment {
 		depNameInput.setFont(font);
 		grid.add(depNameInput, 1, 0);
 		
-		isChangeableLbl = new Label();
-		isChangeableLbl.setText("Hours changeable? : ");
-		isChangeableLbl.setFont(font);
-		grid.add(isChangeableLbl, 0, 1);
-		
-		changeableCkb = new CheckBox();
-		grid.add(changeableCkb, 1, 1);
-		
 		isSyncableLbl = new Label();
 		isSyncableLbl.setText("Department synchronized? : ");
 		isSyncableLbl.setFont(font);
-		grid.add(isSyncableLbl, 0, 2);
+		grid.add(isSyncableLbl, 0, 1);
 		
 		syncableCkb = new CheckBox();
 		syncableCkb.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-				public void handle(ActionEvent arg0) {
-					if(syncableCkb.isSelected()){
-						changeableCkb.setSelected(true);
-						changeableCkb.setVisible(false);
-						isChangeableLbl.setVisible(false);
-					}
-					else{
-						changeableCkb.setSelected(false);
-						changeableCkb.setVisible(true);
-						isChangeableLbl.setVisible(true);
-					}
-				
+			public void handle(ActionEvent arg0) {
+				if(syncableCkb.isSelected()){
+					changeableCkb.setSelected(true);
+					changeableCkb.setVisible(false);
+					isChangeableLbl.setVisible(false);
 				}
+				else{
+					changeableCkb.setSelected(false);
+					changeableCkb.setVisible(true);
+					isChangeableLbl.setVisible(true);
+				}
+			
+			}
 		});
-		grid.add(syncableCkb, 1, 2);
+		grid.add(syncableCkb, 1, 1);
+		
+		isChangeableLbl = new Label();
+		isChangeableLbl.setText("Hours changeable? : ");
+		isChangeableLbl.setFont(font);
+		grid.add(isChangeableLbl, 0, 2);
+		
+		changeableCkb = new CheckBox();
+		grid.add(changeableCkb, 1, 2);
 		
 		addDataBtn = new DefaultButton("Add Department");
 		addDataBtn.setOnAction(new EventHandler<ActionEvent>() {
