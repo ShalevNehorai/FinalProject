@@ -37,6 +37,28 @@ public class Company {
 		allListeners = new ArrayList<CompanyListenable>();
 	}
 	
+	public void createStartingData() {
+		addDepartment("Multimedia", true, true);
+		addRoleToDepartment("Multimedia", "Multimedia Designer", true);
+		addEmployeeToRole("Multimedia", 0, "Aharon Ahava", EmployeeType.BASE_EMPLOYEE, 9, false, 100000, 0, 0);
+		addEmployeeToRole("Multimedia", 0, "Tzofiya Mordecai", EmployeeType.HOUR_EMPLOYEE, 8, true, 100, 0, 0);
+		addRoleToDepartment("Multimedia", "Software Engineering", true);
+		addEmployeeToRole("Multimedia", 1, "Avishag Maor", EmployeeType.PERCENTAGE_EMPLOYEE, 6, false, 12000, 10, 300);
+		
+		addDepartment("Database", false, true);
+		addRoleToDepartment("Database", "Database Administrator", false);
+		addEmployeeToRole("Database", 2, "Moshe Gabay", EmployeeType.HOUR_EMPLOYEE, 8, false, 60, 0, 0);
+		addRoleToDepartment("Database", "SQL Data Analyst", true);
+		addEmployeeToRole("Database", 3, "Nitzan Hadasa", EmployeeType.HOUR_EMPLOYEE, 8, true, 70, 0, 0);
+		
+		addDepartment("PC Development", false, false);
+		addRoleToDepartment("PC Development", "Software Architect", false);
+		addEmployeeToRole("PC Development", 4, "Libi Oved", EmployeeType.PERCENTAGE_EMPLOYEE, 8, true, 4000, 20, 3000);
+		addRoleToDepartment("PC Development", "Engineering Manager", true);
+		addEmployeeToRole("PC Development", 5, "Reuben Aviel", EmployeeType.BASE_EMPLOYEE, 8, true, 40000, 0, 0);
+		
+	}
+	
 	public String getName(){
 		return name;
 	}
@@ -84,7 +106,6 @@ public class Company {
 			try{
 				int roleId = department.addRole(roleName, isRoleChangeable);
 				fireAddedRole(departmentName, roleId);
-				System.out.println("added role" + roleId + " " + getRoleName(departmentName, roleId) + " under " + departmentName);//TODO delete
 			}
 			catch(IllegalArgumentException e){
 				fireExcpetion(e);
@@ -100,9 +121,9 @@ public class Company {
 		
 		if(department != null) {
 			try{
-				department.setRoleEmployee(roleID, emplyeeType, employeeName, DEFAULT_START_WORK_DAY, false, preferWorkingTime, preferWoringFromHome, salary, monthlyPercentage, monthlySales);			
-				fireAddedEmployee(departmentName, roleID);
-				System.out.println("added employee " + emplyeeType + " " + employeeName);//TODO delete
+				int employeeId = department.addEmployeeToRole(roleID, emplyeeType, employeeName, DEFAULT_START_WORK_DAY, false, preferWorkingTime, preferWoringFromHome, salary, monthlyPercentage, monthlySales);			
+				
+				fireAddedEmployee(departmentName, roleID, employeeId);
 			}
 			catch(IllegalArgumentException | InstanceNotFoundException e){
 				fireExcpetion(e);
@@ -237,11 +258,43 @@ public class Company {
 		}
 	}
 	
-	public double getEmployeeProfit(String departmentName, int roleId){
+	public double getRoleProfit(String departmentName, int roleId){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null){
 			try{
-				return dep.getRoleProfit(roleId);	
+				return dep.getRoleProfit(roleId);
+			}
+			catch(InstanceNotFoundException e){
+				fireExcpetion(e);
+				return 0;
+			}
+		} else{
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
+			return 0;
+		}
+	}
+	
+	public String getEmployeeDataInRole(String departmentName, int roleId, int employeeId){
+		Department dep = getDepartmentByName(departmentName);
+		if(dep != null){
+			try{
+				return dep.getEmployeeDataInRole(roleId, employeeId);
+			}
+			catch(InstanceNotFoundException e){
+				fireExcpetion(e);
+				return "";
+			}
+		} else{
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
+			return "";
+		}
+	}
+	
+	public double getEmployeeProfitInRole(String departmentName, int roleId, int employeeId){
+		Department dep = getDepartmentByName(departmentName);
+		if(dep != null){
+			try{
+				return dep.getEmployeeProfitInRole(roleId, employeeId);	
 			}
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
@@ -261,27 +314,27 @@ public class Company {
 			}
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
-				return null;
+				return "";
 			}
 		} else{
 			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
-			return null;
+			return "";
 		}
 	}
 	
-	public String getEmployeeNameInRole(String departmentName, int roleId){
+	public String getEmployeeNameInRole(String departmentName, int roleId, int employeeId){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null){
 			try{
-				return dep.getEmployeeNameInRole(roleId);
+				return dep.getEmployeeNameInRole(roleId, employeeId);
 			}
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
-				return null;
+				return "";
 			}
 		} else{
 			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
-			return null;
+			return "";
 		}
 	}
 	
@@ -293,19 +346,35 @@ public class Company {
 			}
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
-				return null;
+				return "";
 			}
+		} else{
+			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
+			return "";
+		}
+	}
+	
+	public ArrayList<Integer> getEmployeesInRole(String departmentName, int roleId){
+		Department dep = getDepartmentByName(departmentName);
+		if(dep != null){
+			try{
+				return dep.getEmployeesIdListInRole(roleId);
+			}
+			catch(InstanceNotFoundException e){
+				fireExcpetion(e);
+				return null;
+			}	
 		} else{
 			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
 			return null;
 		}
 	}
 	
-	public EmployeeType getEmployeeType(String departmentName, int roleId){
+	public EmployeeType getEmployeeTypeInRole(String departmentName, int roleId, int employeeId){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null){
 			try{
-				return dep.getEmployeeType(roleId);
+				return dep.getEmployeeTypeInRole(roleId, employeeId);
 			}
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
@@ -317,11 +386,11 @@ public class Company {
 		}
 	}
 	
-	public double getEmployeePercentage(String departmentName, int roleId){
+	public double getEmployeePercentageInRole(String departmentName, int roleId, int employeeId){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null) {
 			try{
-				return dep.getEmployeePercentage(roleId);
+				return dep.getEmployeePercentageInRole(roleId, employeeId);
 			}
 			catch(IllegalArgumentException | InstanceNotFoundException e){
 				fireExcpetion(e);
@@ -333,11 +402,11 @@ public class Company {
 		return 0;
 	}
 	
-	public int getEmployeeMonthlySales(String departmentName, int roleId){
+	public int getEmployeeMonthlySalesInRole(String departmentName, int roleId, int employeeId){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null) {
 			try{
-				return dep.getEmployeeMonthlySales(roleId);
+				return dep.getEmployeeMonthlySalesInRole(roleId, employeeId);
 			}
 			catch(IllegalArgumentException | InstanceNotFoundException e){
 				fireExcpetion(e);
@@ -350,11 +419,11 @@ public class Company {
 		return 0;
 	}
 	
-	public void changePercentageEmployeeData(String departmentName, int roleId, double percentage, int monthlySales){
+	public void changePercentageEmployeeDataInRole(String departmentName, int roleId, int employeeId, double percentage, int monthlySales){
 		Department dep = getDepartmentByName(departmentName);
 		if(dep != null) {
 			try{
-				dep.changePercentageEmployeeData(roleId, percentage, monthlySales);
+				dep.changePercentageEmployeeDataInRole(roleId, employeeId, percentage, monthlySales);
 			}
 			catch(IllegalArgumentException | InstanceNotFoundException e){
 				fireExcpetion(e);
@@ -386,15 +455,15 @@ public class Company {
 		}
 	}
 	
-	public void fireAddedRole(String departmentName, int roleId){//TODO needed to send the role id ?
+	public void fireAddedRole(String departmentName, int roleId){
 		for (CompanyListenable listener : allListeners) {
 			listener.modelAddedRole(departmentName, roleId);
 		}
 	}
 	
-	public void fireAddedEmployee(String departmentName, int roleId){
+	public void fireAddedEmployee(String departmentName, int roleId, int employeeId){
 		for (CompanyListenable listener : allListeners) {
-			listener.modelAddedEmployee(departmentName, roleId);
+			listener.modelAddedEmployee(departmentName, roleId, employeeId);
 		}
 	}
 	
@@ -422,7 +491,7 @@ public class Company {
 		}
 	}
 	
-	public void readBinaryFile() {
+	public void readBinaryFile() throws IOException, ClassNotFoundException {
 		ObjectInputStream inputFile;
 		try {
 			inputFile = new ObjectInputStream(new FileInputStream(FILE_PATH));
@@ -434,7 +503,8 @@ public class Company {
 		}
 		catch (IOException | ClassNotFoundException e) {
 			System.out.println("data file not found. fail loading data");
-			e.printStackTrace();
-		}	
+			throw e;
+		}
 	}
+	
 }

@@ -93,13 +93,26 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append("Employee ").append(name).append(" Id " + id);
+		output.append("Employee ").append(name).append(", Id " + id + ":\n");
 		if(isHomeWorking)
-			output.append(" works from home.");
+			output.append(" Works from home.\n");
 		else
-			output.append(" works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY) % 24).append(".\n");
+			output.append(" Works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY) % 24).append(".\n");
 		
-		output.append("He/She prefer working: ").append(preference.toString());
+		output.append("He/She ").append(preference.toString());
 		return output.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Employee)) {
+			return false;
+		}
+		
+		Employee temp = (Employee)obj;
+		return (id == temp.id) && (name == temp.name) && (startTime == temp.startTime) && (isHomeWorking == temp.isHomeWorking) && 
+				(isWorkingSync == temp.isWorkingSync) && (isWorkChangeable == temp.isWorkChangeable) && preference.equals(temp.preference);
+	}
+	
+	
 }

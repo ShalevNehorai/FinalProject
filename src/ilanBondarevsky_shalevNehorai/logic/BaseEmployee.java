@@ -35,4 +35,19 @@ public class BaseEmployee extends Employee {
 		output.append(" The salary is: ").append(salary).append("\u20AA for month.");
 		return output.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof BaseEmployee)) {
+			return false;
+		}
+		
+		BaseEmployee temp = (BaseEmployee) obj;
+		if(salary != temp.salary) {
+			return false;
+		}
+		
+		return super.equals(obj);
+	}
+	
 }

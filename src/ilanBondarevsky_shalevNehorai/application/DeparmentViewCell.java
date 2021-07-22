@@ -65,10 +65,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 		
 	}
 	
-	private void setChagngBtnState(String name) {
-		changeHoursBtn.setVisible(mainWindow.isDepatmentChangeable(name));
-	}
-	
 	@Override
 	protected void updateItem(DeparmentView item, boolean empty) {
 		super.updateItem(item, empty);
@@ -86,8 +82,8 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			}
 			
 			ObservableList<RoleView> roleList = FXCollections.observableArrayList();
-			for(int num : mainWindow.askRolesInDeparment(item.getName())) {
-				roleList.add(new RoleView(num, item.getName()));
+			for(int id : mainWindow.askRolesInDeparment(item.getName())) {
+				roleList.add(new RoleView(id, item.getName()));
 			}
 						
 			roleListView = new ListView<RoleView>(roleList);
@@ -99,11 +95,12 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 				}
 			});
 			root.setCenter(roleListView);
-			roleListView.setPrefSize(50, 200);
+			roleListView.setPrefSize(50, 400);
 			
-			if(!mainWindow.isDepatmentChangeable(item.getName())) {
+			/*if(!mainWindow.isDepatmentChangeable(item.getName())) {
 				changeHoursBtn.setVisible(false);
-			}
+			}*/
+			changeHoursBtn.setVisible(mainWindow.isDepatmentChangeable(item.getName()));
 			
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -119,7 +116,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 				}
 			});
 			
-			setChagngBtnState(item.getName());
 			setGraphic(root);
 		}
 	}

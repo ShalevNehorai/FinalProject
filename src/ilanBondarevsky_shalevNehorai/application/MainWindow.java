@@ -26,7 +26,7 @@ import javafx.util.Callback;
 
 public class MainWindow implements CompanyViewable {
 	private final int WIN_WIDTH = 1280;
-	private final int WIN_HEIGHT = 720;
+	private final int WIN_HEIGHT = 720;//TODO make it smaller
 	
 	private MainWindow mainWindow;
 	
@@ -123,7 +123,7 @@ public class MainWindow implements CompanyViewable {
 	public void initViewData() {
 		askCompanyName();
 		askCompanyProfit();
-		askDeparmnetNames();
+		askDeparmnetsNames();
 	}
 	
 	@Override
@@ -162,7 +162,7 @@ public class MainWindow implements CompanyViewable {
 	}
 
 	@Override
-	public void askDeparmnetNames() {
+	public void askDeparmnetsNames() {
 		ArrayList<String> list = allListeners.get(0).viewAskDeparmentsNames();
 		
 		if(list != null) {		
@@ -207,32 +207,12 @@ public class MainWindow implements CompanyViewable {
 	public String askRoleName(String departmentName, int id) {
 		return allListeners.get(0).viewAskRoleName(departmentName, id);
 	}
-
-	@Override
-	public String askRoleEmployeeName(String deparmentName, int id) {
-		return allListeners.get(0).viewAskRoleEmployeeName(deparmentName, id);
-	}
-
-	@Override
-	public double askEmployeeProfit(String deparmentName, int roleId) {
-		return allListeners.get(0).viewAskEmployeeProfit(deparmentName, roleId);
-	}
 	
 	@Override
-	public EmployeeType askEmployeeType(String deparmentName, int roleId) {
-		return allListeners.get(0).viewAskEmployeeType(deparmentName, roleId);
+	public double askRoleProfit(String departmentName, int id) {
+		return allListeners.get(0).viewAskRoleProfit(departmentName, id);
 	}
 	
-	@Override
-	public int askEmployeeMonthlySales(String depName, int roleId) {
-		return allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId);
-	}
-	
-	@Override
-	public double askEmployeePercentage(String depName, int roleId) {
-		return allListeners.get(0).viewAskEmployeePercentage(depName, roleId);
-	}
-
 	@Override
 	public boolean isRoleSync(String deparmentName, int roleId) {
 		return allListeners.get(0).viewAskIsRoleSync(deparmentName, roleId);
@@ -242,10 +222,45 @@ public class MainWindow implements CompanyViewable {
 	public boolean isRoleChangeable(String departmentName, int roleId) {
 		return allListeners.get(0).viewAskIsRoleChangeable(departmentName, roleId);
 	}
-
+	
 	@Override
 	public String askRoleData(String deparmentName, int roleId) {
 		return allListeners.get(0).viewAskRoleData(deparmentName, roleId);
+	}
+
+	@Override
+	public ArrayList<Integer> askEmployeesInRole(String deparmentName, int roleId) {
+		return allListeners.get(0).viewAskEmployeesInRole(deparmentName, roleId);
+	}
+	
+	@Override
+	public String askEmployeeName(String deparmentName, int roleId, int employeeId) {
+		return allListeners.get(0).viewAskEmployeeName(deparmentName, roleId, employeeId);
+	}
+
+	@Override
+	public double askEmployeeProfit(String deparmentName, int roleId, int employeeId) {
+		return allListeners.get(0).viewAskEmployeeProfit(deparmentName, roleId, employeeId);
+	}
+	
+	@Override
+	public String askEmployeeData(String deparmentName, int roleId, int employeeId) {
+		return allListeners.get(0).viewAskEmployeeData(deparmentName, roleId, employeeId);
+	}
+	
+	@Override
+	public EmployeeType askEmployeeType(String deparmentName, int roleId, int employeeId) {
+		return allListeners.get(0).viewAskEmployeeType(deparmentName, roleId, employeeId);
+	}
+
+	@Override
+	public double askEmployeePercentage(String depName, int roleId, int employeeId) {
+		return allListeners.get(0).viewAskEmployeePercentage(depName, roleId, employeeId);
+	}
+	
+	@Override
+	public int askEmployeeMonthlySales(String depName, int roleId, int employeeId) {
+		return allListeners.get(0).viewAskEmployeeMonthlySales(depName, roleId, employeeId);
 	}
 
 	@Override
@@ -271,9 +286,23 @@ public class MainWindow implements CompanyViewable {
 	}
 
 	@Override
-	public void changeEmployeePercentageData(String deparmentName, int roleId, double percentage, int monthlySales) {
+	public void changeEmployeePercentageData(String deparmentName, int roleId, int employeeId, double percentage, int monthlySales) {
 		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.viewChangeEmployeePersentageData(deparmentName, roleId, percentage, monthlySales);
+			viewListenable.viewChangeEmployeePersentageData(deparmentName, roleId, employeeId, percentage, monthlySales);
+		}
+	}
+	
+	@Override
+	public void changeRoleHours(String depName, int roleId, boolean workFromHome, int startHour) {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.viewChangeRoleHours(depName, roleId, workFromHome, startHour);
+		}
+	}
+	
+	@Override
+	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
+		for (ViewListenable viewListenable : allListeners) {
+			viewListenable.viewChangeDepartmentHours(depName, workHome, startHour);
 		}
 	}
 
@@ -285,26 +314,12 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void addedRoleToDeparment(String deparmentName, int roleId) {
-		updateDepartmentListView();
-	}
-
-	@Override
-	public void addedEmployee(String deparmentName, int roleId) {
 		updateProfit();
 	}
 
 	@Override
-	public void changeDepartmentHours(String depName, boolean workHome, int startHour) {
-		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.viewChangeDepartmentHours(depName, workHome, startHour);
-		}
-	}
-	
-	@Override
-	public void changeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
-		for (ViewListenable viewListenable : allListeners) {
-			viewListenable.viewChangeRoleHour(depName, roleId, workFromHome, startHour);
-		}
+	public void addedEmployee(String deparmentName, int roleId, int employeeId) {
+		updateProfit();
 	}
 	
 	@Override

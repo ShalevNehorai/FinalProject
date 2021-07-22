@@ -31,12 +31,13 @@ public class Preference implements Serializable {
 	public double getUnefficencyValue() {
 		return UNEFFECTIVE_VALUE; 	
 	}
+	
 	public int effectiveHours(int currentStartTime, boolean isHomeWorker) {
 		if(isHomeWorker && this.prefWorkFromHome)
 			return WORK_HOURS;
 		if(isHomeWorker != this.prefWorkFromHome)
-			return 0;	
-
+			return 0;			
+				
 		if(currentStartTime == DEFUALT_TIME) {
 			return 0;
 		}
@@ -52,9 +53,9 @@ public class Preference implements Serializable {
 	}
 	
 	private int laterThanPreferedEffectiveWorkHours(int currentStartTime) {
-		if(prefStartTime < DEFUALT_TIME)
-			return DEFUALT_TIME - prefStartTime;
-		if(prefStartTime > DEFUALT_TIME) {
+		if(currentStartTime < DEFUALT_TIME)
+			return DEFUALT_TIME - currentStartTime;
+		if(currentStartTime > DEFUALT_TIME) {
 			if(prefStartTime > DEFUALT_TIME)
 				return prefStartTime - DEFUALT_TIME;
 			if(prefStartTime < DEFUALT_TIME)
@@ -77,11 +78,19 @@ public class Preference implements Serializable {
 		return 0;
 	}
 	
-	public int unEffectiveHours(int currentStartTime, boolean isHomeWorker) {	
-		if(isHomeWorker && this.prefWorkFromHome)
-			return 0;
-		if(isHomeWorker != this.prefWorkFromHome)
-			return WORK_HOURS;
+	public int unEffectiveHours(int currentStartTime, boolean isHomeWorker) {
+		if(isHomeWorker) {
+			if(prefWorkFromHome) {
+				return 0;
+			}
+			else {
+				return WORK_HOURS;
+			}
+		}
+		else if(prefWorkFromHome) {
+			return Math.abs(DEFUALT_TIME - currentStartTime);
+		}
+		
 		
 		if(currentStartTime == DEFUALT_TIME)
 			return 0;
@@ -128,11 +137,24 @@ public class Preference implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append("Preffer Working ");
+		output.append("prefer working ");
 		if(prefWorkFromHome)
 			output.append("from home.");
 		else
 			output.append("from ").append(prefStartTime).append(" to ").append((prefStartTime + WORK_HOURS) % 24).append(".");
 		return output.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Preference)){
+			return false;
+		}
+		Preference temp = (Preference)(obj);
+		if(temp.prefWorkFromHome != prefWorkFromHome)
+			return false;
+		if(temp.prefStartTime != prefStartTime)
+			return false;
+		return true;
 	}
 }

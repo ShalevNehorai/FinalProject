@@ -12,7 +12,12 @@ public class Main extends Application {
 		Company com = new Company("The company");
 		MainWindow view = new MainWindow(primaryStage);
 		Controller controller = new Controller(com, view);
-		com.readBinaryFile();
+		try {
+			com.readBinaryFile();
+		}
+		catch(Exception e) {
+			com.createStartingData();
+		}
 		view.initViewData();
 	}
 	

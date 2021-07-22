@@ -52,7 +52,7 @@ public class ViewChangeHours {
 	public ViewChangeHours(MainWindow view, Stage stage, String depName, int roleId){
 		grid = new GridPane();
 		whoToChange = new Label();
-		whoToChange.setText("Change " + view.askRoleEmployeeName(depName, roleId) + " hours:");
+		whoToChange.setText("Change role: " + view.askRoleName(depName, roleId) + " hours:");
 		
 		changeButton = new DefaultButton("Submit");
 		changeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -60,7 +60,7 @@ public class ViewChangeHours {
 			public void handle(ActionEvent arg0) {
 				String startStr = whenStartInput.getText();
 				
-				view.changeRoleHour(depName, roleId, homeInput.isSelected(), startStr.isBlank()? Company.DEFAULT_START_WORK_DAY : Integer.parseInt(startStr));
+				view.changeRoleHours(depName, roleId, homeInput.isSelected(), startStr.isBlank()? Company.DEFAULT_START_WORK_DAY : Integer.parseInt(startStr));
 				stage.close();
 			}
 		});

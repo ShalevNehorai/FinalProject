@@ -29,15 +29,15 @@ public class ViewEditEmployee {
 	private final int SCENE_HEIGHT = 200;
 	private final int PADDING_INSETS = 20;
 	
-	public  ViewEditEmployee(MainWindow view, Stage stage, String depName, int roleId){
+	public  ViewEditEmployee(MainWindow view, Stage stage, String depName, int roleId, int employeeId){
 		grid = new GridPane();
 		grid.setPadding(new Insets(PADDING_INSETS));
 		grid.setHgap(H_GAP);
 		grid.setVgap(V_GAP);
 		
-		int currentPercentage = (int)(view.askEmployeePercentage(depName, roleId) * 100);
-		int currentMonthlySales = view.askEmployeeMonthlySales(depName, roleId);
-		String employeeName = view.askRoleEmployeeName(depName, roleId);
+		int currentPercentage = (int)(view.askEmployeePercentage(depName, roleId, employeeId) * 100);
+		int currentMonthlySales = view.askEmployeeMonthlySales(depName, roleId, employeeId);
+		String employeeName = view.askEmployeeName(depName, roleId, employeeId);
 		
 		employee = new Label("Employee " + employeeName);
 		grid.add(employee, 0, 0);
@@ -64,7 +64,7 @@ public class ViewEditEmployee {
 				
 				String saleStr = salesInput.getText();
 				
-				view.changeEmployeePercentageData(depName, roleId, 
+				view.changeEmployeePercentageData(depName, roleId, employeeId,
 												percentStr.isBlank()? (currentPercentage / 100.0) : (Double.parseDouble(percentStr) / 100.0),
 												saleStr.isBlank()? (currentMonthlySales) : (Integer.parseInt(saleStr)));
 												

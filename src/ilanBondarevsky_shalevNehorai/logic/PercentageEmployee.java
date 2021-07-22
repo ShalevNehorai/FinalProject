@@ -25,11 +25,6 @@ public class PercentageEmployee extends BaseEmployee {
 		return EmployeeType.PERCENTAGE_EMPLOYEE;
 	}
 	
-	@Override
-	public double profit() {
-		return super.profit() + monthlySales * (1 - monthlyPercentage);
-	}
-	
 	public double getPercentage(){
 		return monthlyPercentage;
 	}
@@ -50,5 +45,19 @@ public class PercentageEmployee extends BaseEmployee {
 		StringBuffer output = new StringBuffer(super.toString());
 		output.append("\nWith ").append(monthlyPercentage).append(" percentage from sales.");
 		return output.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof PercentageEmployee)) {
+			return false;
+		}
+		
+		PercentageEmployee temp = (PercentageEmployee) obj;
+		if(monthlyPercentage != temp.monthlyPercentage || monthlySales != temp.monthlySales) {
+			return false;
+		}
+		
+		return super.equals(obj);
 	}
 }

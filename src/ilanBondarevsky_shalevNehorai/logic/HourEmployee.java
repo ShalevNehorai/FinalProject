@@ -31,4 +31,18 @@ public class HourEmployee extends Employee {
 		output.append(" The salary is: ").append(moneyForHour).append("\u20AA for Hour.");
 		return output.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof HourEmployee)) {
+			return false;
+		}
+		
+		HourEmployee temp = (HourEmployee) obj;
+		if(moneyForHour != temp.moneyForHour) {
+			return false;
+		}
+		
+		return super.equals(obj);
+	}
 }

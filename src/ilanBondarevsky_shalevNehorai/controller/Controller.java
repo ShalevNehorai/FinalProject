@@ -60,22 +60,16 @@ public class Controller implements CompanyListenable, ViewListenable {
 	public String viewAskRoleName(String deparmentName, int roleId) {
 		return theModel.getRoleName(deparmentName, roleId);
 	}
-
-	@Override
-	public String viewAskRoleEmployeeName(String deparmentName, int roleId) {
-		return theModel.getEmployeeNameInRole(deparmentName, roleId);
-	}
-
-	@Override
-	public double viewAskEmployeeProfit(String deparmentName, int roleId) {
-		return theModel.getEmployeeProfit(deparmentName, roleId);
+	
+	public double viewAskRoleProfit(String departmentName, int roleId) {
+		return theModel.getRoleProfit(departmentName, roleId);
 	}
 
 	@Override
 	public boolean viewAskIsRoleSync(String deparmentName, int roleId) {
 		return theModel.isRoleSync(deparmentName, roleId);
 	}
-
+	
 	@Override
 	public boolean viewAskIsRoleChangeable(String departmentName, int roleId) {
 		return theModel.isRoleChangeable(departmentName, roleId);
@@ -87,18 +81,38 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public EmployeeType viewAskEmployeeType(String deparmentName, int roleId) {
-		return theModel.getEmployeeType(deparmentName, roleId);
+	public ArrayList<Integer> viewAskEmployeesInRole(String deparmentName, int roleId) {
+		return theModel.getEmployeesInRole(deparmentName, roleId);
 	}
 	
 	@Override
-	public int viewAskEmployeeMonthlySales(String depName, int roleId) {
-		return theModel.getEmployeeMonthlySales(depName, roleId);
+	public String viewAskEmployeeName(String deparmentName, int roleId, int employeeId) {
+		return theModel.getEmployeeNameInRole(deparmentName, roleId, employeeId);
+	}
+
+	@Override
+	public double viewAskEmployeeProfit(String deparmentName, int roleId, int employeeId) {
+		return theModel.getEmployeeProfitInRole(deparmentName, roleId, employeeId);
+	}
+
+	@Override
+	public String viewAskEmployeeData(String deparmentName, int roleId, int employeeId) {
+		return theModel.getEmployeeDataInRole(deparmentName, roleId, employeeId);
 	}
 	
 	@Override
-	public double viewAskEmployeePercentage(String depName, int roleId) {
-		return theModel.getEmployeePercentage(depName, roleId);
+	public EmployeeType viewAskEmployeeType(String deparmentName, int roleId, int employeeId) {
+		return theModel.getEmployeeTypeInRole(deparmentName, roleId, employeeId);
+	}
+	
+	@Override
+	public int viewAskEmployeeMonthlySales(String depName, int roleId, int employeeId) {
+		return theModel.getEmployeeMonthlySalesInRole(depName, roleId, employeeId);
+	}
+	
+	@Override
+	public double viewAskEmployeePercentage(String depName, int roleId, int employeeId) {
+		return theModel.getEmployeePercentageInRole(depName, roleId, employeeId);
 	}
 	
 	@Override
@@ -123,13 +137,13 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public void viewChangeRoleHour(String depName, int roleId, boolean workFromHome, int startHour) {
+	public void viewChangeRoleHours(String depName, int roleId, boolean workFromHome, int startHour) {
 		theModel.changeRoleWorkHours(depName, roleId, startHour, workFromHome);	
 	}
 
 	@Override
-	public void viewChangeEmployeePersentageData(String deparmentName, int roleId, double percentage, int sales) {
-		theModel.changePercentageEmployeeData(deparmentName, roleId, percentage, sales);
+	public void viewChangeEmployeePersentageData(String deparmentName, int roleId, int employeeId, double percentage, int sales) {
+		theModel.changePercentageEmployeeDataInRole(deparmentName, roleId, employeeId, percentage, sales);
 	}
 	
 	@Override
@@ -158,8 +172,8 @@ public class Controller implements CompanyListenable, ViewListenable {
 	}
 	
 	@Override
-	public void modelAddedEmployee(String depName, int roleId) {
-		theView.addedEmployee(depName, roleId);
+	public void modelAddedEmployee(String depName, int roleId, int employeeId) {
+		theView.addedEmployee(depName, roleId, employeeId);
 	}
 	
 	@Override

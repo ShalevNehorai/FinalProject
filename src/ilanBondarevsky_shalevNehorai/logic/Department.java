@@ -14,18 +14,19 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	private boolean isChangeable;
 	
 	private int syncStartTime;
-	private boolean syncWorkFromHome = false;
+	private boolean syncWorkFromHome;
 	
-	public Department(String name, boolean isSync, boolean isChangable) throws IllegalArgumentException{
+	public Department(String name, boolean isSync, boolean isChangeable) throws IllegalArgumentException{
 		if(name.isBlank()) {
 			throw new IllegalArgumentException("Department name cant be blank");
 		}
 		
 		this.name = name;
 		this.isSync = isSync;
-		this.isChangeable = isChangable;
+		this.isChangeable = isChangeable;
 		
 		syncStartTime = Company.DEFAULT_START_WORK_DAY;
+		syncWorkFromHome = false;
 		
 		roles = new ArrayList<Role>();
 	}
@@ -49,13 +50,8 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 			}
 		}
 		return null;
-	}
-	
-	/*public int addRole(String roleName, boolean isRoleChangeable)  throws IllegalArgumentException {
-		return addRole(roleName, isRoleChangeable, null, "", 0, false, 0, false, 0, 0, 0);
-	}*/
-	
-	public int addRole(String roleName, boolean isRoleChangeable) throws IllegalArgumentException {
+	}
+	public int addRole(String roleName, boolean isRoleChangeable, int startTime, boolean workFromHome){
 		if(isSync){
 			isRoleChangeable = true;
 		}
@@ -63,12 +59,16 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 			isRoleChangeable = false;
 		}
 		
-		roles.add(new Role(roleName, isSync, isRoleChangeable));
+		roles.add(new Role(roleName, isSync, isRoleChangeable, startTime, workFromHome));
 		
 		return roles.get(roles.size() - 1).getId();
 	}
 	
-	public void setRoleEmployee(int roleId, EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException {
+	public int addRole(String roleName, boolean isRoleChangeable) throws IllegalArgumentException {
+		return addRole(roleName, isRoleChangeable, syncStartTime, syncWorkFromHome);
+	}
+	
+	public int addEmployeeToRole(int roleId, EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException {
 		Role role = getRoleById(roleId);
 		
 		if(role != null) {
@@ -76,7 +76,7 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 				startTime = this.syncStartTime;
 				isHomeWorking = this.syncWorkFromHome;
 			}
-			role.setEmployee(type, name, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
+			return role.addEmployee(type, name, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
 		}
 		else{
 			throw new InstanceNotFoundException("Role not found");
@@ -193,44 +193,54 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		}
 	}
 	
-	public String getEmployeeNameInRole(int roleId) throws InstanceNotFoundException {
+	public String getEmployeeNameInRole(int roleId, int employeeId) throws InstanceNotFoundException {
 		Role role = getRoleById(roleId);
 		if(role != null){
-			return role.getEmployeeName();
+			return role.getEmployeeName(employeeId);
 		}
 		else {
 			throw new InstanceNotFoundException("Role not found under deparment " + name);
 		}
 	}
 	
-	public EmployeeType getEmployeeType(int roleId) throws InstanceNotFoundException{
+	public EmployeeType getEmployeeTypeInRole(int roleId, int employeeId) throws InstanceNotFoundException{
 		Role role = getRoleById(roleId);
 		if(role != null){
-			return role.getEmployeeType();
+			return role.getEmployeeType(employeeId);
 		} else{
 			throw new InstanceNotFoundException("Role doesn't exist");
 		}
 	}
 	
-	public double getEmployeePercentage(int roleId) throws IllegalArgumentException, InstanceNotFoundException{
+	public double getEmployeeProfitInRole(int roleId, int employeeId) throws InstanceNotFoundException{
 		Role role = getRoleById(roleId);
-		return role.getEmployeePercentage();
+		if(role != null){
+			return role.getEmployeeProfit(employeeId);
+		}
+		else {
+			throw new InstanceNotFoundException("Role doesn't exist");
+		}
 	}
 	
-	public int getEmployeeMonthlySales(int roleId) throws IllegalArgumentException, InstanceNotFoundException {
+	public double getEmployeePercentageInRole(int roleId, int employeeId) throws IllegalArgumentException, InstanceNotFoundException{
 		Role role = getRoleById(roleId);
-		return role.getEmployeeMonthlySales();
+		return role.getEmployeePercentage(employeeId);
+	}
+	
+	public int getEmployeeMonthlySalesInRole(int roleId, int employeeId) throws IllegalArgumentException, InstanceNotFoundException {
+		Role role = getRoleById(roleId);
+		return role.getEmployeeMonthlySales(employeeId);
 	}	
 	
-	public void changePercentageEmployeeData(int roleId, double percentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException {
+	public void changePercentageEmployeeDataInRole(int roleId, int employeeId, double percentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException {
 		Role role = getRoleById(roleId);
-		role.changePercentageEmployeeData(percentage, monthlySales);
+		role.changePercentageEmployeeData(employeeId, percentage, monthlySales);
 	}
 	
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append("Department ").append(name).append("\n");
+		output.append("Department ").append(name).append(":\n");
 		if(roles.isEmpty()){
 			output.append("\t").append("There are no roles in this department.");
 		}
@@ -241,5 +251,50 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		}
 		
 		return output.toString();
+	}
+	
+	public ArrayList<Integer> getEmployeesIdListInRole(int roleId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.getEmployeesIdList();
+		}
+		throw new InstanceNotFoundException("Role doesn't exist");
+	}
+	
+	public String getEmployeeDataInRole(int roleId, int employeeId) throws InstanceNotFoundException{
+		Role role = getRoleById(roleId);
+		if(role != null){
+			return role.getEmployeeData(employeeId);
+		}
+		throw new InstanceNotFoundException("Role doesn't exist");
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Department)) {
+			return false;
+		}
+		
+		Department temp = (Department)obj;
+		if(name != temp.name)
+			return false;
+		
+		if(isSync != temp.isSync)
+			return false;
+		
+		if(isChangeable != temp.isChangeable)
+			return false;
+		
+		if(syncStartTime != temp.syncStartTime)
+			return false;
+		
+		if(syncWorkFromHome != temp.syncWorkFromHome)
+			return false;
+		
+		if(roles != temp.roles)
+			return false;
+		
+		return true;
+			
 	}
 }
