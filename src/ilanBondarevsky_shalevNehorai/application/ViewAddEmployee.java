@@ -82,7 +82,8 @@ public class ViewAddEmployee {
 		grid.add(preferStartHour, 0, 3);
 		
 		preferHourInput = new TextField();
-		setTextFieldNumbersOnly(preferHourInput, 8);
+		Util.setTextFieldNumbersOnly(preferHourInput);
+		Util.setStartingText(preferHourInput, 8);
 		grid.add(preferHourInput, 1, 3);
 		
 		type = new Label("Employee Type: ");
@@ -129,7 +130,8 @@ public class ViewAddEmployee {
 		grid.add(salary, 0, 5);
 		
 		salaryInput = new TextField();
-		setTextFieldNumbersOnly(salaryInput, 0);
+		Util.setTextFieldNumbersOnly(salaryInput);
+		Util.setStartingText(salaryInput, 0);
 		grid.add(salaryInput, 1, 5);
 		
 		salesPercentage = new Label("Your sales Percentage:\n(A number between 0 to 100)");
@@ -137,7 +139,8 @@ public class ViewAddEmployee {
 		salesPercentage.setVisible(false);
 		
 		salesPercentageInput = new TextField();
-		setTextFieldNumbersOnly(salesPercentageInput, 0);
+		Util.setTextFieldNumbersOnly(salesPercentageInput);
+		Util.setStartingText(salesPercentageInput, 0);
 		grid.add(salesPercentageInput, 1, 6);
 		salesPercentageInput.setVisible(false);
 		
@@ -146,7 +149,8 @@ public class ViewAddEmployee {
 		salesMonthlyLbl.setVisible(false);
 		
 		salesMonthlyInput = new TextField();
-		setTextFieldNumbersOnly(salesMonthlyInput, 0);
+		Util.setTextFieldNumbersOnly(salesMonthlyInput);
+		Util.setStartingText(salesMonthlyInput, 0);
 		grid.add(salesMonthlyInput, 1, 7);
 		salesMonthlyInput.setVisible(false);
 		

@@ -164,11 +164,11 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		if(!isWorkChangeable())
 			throw new IllegalArgumentException("Role's hours cannot be changed");
 		
-		this.startTime = startTime;
-		this.isWorkFromHome = homeWork;
 		for (Employee employee : employeeList) {
 			employee.changeWorkingHours(startTime, homeWork);
 		}
+		this.startTime = startTime;
+		this.isWorkFromHome = homeWork;
 	}
 	
 	public void changePercentageEmployeeData(int employeeId, double percentage, int sales) throws InstanceNotFoundException, IllegalArgumentException {
@@ -188,12 +188,17 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append("In role ").append(name).append(" working:\n");
+		/*output.append("In role ").append(name).append(" working:\n");
 		for (Employee employee : employeeList) {
 			output.append("\t").append(employee.toString()).append("\n");
 		}
 		//TODO need to delete this line (162) in the end	
 		output.append("IsChangeable ").append(isWorkChangeable).append("\nisSync? ").append(isWorkingSync);
+		return output.toString();*/
+		
+		
+		output.append("The role is in ").append(isWorkingSync? "" : "un").append("syncronus department.");
+		output.append(" Working hours for this role can").append(isWorkChangeable? "":"'t").append(" be change");//TODO check spelling
 		return output.toString();
 	}
 	

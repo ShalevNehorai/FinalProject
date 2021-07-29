@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -22,7 +23,7 @@ public class EmployeeViewCell extends ListCell<EmployeeView> {
 	private Label nameLbl;
 	private Label profitLbl;
 	
-	private Button showBtn;
+	private Button infoBtn;
 	private Button editEmployeeBtn;
 	
 	public EmployeeViewCell(MainWindow mainWindow) {
@@ -31,19 +32,18 @@ public class EmployeeViewCell extends ListCell<EmployeeView> {
 		this.mainWindow = mainWindow;
 		
 		hbox = new HBox();
-		hbox.setSpacing(20);//TODO more spacing in all the windows
+		hbox.setSpacing(40);
 		hbox.setAlignment(Pos.CENTER_LEFT);
 		
 		nameLbl = new Label();
 		profitLbl = new Label();
 		
-		showBtn = new Button();
-		ImageView showImg = new ImageView(new Image("ilanBondarevsky_shalevNehorai/Images/icons8-info-48.png"));
-		showBtn.setGraphic(showImg);
+		infoBtn = new Button("show info");
 		
 		editEmployeeBtn = new Button("Edit");
+		editEmployeeBtn.setTooltip(new Tooltip("change the monthly persentage and monthly sales"));//TODO chack spelling
 		
-		hbox.getChildren().addAll(nameLbl, profitLbl, showBtn, editEmployeeBtn);
+		hbox.getChildren().addAll(nameLbl, profitLbl, infoBtn, editEmployeeBtn);
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class EmployeeViewCell extends ListCell<EmployeeView> {
 				profitLbl.setTextFill(Color.GREEN);
 			}
 			
-			showBtn.setOnAction(new EventHandler<ActionEvent>() {	
+			infoBtn.setOnAction(new EventHandler<ActionEvent>() {	
 				@Override
 				public void handle(ActionEvent arg0) {
 					JOptionPane.showMessageDialog(null, mainWindow.askEmployeeData(item.getDepartmentName(), item.getRoleId(), item.getEmployeeId()));

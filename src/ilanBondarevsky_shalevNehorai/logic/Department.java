@@ -87,6 +87,10 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
 		StringBuffer errorMsg = new StringBuffer();
 		
+		if(startTime < 0 || startTime >= 24) {
+			throw new IllegalArgumentException("start working hour must be in range 0 - 23");
+		}
+		
 		if(isChangeable){
 			syncStartTime = startTime;
 			syncWorkFromHome = homeWork;

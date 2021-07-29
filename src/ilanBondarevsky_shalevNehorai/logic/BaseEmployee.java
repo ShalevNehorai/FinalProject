@@ -32,7 +32,7 @@ public class BaseEmployee extends Employee {
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer(super.toString());
-		output.append(" The salary is: ").append(salary).append("\u20AA for month.");
+		output.append("\nThe salary is: ").append(salary).append("\u20AA for month.");
 		return output.toString();
 	}
 	

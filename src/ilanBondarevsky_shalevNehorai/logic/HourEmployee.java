@@ -28,7 +28,7 @@ public class HourEmployee extends Employee {
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer(super.toString());
-		output.append(" The salary is: ").append(moneyForHour).append("\u20AA for Hour.");
+		output.append("\nThe salary is: ").append(moneyForHour).append("\u20AA for an Hour.");
 		return output.toString();
 	}
 	

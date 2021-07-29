@@ -25,8 +25,8 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 public class MainWindow implements CompanyViewable {
-	private final int WIN_WIDTH = 1280;
-	private final int WIN_HEIGHT = 720;//TODO make it smaller
+	private final int WIN_WIDTH = 1000;//1280;
+	private final int WIN_HEIGHT = 720;
 	
 	private MainWindow mainWindow;
 	
@@ -94,7 +94,7 @@ public class MainWindow implements CompanyViewable {
 		});
 		
 		HBox bottomBox = new HBox(addDeptButton, exitBtn);
-		bottomBox.setSpacing(900);
+		bottomBox.setSpacing(WIN_WIDTH - 340);
 		
 		root.setBottom(bottomBox);
 		BorderPane.setMargin(addDeptButton, new Insets(10));
@@ -314,11 +314,20 @@ public class MainWindow implements CompanyViewable {
 
 	@Override
 	public void addedRoleToDeparment(String deparmentName, int roleId) {
+		/*
+		 * the method been provided with data of the new role even though we arent using it in this view class.
+		 * we chose to keep it to make the method more general and to proide the option that some view class might use the data provided.
+		 */
 		updateProfit();
 	}
 
 	@Override
 	public void addedEmployee(String deparmentName, int roleId, int employeeId) {
+		/*
+		 * the method been provided with data of the new role even though we arent using it in this view class.
+		 * we chose to keep it to make the method more general and to proide the option that some view class might use the data provided.
+		 */
+
 		updateProfit();
 	}
 	

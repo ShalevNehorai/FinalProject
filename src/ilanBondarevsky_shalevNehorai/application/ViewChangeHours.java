@@ -97,7 +97,7 @@ public class ViewChangeHours {
 		grid.add(whenStart, 0, 2);
 		
 		whenStartInput = new TextField();
-		setTextFieldNumbersOnly(whenStartInput);
+		Util.setTextFieldNumbersOnly(whenStartInput);
 		grid.add(whenStartInput, 1, 2);
 		
 		grid.add(changeButton, 1, 3);

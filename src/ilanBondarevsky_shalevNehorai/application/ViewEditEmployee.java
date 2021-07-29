@@ -46,14 +46,14 @@ public class ViewEditEmployee {
 		grid.add(monthlySales, 0, 1);
 		
 		salesInput = new TextField("" + currentMonthlySales);
-		setTextFieldNumbersOnly(salesInput);
+		Util.setTextFieldNumbersOnly(salesInput);
 		grid.add(salesInput, 1, 1);
 		
 		percentage = new Label("Percentage (Can be 0 - 100)");
 		grid.add(percentage, 0, 2);
 		
 		percentageInput = new TextField("" + (int)(currentPercentage));
-		setTextFieldNumbersOnly(percentageInput);
+		Util.setTextFieldNumbersOnly(percentageInput);
 		grid.add(percentageInput, 1, 2);
 		
 		editButton = new DefaultButton("Submit");

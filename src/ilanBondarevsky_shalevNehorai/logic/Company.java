@@ -346,12 +346,11 @@ public class Company {
 			}
 			catch(InstanceNotFoundException e){
 				fireExcpetion(e);
-				return "";
 			}
 		} else{
 			fireExcpetion(new InstanceNotFoundException("Deparment " + departmentName + " doesnt exists"));
-			return "";
 		}
+		return "";
 	}
 	
 	public ArrayList<Integer> getEmployeesInRole(String departmentName, int roleId){

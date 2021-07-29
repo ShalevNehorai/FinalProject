@@ -24,7 +24,7 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 	
 	private HBox top;
 	private Label name;
-	private Label profitText;
+	private Label profitLbl;
 	private Button changeHoursBtn;
 	private Button addRoleButton;
 	
@@ -42,13 +42,13 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			//@TOP
 		name = new Label();
 		name.getStyleClass().add("default-label");
-		profitText = new Label();
-		profitText.setFont(topfont);
+		profitLbl = new Label();
+		profitLbl.setFont(topfont);
 		
 		changeHoursBtn = new EditButton("Change hours");
 		changeHoursBtn.setTooltip(new Tooltip("change the work hours of all the roles in the deprament"));
 		
-		top = new HBox(name, profitText, changeHoursBtn);
+		top = new HBox(name, profitLbl, changeHoursBtn);
 		top.setSpacing(40);
 		
 		root.setTop(top);
@@ -73,12 +73,12 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			name.setText(item.getName());
 			
 			double profit = mainWindow.askDeparmentProfit(item.getName());
-			profitText.setText(String.valueOf(profit) + "\u20AA");
+			profitLbl.setText(String.valueOf(profit) + "\u20AA");
 			if(profit < 0) {
-				profitText.setTextFill(Color.RED);
+				profitLbl.setTextFill(Color.RED);
 			}
 			else {
-				profitText.setTextFill(Color.GREEN);
+				profitLbl.setTextFill(Color.GREEN);
 			}
 			
 			ObservableList<RoleView> roleList = FXCollections.observableArrayList();
@@ -97,9 +97,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			root.setCenter(roleListView);
 			roleListView.setPrefSize(50, 400);
 			
-			/*if(!mainWindow.isDepatmentChangeable(item.getName())) {
-				changeHoursBtn.setVisible(false);
-			}*/
 			changeHoursBtn.setVisible(mainWindow.isDepatmentChangeable(item.getName()));
 			
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {

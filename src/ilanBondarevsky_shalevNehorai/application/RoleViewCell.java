@@ -30,6 +30,7 @@ public class RoleViewCell extends ListCell<RoleView> {
 	private HBox top;
 	private Label roleNameLbl;
 	private Label profitLbl; // TODO make sure it necessery
+	private Label roleData;
 	
 	private Button addEmployeeBtn;
 	private Button changeHoursBtn;
@@ -48,12 +49,13 @@ public class RoleViewCell extends ListCell<RoleView> {
 		roleNameLbl = new Label();
 		roleNameLbl.getStyleClass().add("default-label");
 		profitLbl = new Label();
+		roleData = new Label();
 		
 		changeHoursBtn = new EditButton("change hours");
 		changeHoursBtn.setTooltip(new Tooltip("change the work hours of all the employees in the role"));
 		
-		top = new HBox(roleNameLbl, profitLbl, changeHoursBtn);
-		top.setSpacing(20);//TODO space
+		top = new HBox(roleNameLbl, profitLbl, changeHoursBtn, roleData);
+		top.setSpacing(20);
 
 		layout.setTop(top);
 		BorderPane.setMargin(top, new Insets(5));
@@ -83,6 +85,8 @@ public class RoleViewCell extends ListCell<RoleView> {
 			else {
 				profitLbl.setTextFill(Color.GREEN);
 			}
+			
+			roleData.setText(mainWindow.askRoleData(item.getDeparmentName(), item.getRoleId()));
 			
 			ObservableList<EmployeeView> employeeList = FXCollections.observableArrayList();
 			for(int id : mainWindow.askEmployeesInRole(item.getDeparmentName(), item.getRoleId())) {

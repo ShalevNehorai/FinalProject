@@ -78,6 +78,10 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	
 	@Override
 	public void changeWorkingHours(int startTime, boolean homeWork) {
+		if(startTime < 0 || startTime >= 24) {
+			throw new IllegalArgumentException("start working hour must be in range 0 - 23");//TODO make inworking hours spaicel exeption
+		}
+		
 		if(isWorkChangeable()) {
 			this.startTime = startTime;
 			this.isHomeWorking = homeWork;
@@ -95,9 +99,9 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 		StringBuffer output = new StringBuffer();
 		output.append("Employee ").append(name).append(", Id " + id + ":\n");
 		if(isHomeWorking)
-			output.append(" Works from home.\n");
+			output.append("Works from home. ");
 		else
-			output.append(" Works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY) % 24).append(".\n");
+			output.append("Works from ").append(startTime).append(" to ").append((startTime + Company.WORK_HOURS_IN_DAY) % 24).append(". ");
 		
 		output.append("He/She ").append(preference.toString());
 		return output.toString();
