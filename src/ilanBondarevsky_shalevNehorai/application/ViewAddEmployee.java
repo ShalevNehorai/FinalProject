@@ -83,7 +83,7 @@ public class ViewAddEmployee {
 		
 		preferHourInput = new TextField();
 		Util.setTextFieldNumbersOnly(preferHourInput);
-		Util.setStartingText(preferHourInput, 8);
+		preferHourInput.setText("8");
 		grid.add(preferHourInput, 1, 3);
 		
 		type = new Label("Employee Type: ");
@@ -131,7 +131,7 @@ public class ViewAddEmployee {
 		
 		salaryInput = new TextField();
 		Util.setTextFieldNumbersOnly(salaryInput);
-		Util.setStartingText(salaryInput, 0);
+		salaryInput.setText("0");
 		grid.add(salaryInput, 1, 5);
 		
 		salesPercentage = new Label("Your sales Percentage:\n(A number between 0 to 100)");
@@ -140,7 +140,7 @@ public class ViewAddEmployee {
 		
 		salesPercentageInput = new TextField();
 		Util.setTextFieldNumbersOnly(salesPercentageInput);
-		Util.setStartingText(salesPercentageInput, 0);
+		salesPercentageInput.setText("0");
 		grid.add(salesPercentageInput, 1, 6);
 		salesPercentageInput.setVisible(false);
 		
@@ -150,7 +150,7 @@ public class ViewAddEmployee {
 		
 		salesMonthlyInput = new TextField();
 		Util.setTextFieldNumbersOnly(salesMonthlyInput);
-		Util.setStartingText(salesMonthlyInput, 0);
+		salesMonthlyInput.setText("0");
 		grid.add(salesMonthlyInput, 1, 7);
 		salesMonthlyInput.setVisible(false);
 		
@@ -190,20 +190,8 @@ public class ViewAddEmployee {
 			
 			
 		Scene scene = new Scene(grid, SCENE_WIDTH, SCENE_HEIGHT);
+		scene.getStylesheets().add(MainWindow.STYLE_SHEET_PATH);
 		stage.setScene(scene);
 		stage.show();	
-	}
-	
-	private void setTextFieldNumbersOnly(TextField tf, int startingText) {
-		tf.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-		        String newValue) {
-		        if (!newValue.matches("\\d*")) {
-		        	tf.setText(newValue.replaceAll("[^\\d]", ""));
-		        }
-		    }
-		});
-		tf.setText(String.valueOf(startingText));
 	}
 }

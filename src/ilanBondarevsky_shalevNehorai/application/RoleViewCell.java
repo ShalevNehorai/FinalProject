@@ -1,21 +1,15 @@
 package ilanBondarevsky_shalevNehorai.application;
 
-import javax.swing.JOptionPane;
-
-import ilanBondarevsky_shalevNehorai.logic.EmployeeType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -29,7 +23,7 @@ public class RoleViewCell extends ListCell<RoleView> {
 		
 	private HBox top;
 	private Label roleNameLbl;
-	private Label profitLbl; // TODO make sure it necessery
+	private Label profitLbl;
 	private Label roleData;
 	
 	private Button addEmployeeBtn;
@@ -102,7 +96,7 @@ public class RoleViewCell extends ListCell<RoleView> {
 				}
 			});
 			layout.setCenter(employeeListView);
-			employeeListView.setPrefSize(50, 150);//TODO change size
+			employeeListView.setPrefSize(50, 150);
 			
 			boolean canChangeHours = mainWindow.isRoleChangeable(item.getDeparmentName(), item.getRoleId()) && !mainWindow.isRoleSync(item.getDeparmentName(), item.getRoleId());
 			
@@ -111,14 +105,14 @@ public class RoleViewCell extends ListCell<RoleView> {
 			addEmployeeBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					ViewAddEmployee addEmployee = new ViewAddEmployee(mainWindow, item.getDeparmentName(), item.getRoleId(), new Stage());					
+					new ViewAddEmployee(mainWindow, item.getDeparmentName(), item.getRoleId(), new Stage());					
 				}
 			});
 			
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					ViewChangeHours change = new ViewChangeHours(mainWindow, new Stage(), item.getDeparmentName(), item.getRoleId());
+					new ViewChangeHours(mainWindow, new Stage(), item.getDeparmentName(), item.getRoleId());
 				}
 			});
 			

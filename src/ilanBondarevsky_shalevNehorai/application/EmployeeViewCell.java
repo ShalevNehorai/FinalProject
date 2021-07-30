@@ -10,8 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -41,7 +39,7 @@ public class EmployeeViewCell extends ListCell<EmployeeView> {
 		infoBtn = new Button("show info");
 		
 		editEmployeeBtn = new Button("Edit");
-		editEmployeeBtn.setTooltip(new Tooltip("change the monthly persentage and monthly sales"));//TODO chack spelling
+		editEmployeeBtn.setTooltip(new Tooltip("change the monthly persentage and monthly sales"));
 		
 		hbox.getChildren().addAll(nameLbl, profitLbl, infoBtn, editEmployeeBtn);
 	}
@@ -73,7 +71,7 @@ public class EmployeeViewCell extends ListCell<EmployeeView> {
 			editEmployeeBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					ViewEditEmployee edit = new ViewEditEmployee(mainWindow, new Stage(), item.getDepartmentName(), item.getRoleId(), item.getEmployeeId());
+					new ViewEditEmployee(mainWindow, new Stage(), item.getDepartmentName(), item.getRoleId(), item.getEmployeeId());
 				}
 			});
 

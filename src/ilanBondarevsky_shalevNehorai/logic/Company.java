@@ -125,7 +125,7 @@ public class Company {
 				
 				fireAddedEmployee(departmentName, roleID, employeeId);
 			}
-			catch(IllegalArgumentException | InstanceNotFoundException e){
+			catch(IllegalArgumentException | InstanceNotFoundException | WorkingHoursException e){
 				fireExcpetion(e);
 			}
 		} else{
@@ -139,7 +139,7 @@ public class Company {
 			try{
 				department.changeWorkingHours(startTime, workingFromHome);
 			}
-			catch(IllegalArgumentException e){
+			catch(IllegalArgumentException | WorkingHoursException e){
 				fireExcpetion(e);
 			}
 			finally {
@@ -157,7 +157,7 @@ public class Company {
 			try{
 				department.changeWorkingHoursForRole(roleId, startTime, workingFromHome);
 			}
-			catch(IllegalArgumentException | InstanceNotFoundException e){
+			catch(IllegalArgumentException | InstanceNotFoundException | WorkingHoursException e){
 				fireExcpetion(e);
 			}
 			finally {

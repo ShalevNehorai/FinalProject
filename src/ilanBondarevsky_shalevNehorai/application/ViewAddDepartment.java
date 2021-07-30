@@ -91,7 +91,6 @@ public class ViewAddDepartment {
 			
 			@Override
 			public void handle(ActionEvent arg0) {
-				System.out.print(changeableCkb.isSelected());
 				view.addDepartment(depNameInput.getText(), syncableCkb.isSelected(), changeableCkb.isSelected());	
 				stage.close();
 			}
@@ -105,6 +104,7 @@ public class ViewAddDepartment {
 		vbox.getChildren().addAll(companyNameLbl, grid);
 		
 		Scene scene = new Scene(vbox, SCENE_WIDTH, SCENE_HEIGHT);
+		scene.getStylesheets().add(MainWindow.STYLE_SHEET_PATH);
 		stage.setScene(scene);
 		stage.show();
 		

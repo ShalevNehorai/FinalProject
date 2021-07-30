@@ -10,14 +10,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {	
 		Company com = new Company("The company");
-		MainWindow view = new MainWindow(primaryStage);
-		Controller controller = new Controller(com, view);
 		try {
 			com.readBinaryFile();
 		}
 		catch(Exception e) {
 			com.createStartingData();
 		}
+		MainWindow view = new MainWindow(primaryStage);
+		Controller controller = new Controller(com, view);
 		view.initViewData();
 	}
 	

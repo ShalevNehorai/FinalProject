@@ -1,3 +1,4 @@
 some times when scrolling down for the first time error massage
 ` Cannot invoke "javafx.scene.Parent.getParent()" because "<local2>" is null `
- is printing in console. We didnt find what it couse but the program is still running and working properly.
+ is printing in console. because the listView of some object is empty it is fail to load the UI, we could't find how to fix it
+ but the program countious to run even with the error.  

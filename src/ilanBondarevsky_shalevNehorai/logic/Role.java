@@ -67,9 +67,9 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		return isWorkChangeable;
 	}
 	
-	public int addEmployee(EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException {
+	public int addEmployee(EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, WorkingHoursException {
 		//argument salary refer to salary for base employee and hour salary for hour employee
-		if(!isWorkChangeable){
+		if(!isWorkChangeable){//TODO need to think about this
 			startTime = this.startTime;
 			isHomeWorking = this.isWorkFromHome;
 		}
@@ -160,13 +160,14 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	}
 	
 	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException{
+	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, WorkingHoursException{
 		if(!isWorkChangeable())
 			throw new IllegalArgumentException("Role's hours cannot be changed");
 		
 		for (Employee employee : employeeList) {
 			employee.changeWorkingHours(startTime, homeWork);
 		}
+		
 		this.startTime = startTime;
 		this.isWorkFromHome = homeWork;
 	}
@@ -197,8 +198,8 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		return output.toString();*/
 		
 		
-		output.append("The role is in ").append(isWorkingSync? "" : "un").append("syncronus department.");
-		output.append(" Working hours for this role can").append(isWorkChangeable? "":"'t").append(" be change");//TODO check spelling
+		output.append("The role is in ").append(isWorkingSync? "" : "un").append("synchronous department.");
+		output.append(" Working hours for this role can").append(isWorkChangeable? "":"'t").append(" be change");
 		return output.toString();
 	}
 	

@@ -10,9 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
 public class ViewEditEmployee {
 	private GridPane grid;
 	
@@ -74,19 +71,8 @@ public class ViewEditEmployee {
 		grid.add(editButton, 0, 3);
 		
 		Scene scene = new Scene(grid, SCENE_WIDTH, SCENE_HEIGHT);
+		scene.getStylesheets().add(MainWindow.STYLE_SHEET_PATH);
 		stage.setScene(scene);
 		stage.show();
-	}
-	
-	private void setTextFieldNumbersOnly(TextField tf) {
-		tf.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-		        String newValue) {
-		        if (!newValue.matches("\\d*")) {
-		        	tf.setText(newValue.replaceAll("[^\\d]", ""));
-		        }
-		    }
-		});
 	}
 }

@@ -25,6 +25,8 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 public class MainWindow implements CompanyViewable {
+	public static final String STYLE_SHEET_PATH = "/ilanBondarevsky_shalevNehorai/application.css";
+	
 	private final int WIN_WIDTH = 1000;//1280;
 	private final int WIN_HEIGHT = 720;
 	
@@ -79,7 +81,7 @@ public class MainWindow implements CompanyViewable {
 		addDeptButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {				
-				ViewAddDepartment addDept = new ViewAddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
+				new ViewAddDepartment(mainWindow, companyNameLbl.getText(), new Stage());
 			}
 		});
 		
@@ -109,7 +111,7 @@ public class MainWindow implements CompanyViewable {
 		});
 		
 		Scene scene = new Scene(root, WIN_WIDTH, WIN_HEIGHT);
-		scene.getStylesheets().add("/ilanBondarevsky_shalevNehorai/application.css");
+		scene.getStylesheets().add(STYLE_SHEET_PATH);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

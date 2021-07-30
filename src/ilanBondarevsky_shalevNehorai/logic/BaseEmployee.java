@@ -5,7 +5,7 @@ public class BaseEmployee extends Employee {
 	private int salary; // salary in a month
 	
 	protected BaseEmployee(String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome,
-			boolean isWorkingSync, boolean isWorkChangeable, int salary) throws IllegalArgumentException{
+			boolean isWorkingSync, boolean isWorkChangeable, int salary) throws IllegalArgumentException, WorkingHoursException{
 		super(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, isWorkingSync, isWorkChangeable);
 		
 		if(salary < 0) {

@@ -13,9 +13,9 @@ public class Preference implements Serializable {
 	private int prefStartTime;
 	private boolean prefWorkFromHome;
 	
-	public Preference(boolean workFromHome, int startWorkHour) throws IllegalArgumentException{
+	public Preference(boolean workFromHome, int startWorkHour) throws WorkingHoursException{
 		if(startWorkHour < 0 || startWorkHour >= 24) {
-			throw new IllegalArgumentException("start working hour must be in range 0 - 23");
+			throw new WorkingHoursException();
 		}
 		
 		this.prefStartTime = startWorkHour;

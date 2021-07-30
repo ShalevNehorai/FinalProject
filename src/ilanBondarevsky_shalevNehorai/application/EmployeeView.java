@@ -23,6 +23,4 @@ public class EmployeeView {
 	public String getDepartmentName() {
 		return departmentName;
 	}
-	
-	
 }

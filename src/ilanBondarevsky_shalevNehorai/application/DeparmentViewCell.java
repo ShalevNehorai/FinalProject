@@ -102,14 +102,14 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 			changeHoursBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					ViewChangeHours change = new ViewChangeHours(mainWindow, new Stage(), item.getName());
+					new ViewChangeHours(mainWindow, new Stage(), item.getName());
 				}
 			});
 			
 			addRoleButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					ViewAddRole addRole = new ViewAddRole(mainWindow, item.getName(), new Stage());
+					new ViewAddRole(mainWindow, item.getName(), new Stage());
 				}
 			});
 			

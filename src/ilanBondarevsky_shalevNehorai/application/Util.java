@@ -17,8 +17,4 @@ public class Util {
 		    }
 		});
 	}
-	
-	public static void setStartingText(TextField tf, int startingText) {
-		tf.setText(String.valueOf(startingText));
-	}
 }
