@@ -6,7 +6,7 @@ public class PercentageEmployee extends BaseEmployee {
 	private int monthlySales;
 
 	protected PercentageEmployee(String name, int startTime, boolean isHomeWorking, int prefStartTime,
-			boolean prefWorkHome, boolean isWorkingSync, boolean isWorkChangeable, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, WorkingHoursException {
+			boolean prefWorkHome, boolean isWorkingSync, boolean isWorkChangeable, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InvalidWorkingHoursException {
 		super(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, isWorkingSync, isWorkChangeable, salary);
 		
 		if(monthlySales < 0) {

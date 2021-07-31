@@ -17,13 +17,13 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	
 	
 	protected Employee(String name, int startTime, boolean isHomeWorking, int prefStartTime, 
-			boolean prefWorkHome, boolean isWorkingSync, boolean isWorkChangeable) throws IllegalArgumentException, WorkingHoursException {
+			boolean prefWorkHome, boolean isWorkingSync, boolean isWorkChangeable) throws IllegalArgumentException, InvalidWorkingHoursException {
 		if(name.isBlank()) {
 			throw new IllegalArgumentException("Employee name cant be blank");
 		}
 		
 		if(startTime < 0 || startTime >= 24) {
-			throw new WorkingHoursException();
+			throw new InvalidWorkingHoursException();
 		}
 		
 		this.name = name;
@@ -77,9 +77,9 @@ public abstract class Employee implements CalculateAddedValueable, WorkChangeabl
 	}
 	
 	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) throws WorkingHoursException {
+	public void changeWorkingHours(int startTime, boolean homeWork) throws InvalidWorkingHoursException {
 		if(startTime < 0 || startTime >= 24) {
-			throw new WorkingHoursException();
+			throw new InvalidWorkingHoursException();
 		}
 		
 		if(isWorkChangeable()) {

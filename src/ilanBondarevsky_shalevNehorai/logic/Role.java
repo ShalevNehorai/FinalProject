@@ -67,7 +67,7 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		return isWorkChangeable;
 	}
 	
-	public int addEmployee(EmployeeType type, String name, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, WorkingHoursException {
+	public int addEmployee(EmployeeType type, String name, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InvalidWorkingHoursException {
 		//argument salary refer to salary for base employee and hour salary for hour employee
 		switch (type) {
 		case BASE_EMPLOYEE: 
@@ -156,7 +156,7 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	}
 	
 	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, WorkingHoursException{
+	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, InvalidWorkingHoursException{
 		if(!isWorkChangeable())
 			throw new IllegalArgumentException("Role's hours cannot be changed");
 		

@@ -68,14 +68,10 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		return addRole(roleName, isRoleChangeable, syncStartTime, syncWorkFromHome);
 	}
 	
-	public int addEmployeeToRole(int roleId, EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException, WorkingHoursException {
+	public int addEmployeeToRole(int roleId, EmployeeType type, String name, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, InstanceNotFoundException, InvalidWorkingHoursException {
 		Role role = getRoleById(roleId);
 		
 		if(role != null) {
-			if(isSync) {
-				startTime = this.syncStartTime;
-				isHomeWorking = this.syncWorkFromHome;
-			}
 			return role.addEmployee(type, name, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
 		}
 		else{
@@ -84,7 +80,7 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 	}
 	
 	@Override
-	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, WorkingHoursException{
+	public void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, InvalidWorkingHoursException{
 		StringBuffer errorMsg = new StringBuffer();
 		
 		if(isChangeable){
@@ -92,7 +88,7 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 				try{
 					role.changeWorkingHours(startTime, homeWork);
 				}
-				catch(WorkingHoursException e) {
+				catch(InvalidWorkingHoursException e) {
 					throw e;
 				}
 				catch(IllegalArgumentException e){
@@ -111,7 +107,7 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 		}
 	}
 	
-	public void changeWorkingHoursForRole(int roleId, int startTime, boolean homeWork) throws IllegalArgumentException, InstanceNotFoundException, WorkingHoursException{
+	public void changeWorkingHoursForRole(int roleId, int startTime, boolean homeWork) throws IllegalArgumentException, InstanceNotFoundException, InvalidWorkingHoursException{
 		if(isSync) {
 			System.out.println("cant change hours for this role " + roleId + " seperately");
 			throw new IllegalArgumentException("Can't change the role's hours");

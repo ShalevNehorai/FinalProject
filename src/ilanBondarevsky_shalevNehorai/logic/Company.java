@@ -121,11 +121,10 @@ public class Company {
 		
 		if(department != null) {
 			try{
-				int employeeId = department.addEmployeeToRole(roleID, emplyeeType, employeeName, DEFAULT_START_WORK_DAY, false, preferWorkingTime, preferWoringFromHome, salary, monthlyPercentage, monthlySales);			
-				
+				int employeeId = department.addEmployeeToRole(roleID, emplyeeType, employeeName, preferWorkingTime, preferWoringFromHome, salary, monthlyPercentage, monthlySales);
 				fireAddedEmployee(departmentName, roleID, employeeId);
 			}
-			catch(IllegalArgumentException | InstanceNotFoundException | WorkingHoursException e){
+			catch(IllegalArgumentException | InstanceNotFoundException | InvalidWorkingHoursException e){
 				fireExcpetion(e);
 			}
 		} else{
@@ -139,7 +138,7 @@ public class Company {
 			try{
 				department.changeWorkingHours(startTime, workingFromHome);
 			}
-			catch(IllegalArgumentException | WorkingHoursException e){
+			catch(IllegalArgumentException | InvalidWorkingHoursException e){
 				fireExcpetion(e);
 			}
 			finally {
@@ -157,7 +156,7 @@ public class Company {
 			try{
 				department.changeWorkingHoursForRole(roleId, startTime, workingFromHome);
 			}
-			catch(IllegalArgumentException | InstanceNotFoundException | WorkingHoursException e){
+			catch(IllegalArgumentException | InstanceNotFoundException | InvalidWorkingHoursException e){
 				fireExcpetion(e);
 			}
 			finally {
@@ -501,7 +500,6 @@ public class Company {
 			inputFile.close();
 		}
 		catch (IOException | ClassNotFoundException e) {
-			System.out.println("data file not found. fail loading data");
 			throw e;
 		}
 	}

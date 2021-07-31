@@ -5,7 +5,7 @@ public class HourEmployee extends Employee {
 	private int moneyForHour;
 	
 	protected HourEmployee(String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome,
-			boolean isWorkingSync, boolean isWorkChangeable, int moneyForHour) throws IllegalArgumentException, WorkingHoursException {
+			boolean isWorkingSync, boolean isWorkChangeable, int moneyForHour) throws IllegalArgumentException, InvalidWorkingHoursException {
 		super(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, isWorkingSync, isWorkChangeable);
 		
 		if(moneyForHour < 0) {

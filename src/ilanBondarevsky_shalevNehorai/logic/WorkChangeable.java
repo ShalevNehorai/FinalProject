@@ -2,5 +2,5 @@ package ilanBondarevsky_shalevNehorai.logic;
 
 public interface WorkChangeable {
 	boolean isWorkChangeable();
-	void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, WorkingHoursException;
+	void changeWorkingHours(int startTime, boolean homeWork) throws IllegalArgumentException, InvalidWorkingHoursException;
 }
