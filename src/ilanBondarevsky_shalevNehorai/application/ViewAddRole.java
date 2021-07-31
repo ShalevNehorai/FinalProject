@@ -70,6 +70,7 @@ public class ViewAddRole {
 		grid.add(addData, 0, 3);
 		
 		Scene scene = new Scene(grid, SCENE_WIDTH, SCENE_HEIGHT);
+		scene.getStylesheets().add(MainWindow.STYLE_SHEET_PATH);
 		stage.setScene(scene);
 		stage.show();
 	}

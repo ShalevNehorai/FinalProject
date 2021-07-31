@@ -27,7 +27,7 @@ import javafx.util.Callback;
 public class MainWindow implements CompanyViewable {
 	public static final String STYLE_SHEET_PATH = "/ilanBondarevsky_shalevNehorai/application.css";
 	
-	private final int WIN_WIDTH = 1000;//1280;
+	private final int WIN_WIDTH = 1000;
 	private final int WIN_HEIGHT = 720;
 	
 	private MainWindow mainWindow;
@@ -48,7 +48,6 @@ public class MainWindow implements CompanyViewable {
 		BorderPane root = new BorderPane();
 		root.setPadding(new Insets(20, 20, 20, 20));
 		
-			//@TOP
 		HBox hbox = new HBox();
 		hbox.setSpacing(40);
 		
@@ -64,9 +63,7 @@ public class MainWindow implements CompanyViewable {
 		
 		root.setTop(hbox);
 		BorderPane.setMargin(hbox, new Insets(10));
-			//END @TOP
-		
-			//@CENTER
+			
 		deptList = FXCollections.observableArrayList();
 		depListView = new ListView<DeparmentView>(deptList);
 		depListView.setSelectionModel(new NoSelectionModel<DeparmentView>());
@@ -74,9 +71,7 @@ public class MainWindow implements CompanyViewable {
 		
 		root.setCenter(depListView);
 		BorderPane.setMargin(depListView, new Insets(10));
-			//END @CENTER
-		
-			//@BUTTOM
+			
 		Button addDeptButton = new DefaultButton("Add Deparment");
 		addDeptButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -100,7 +95,6 @@ public class MainWindow implements CompanyViewable {
 		
 		root.setBottom(bottomBox);
 		BorderPane.setMargin(addDeptButton, new Insets(10));
-			//END @BUTTOM
 		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override

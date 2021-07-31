@@ -32,106 +32,87 @@ public class Preference implements Serializable {
 		return UNEFFECTIVE_VALUE; 	
 	}
 	
-	public int effectiveHours(int currentStartTime, boolean isHomeWorker) {
-		if(isHomeWorker && this.prefWorkFromHome)
+	public int effectiveHours(int startTime, boolean homeWorker){	
+		int minTime = Math.min(startTime, prefStartTime);
+		int maxTime = Math.max(startTime, prefStartTime);
+		
+		if(homeWorker && prefWorkFromHome){
 			return WORK_HOURS;
-		if(isHomeWorker != this.prefWorkFromHome)
-			return 0;			
-				
-		if(currentStartTime == DEFUALT_TIME) {
+		}
+		if(homeWorker != prefWorkFromHome){
 			return 0;
 		}
 		
-		if(prefStartTime == currentStartTime)
-			return Math.abs(DEFUALT_TIME - prefStartTime);
-		else if(prefStartTime > currentStartTime) {
-			return earlierThanPreferedEffectiveWorkHours(currentStartTime);
+		if(startTime == DEFUALT_TIME || prefStartTime == DEFUALT_TIME)
+			return 0;
+		
+		if(startTime < DEFUALT_TIME && prefStartTime < DEFUALT_TIME) {
+			return Math.min(DEFUALT_TIME - maxTime, WORK_HOURS);
 		}
-		else {
-			return laterThanPreferedEffectiveWorkHours(currentStartTime);
-		}
-	}
-	
-	private int laterThanPreferedEffectiveWorkHours(int currentStartTime) {
-		if(currentStartTime < DEFUALT_TIME)
-			return DEFUALT_TIME - currentStartTime;
-		if(currentStartTime > DEFUALT_TIME) {
-			if(prefStartTime > DEFUALT_TIME)
-				return prefStartTime - DEFUALT_TIME;
-			if(prefStartTime < DEFUALT_TIME)
+		if(startTime > DEFUALT_TIME && prefStartTime > DEFUALT_TIME){
+			int diffrence = Math.abs(startTime - prefStartTime);
+			if(diffrence >= WORK_HOURS)
 				return 0;
+			return Math.min(minTime - DEFUALT_TIME, WORK_HOURS);
 		}
-		return 0;
-	}
-	private int earlierThanPreferedEffectiveWorkHours(int currentStartTime) {
-		if(currentStartTime < DEFUALT_TIME) {
-			if(prefStartTime > DEFUALT_TIME) {
-				return 0;
-			}
-			if(prefStartTime < DEFUALT_TIME) 
-				return DEFUALT_TIME - prefStartTime;
-		}
-		if(currentStartTime > DEFUALT_TIME) {
-			return currentStartTime - DEFUALT_TIME;
+		
+		int endWorkTime = (maxTime + WORK_HOURS);
+		if((endWorkTime > 24) && (endWorkTime % 24 > minTime)){
+			return Math.min((endWorkTime % 24) - minTime, WORK_HOURS);
 		}
 		
 		return 0;
 	}
 	
-	public int unEffectiveHours(int currentStartTime, boolean isHomeWorker) {
-		if(isHomeWorker) {
-			if(prefWorkFromHome) {
+	 public int unEffectiveHours(int startTime, boolean homeWorker){
+		if(homeWorker){
+			if(prefWorkFromHome)
 				return 0;
+			return WORK_HOURS;
+		}
+		if(!homeWorker && prefWorkFromHome){
+			return Math.min(Math.abs(DEFUALT_TIME - startTime), WORK_HOURS);
+		}
+		
+		if(startTime == DEFUALT_TIME)
+			return 0;
+		if(startTime == prefStartTime)
+			return 0;
+		
+		if(startTime > DEFUALT_TIME && prefStartTime > DEFUALT_TIME) {
+			if((startTime >= DEFUALT_TIME + WORK_HOURS && prefStartTime >= DEFUALT_TIME + WORK_HOURS)) {
+				return Math.min(Math.abs(startTime - prefStartTime), WORK_HOURS);
+			}
+			if(prefStartTime < startTime) {
+				return Math.min(startTime - prefStartTime, WORK_HOURS) ;
+			}
+			if(prefStartTime >= startTime + WORK_HOURS) {
+				return startTime - DEFUALT_TIME;
+			}
+			return 0;
+		}
+		
+		if(startTime < DEFUALT_TIME && prefStartTime < DEFUALT_TIME) {
+			if(startTime < prefStartTime) {
+				return prefStartTime - startTime;
+			} else {
+				return 0;
+			}
+		}
+		
+		int minTime = Math.min(startTime, prefStartTime);
+		int maxTime = Math.max(startTime, prefStartTime);
+		int endWorkTime = maxTime + WORK_HOURS;
+		if((endWorkTime > 24) && (endWorkTime % 24 > minTime)){
+			if(startTime > DEFUALT_TIME) {
+				return prefStartTime + 24 - startTime;
 			}
 			else {
-				return WORK_HOURS;
+				return Math.abs(DEFUALT_TIME  - (endWorkTime % 24));
 			}
-		}
-		else if(prefWorkFromHome) {
-			return Math.abs(DEFUALT_TIME - currentStartTime);
-		}
+		} 
 		
-		
-		if(currentStartTime == DEFUALT_TIME)
-			return 0;
-			
-		if(prefStartTime == DEFUALT_TIME)
-			return Math.abs(DEFUALT_TIME - currentStartTime);
-		
-		if(prefStartTime == currentStartTime)
-			return 0;
-		else if(prefStartTime > currentStartTime) {
-			return earlierThanPreferedUneffectiveWorkHours(currentStartTime);
-		}
-		
-		else {
-			return laterThanPreferedUneffectiveWorkHours(currentStartTime);
-		}
-	}
-	
-	private int earlierThanPreferedUneffectiveWorkHours(int currentStartTime) {
-		if(currentStartTime < DEFUALT_TIME) {
-			if(prefStartTime < DEFUALT_TIME) {
-				return prefStartTime - currentStartTime;
-			}
-			if(prefStartTime > DEFUALT_TIME) 
-				return DEFUALT_TIME - currentStartTime;
-		}
-		if(currentStartTime > DEFUALT_TIME) {
-			return 0;
-		}
-		return 0;
-	}
-	private int laterThanPreferedUneffectiveWorkHours(int currentStartTime) {
-		if(currentStartTime < DEFUALT_TIME)
-			return 0;
-		if(currentStartTime > DEFUALT_TIME) {
-			if(prefStartTime > DEFUALT_TIME)
-				return currentStartTime - prefStartTime;
-			if(prefStartTime < DEFUALT_TIME)
-				return currentStartTime - DEFUALT_TIME;
-		}
-		return 0;
+		return Math.min(Math.abs(DEFUALT_TIME - startTime), WORK_HOURS);
 	}
 	
 	@Override

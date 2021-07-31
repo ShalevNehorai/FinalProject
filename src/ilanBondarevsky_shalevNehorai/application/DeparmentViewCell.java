@@ -39,7 +39,6 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 		root = new BorderPane();
 		root.setPadding(new Insets(20));
 
-			//@TOP
 		name = new Label();
 		name.getStyleClass().add("default-label");
 		profitLbl = new Label();
@@ -53,16 +52,11 @@ public class DeparmentViewCell extends ListCell<DeparmentView> {
 		
 		root.setTop(top);
 		BorderPane.setMargin(top, new Insets(5));
-			//END @TOP
-		
-		
-			//@BUTTOM
+
 		addRoleButton = new DefaultButton("Add Role");
 		
 		root.setBottom(addRoleButton);
-		BorderPane.setMargin(addRoleButton, new Insets(5));
-			//END @BUTTOM
-		
+		BorderPane.setMargin(addRoleButton, new Insets(5));		
 	}
 	
 	@Override

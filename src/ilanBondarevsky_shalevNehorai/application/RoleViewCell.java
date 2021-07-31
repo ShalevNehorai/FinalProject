@@ -39,7 +39,6 @@ public class RoleViewCell extends ListCell<RoleView> {
 		layout = new BorderPane();
 		layout.setPadding(new Insets(20));
 
-			//@TOP
 		roleNameLbl = new Label();
 		roleNameLbl.getStyleClass().add("default-label");
 		profitLbl = new Label();
@@ -53,14 +52,11 @@ public class RoleViewCell extends ListCell<RoleView> {
 
 		layout.setTop(top);
 		BorderPane.setMargin(top, new Insets(5));
-			//END @TOP
 		
-			//@BOTTOM
 		addEmployeeBtn = new DefaultButton("Add Employee");
 		
 		layout.setBottom(addEmployeeBtn);
 		BorderPane.setMargin(addEmployeeBtn, new Insets(5));
-			//END @BOTTOM
 	}
 	 
 	@Override

@@ -67,21 +67,17 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 		return isWorkChangeable;
 	}
 	
-	public int addEmployee(EmployeeType type, String name, int startTime, boolean isHomeWorking, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, WorkingHoursException {
+	public int addEmployee(EmployeeType type, String name, int prefStartTime, boolean prefWorkHome, int salary, double mothlyPercentage, int monthlySales) throws IllegalArgumentException, WorkingHoursException {
 		//argument salary refer to salary for base employee and hour salary for hour employee
-		if(!isWorkChangeable){//TODO need to think about this
-			startTime = this.startTime;
-			isHomeWorking = this.isWorkFromHome;
-		}
 		switch (type) {
 		case BASE_EMPLOYEE: 
-			employeeList.add(new BaseEmployee(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary));
+			employeeList.add(new BaseEmployee(name, startTime, isWorkFromHome, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary));
 			break;
 		case HOUR_EMPLOYEE:
-			employeeList.add(new HourEmployee(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary));
+			employeeList.add(new HourEmployee(name, startTime, isWorkFromHome, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary));
 			break;
 		case PERCENTAGE_EMPLOYEE:
-			employeeList.add(new PercentageEmployee(name, startTime, isHomeWorking, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary, mothlyPercentage, monthlySales));
+			employeeList.add(new PercentageEmployee(name, startTime, isWorkFromHome, prefStartTime, prefWorkHome, this.isWorkingSync, this.isWorkChangeable, salary, mothlyPercentage, monthlySales));
 			break;
 		
 		default:
@@ -189,15 +185,6 @@ public class Role implements CalculateAddedValueable, WorkChangeable, WorkingSyn
 	@Override
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		/*output.append("In role ").append(name).append(" working:\n");
-		for (Employee employee : employeeList) {
-			output.append("\t").append(employee.toString()).append("\n");
-		}
-		//TODO need to delete this line (162) in the end	
-		output.append("IsChangeable ").append(isWorkChangeable).append("\nisSync? ").append(isWorkingSync);
-		return output.toString();*/
-		
-		
 		output.append("The role is in ").append(isWorkingSync? "" : "un").append("synchronous department.");
 		output.append(" Working hours for this role can").append(isWorkChangeable? "":"'t").append(" be change");
 		return output.toString();

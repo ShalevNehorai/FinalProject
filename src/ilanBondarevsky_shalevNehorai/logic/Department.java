@@ -76,7 +76,7 @@ public class Department implements CalculateAddedValueable, WorkChangeable, Work
 				startTime = this.syncStartTime;
 				isHomeWorking = this.syncWorkFromHome;
 			}
-			return role.addEmployee(type, name, startTime, isHomeWorking, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
+			return role.addEmployee(type, name, prefStartTime, prefWorkHome, salary, mothlyPercentage, monthlySales);
 		}
 		else{
 			throw new InstanceNotFoundException("Role not found");

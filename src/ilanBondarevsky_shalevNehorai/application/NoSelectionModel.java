@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MultipleSelectionModel;
 
+//class to make the ListView unselectable
 public class NoSelectionModel<T> extends MultipleSelectionModel<T> {
 
 	@Override

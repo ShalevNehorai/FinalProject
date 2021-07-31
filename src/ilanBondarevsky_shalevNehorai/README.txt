@@ -6,5 +6,6 @@ The profit of the company is a multiplication of the constant variable PROFIT_FO
 When closing the program with the X button of the window, the program will save automatically.
 The file path of saving\loading the file is a constant in the Company file.
 When starting the program, it will load from the constant file path.
+If the file doesn't exists loads hardwriten data.
 
 To change the path, change the path in the FILE_PATH constant variable.
